@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:orientation="vertical">
+
+<android.support.v7.widget.CardView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="4dp"
+    android:elevation="4dp"
+    android:id="@+id/cvHelado"
+
+    >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp">
+
+        <TextView
+            android:id="@+id/item_helado_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            />
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/item_helado_chk"
+            />
+        <TextView
+            android:id="@+id/item_helado_nombre"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/item_helado_chk"
+            android:text="Chocolate Con Granizado"
+            android:textSize="20dp"
+            />
+
+        <TextView
+            android:id="@+id/item_helado_cantidad_desc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/item_helado_nombre"
+            android:text="Equilibrado"
+            android:layout_alignParentRight="true"
+            android:gravity="right"
+            android:textAlignment="gravity"
+            android:padding="2dp"
+            android:visibility="invisible"/>
+
+
+        <SeekBar
+            android:id="@+id/item_helado_proporcion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/item_helado_cantidad_desc"
+            android:max="150"
+            android:progress="75"
+            android:visibility="invisible"/>
+
+
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>
+
+
+
+</LinearLayout>

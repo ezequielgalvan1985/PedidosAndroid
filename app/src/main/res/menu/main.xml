@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+<!--
+    <item android:id="@+id/mnu_search"
+        android:title="Buscar..."
+        android:icon="@android:drawable/ic_menu_search"
+        android:orderInCategory="1"
+        app:showAsAction="always"
+        app:actionViewClass="android.support.v7.widget.SearchView"/>
+-->
+
+    <item android:id="@+id/mnu_nuevo_pedido"
+        android:title="Nuevo Pedido"
+        android:orderInCategory="1"
+        app:showAsAction="never" />
+
+    <item android:id="@+id/mnu_ver_pedido_actual"
+        android:title="Ver Pedido Actual"
+        android:orderInCategory="1"
+        app:showAsAction="never" />
+
+    <item android:id="@+id/mnu_continuar_pedido_actual"
+        android:title="Continuar Carga Pedido Actual"
+        android:orderInCategory="1"
+        app:showAsAction="never" />
+
+
+
+
+</menu>

@@ -1,0 +1,67 @@
+<resources>
+    <string name="app_name">Roma Heladeria</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="title_activity_login">Roma Heladeria</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_username">Usuario</string>
+    <string name="prompt_email_username">Usuario/Email</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_telefono">Telefono</string>
+    <string name="prompt_localidad">Localidad</string>
+    <string name="prompt_calle">Calle</string>
+    <string name="prompt_nro">Nro</string>
+    <string name="prompt_piso">Piso Y Depto</string>
+    <string name="prompt_contacto">Contacto (Nombre y Apellido)</string>
+
+
+    <string name="prompt_password">Contraseña</string>
+    <string name="action_register">Crear Cuenta</string>
+    <string name="action_login">Iniciar Sesion</string>
+    <string name="label_register">Registrarme</string>
+    <string name="label_eres_nuevo">¿Eres Nuevo? Haz Click en Registrarme</string>
+    <string name="label_tienes_cuenta">¿Ya tienes Cuenta?</string>
+    <string name="label_iniciar_sesion">Iniciar Sesion</string>
+    <string name="label_ingresardatos">Ingresá tus datos</string>
+
+
+    <string name="action_save">Guardar</string>
+    <string name="action_nuevo_pedido">Hacé Tu Pedido</string>
+    <string name="volver">Volver</string>
+
+
+    <string name="listo">Listo!</string>
+    <string name="finalizar_seleccion">Finalizar Seleccion</string>
+    <string name="ver_seleccion">Ver Helados Seleccionados</string>
+
+
+    <string name="action_sign_in_short">Ingresar/Registrarse</string>
+    <string name="error_invalid_email">El Email es Invalido</string>
+    <string name="error_invalid_password">Password demasiado corta</string>
+    <string name="error_incorrect_password">Password Incorrecta</string>
+    <string name="error_field_required">Este Campo es requerido</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
+    <string name="title_activity_maps">Map</string>
+    <string name="title_activity_config">Configuracion</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="register">Registro de Usuario</string>
+    <string name="title_activity_nuevo_pedido">Nuevo Pedido</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="direction">1 - Direccion</string>
+    <string name="elegir_cantidad">2 - Elegir Cantidad</string>
+    <string name="elegir_sabores">3 - Elegir Sabores </string>
+    <string name="ver_pedido"> Ver Pedido </string>
+    <string name="confirmacion">4 - Confirmacion </string>
+    <string name="agregar_pote">Agregar</string>
+    <string name="agregar">Agregar</string>
+    <string name="promos">Ver Promos</string>
+</resources>

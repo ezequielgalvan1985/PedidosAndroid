@@ -1,0 +1,78 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="adaptivex.pedidoscloud.View.Resumenes.HomeFragment">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="10dp"
+        >
+
+
+
+
+        <Button
+            android:id="@+id/home_btn_nuevo_pedido"
+            android:layout_width="match_parent"
+            android:layout_height="75dp"
+            android:layout_marginTop="10dp"
+            android:text="Hace Tu Pedido"
+            android:textAlignment="center"
+            android:drawableRight="@mipmap/ic_nuevo_pedido"
+            style="@style/Widget.AppCompat.Button.Colored"  />
+
+        <Button
+            android:id="@+id/home_btn_helados"
+            android:layout_width="match_parent"
+            android:layout_height="75dp"
+            android:layout_marginTop="10dp"
+            android:text="Nuestros Helados"
+            android:textAlignment="center"
+            android:drawableRight="@mipmap/ic_helado12"
+            style="@style/Widget.AppCompat.Button.Colored"  />
+
+        <Button
+            android:id="@+id/home_btn_postres"
+            android:layout_width="match_parent"
+            android:layout_height="75dp"
+            android:layout_marginTop="10dp"
+            android:text="Postres"
+            android:textAlignment="center"
+            android:drawableRight="@drawable/postre_5"
+            style="@style/Widget.AppCompat.Button.Colored"  />
+        <Button
+            android:id="@+id/home_btn_promos"
+            android:layout_width="match_parent"
+            android:layout_height="75dp"
+            android:layout_marginTop="10dp"
+            android:text="Promociones"
+            android:textAlignment="center"
+            android:drawableRight="@mipmap/ic_promo3"
+            style="@style/Widget.AppCompat.Button.Colored"  />
+        <Button
+            android:id="@+id/home_btn_mi_pedido"
+            android:layout_width="match_parent"
+            android:layout_height="75dp"
+            android:layout_marginTop="10dp"
+            android:text="Ver Mi Pedido"
+            android:textAlignment="center"
+            android:drawableRight="@mipmap/ic_ver_pedido"
+            style="@style/Widget.AppCompat.Button.Colored" />
+        <Button
+            android:visibility="invisible"
+            android:id="@+id/home_btn_mi_cuenta"
+            android:layout_width="match_parent"
+            android:layout_height="75dp"
+            android:layout_marginTop="10dp"
+            android:text="Ver Mi Pedido"
+            android:textAlignment="center"
+            android:drawableRight="@mipmap/ic_ver_pedido"
+            style="@style/Widget.AppCompat.Button.Colored" />
+    </LinearLayout>
+
+</FrameLayout>
