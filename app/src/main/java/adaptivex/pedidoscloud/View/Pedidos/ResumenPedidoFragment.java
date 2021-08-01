@@ -1,17 +1,13 @@
 package adaptivex.pedidoscloud.View.Pedidos;
 
 import android.Manifest;
-import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.telephony.SmsManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,23 +15,13 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
-
-import java.util.Calendar;
-import java.util.Date;
-
-import adaptivex.pedidoscloud.Config.Constants;
 import adaptivex.pedidoscloud.Config.GlobalValues;
-import adaptivex.pedidoscloud.Controller.ParameterController;
 import adaptivex.pedidoscloud.Core.Interfaces.OnTaskCompleted;
 import adaptivex.pedidoscloud.Core.WorkDate;
 import adaptivex.pedidoscloud.Core.WorkNumber;
-import adaptivex.pedidoscloud.Model.Parameter;
 import adaptivex.pedidoscloud.Model.Pedido;
 import adaptivex.pedidoscloud.R;
-import adaptivex.pedidoscloud.Servicios.HelperPedidos;
-
-import static android.Manifest.permission.SEND_SMS;
+import adaptivex.pedidoscloud.Servicios.Helpers.HelperPedidos;
 
 public class ResumenPedidoFragment extends Fragment implements View.OnClickListener ,OnTaskCompleted {
 

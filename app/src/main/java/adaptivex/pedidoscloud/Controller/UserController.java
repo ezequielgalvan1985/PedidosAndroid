@@ -8,11 +8,9 @@ import android.database.sqlite.SQLiteException;
 import android.widget.Toast;
 
 import adaptivex.pedidoscloud.Config.GlobalValues;
-import adaptivex.pedidoscloud.Model.Parameter;
-import adaptivex.pedidoscloud.Model.PromoDataBaseHelper;
 import adaptivex.pedidoscloud.Model.User;
 import adaptivex.pedidoscloud.Model.UserDataBaseHelper;
-import adaptivex.pedidoscloud.Servicios.HelperUser;
+import adaptivex.pedidoscloud.Servicios.Helpers.HelperUser;
 
 /**
  * Created by ezequiel on 28/05/2016.

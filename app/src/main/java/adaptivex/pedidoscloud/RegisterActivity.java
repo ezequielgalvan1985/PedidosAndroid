@@ -9,12 +9,9 @@ import android.widget.Toast;
 import adaptivex.pedidoscloud.Config.Constants;
 import adaptivex.pedidoscloud.Core.IniciarApp;
 
-import adaptivex.pedidoscloud.Servicios.HelperParameters;
 import adaptivex.pedidoscloud.View.Users.HomeLoginFragment;
 import adaptivex.pedidoscloud.View.Users.LoginFragment;
 import adaptivex.pedidoscloud.View.Users.RegisterFragment;
-
-import static android.Manifest.permission.READ_CONTACTS;
 
 public class RegisterActivity
         extends AppCompatActivity

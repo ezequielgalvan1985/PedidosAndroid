@@ -14,7 +14,7 @@ import android.widget.Toast;
 import adaptivex.pedidoscloud.Config.GlobalValues;
 import adaptivex.pedidoscloud.Model.Pedido;
 import adaptivex.pedidoscloud.R;
-import adaptivex.pedidoscloud.Servicios.HelperPedidos;
+import adaptivex.pedidoscloud.Servicios.Helpers.HelperPedidos;
 
 import java.util.ArrayList;
 

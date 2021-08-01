@@ -1,4 +1,4 @@
-package adaptivex.pedidoscloud.Servicios;
+package adaptivex.pedidoscloud.Servicios.Helpers;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -7,9 +7,11 @@ import android.widget.Toast;
 
 import adaptivex.pedidoscloud.Config.Configurador;
 import adaptivex.pedidoscloud.Config.GlobalValues;
+import adaptivex.pedidoscloud.Controller.HojarutaController;
 import adaptivex.pedidoscloud.Controller.HojarutadetalleController;
-import adaptivex.pedidoscloud.Core.parserJSONtoModel.HojarutadetalleParser;
-import adaptivex.pedidoscloud.Model.Hojarutadetalle;
+import adaptivex.pedidoscloud.Core.parserJSONtoModel.HojarutaParser;
+import adaptivex.pedidoscloud.Model.Hojaruta;
+import adaptivex.pedidoscloud.Servicios.WebRequest;
 
 import java.util.HashMap;
 
@@ -17,16 +19,18 @@ import java.util.HashMap;
  * Created by Ezequiel on 02/04/2017.
  */
 
-public class HelperHojarutadetalles extends AsyncTask<Void, Void, Void> {
+public class HelperHojarutas extends AsyncTask<Void, Void, Void> {
     private Context ctx;
     private HashMap<String,String> registro;
-    private Hojarutadetalle hojarutadetalle;
+    private Hojaruta hojaruta;
+    private HojarutaController hojarutaCtr;
     private HojarutadetalleController hojarutadetalleCtr;
     private int respuesta; //1=ok, 200=error
-    private int opcion; //1 enviar Post Hojarutadetalle
-
-    public HelperHojarutadetalles(Context pCtx){
+    private int opcion; //1 enviar Post Hojaruta
+    private HojarutaParser cp;
+    public HelperHojarutas(Context pCtx){
         this.setCtx(pCtx);
+        this.hojarutaCtr = new HojarutaController(this.getCtx());
         this.hojarutadetalleCtr = new HojarutadetalleController(this.getCtx());
     }
 
@@ -36,15 +40,13 @@ public class HelperHojarutadetalles extends AsyncTask<Void, Void, Void> {
         try{
             WebRequest webreq = new WebRequest();
 
-            String jsonStr = webreq.makeWebServiceCall(Configurador.urlHojarutadetalles, WebRequest.POST,null);
-            HojarutadetalleParser cp = new HojarutadetalleParser(jsonStr);
+            String jsonStr = webreq.makeWebServiceCall(Configurador.urlHojarutas, WebRequest.POST,null);
+            cp = new HojarutaParser(jsonStr);
+
+            //Parsea las hoja de rutas y sus detalles
             cp.parseJsonToObject();
-            hojarutadetalleCtr.abrir().limpiar();
-            //Recorrer Lista
-            for (int i = 0; i < cp.getListadoHojarutadetalles().size(); i++) {
-                hojarutadetalleCtr.abrir().agregar(cp.getListadoHojarutadetalles().get(i));
-            }
-            setRespuesta(GlobalValues.getINSTANCIA().RETURN_OK);
+
+
         }catch (Exception e){
                 setRespuesta(GlobalValues.getINSTANCIA().RETURN_ERROR);
                 Log.println(Log.ERROR,"ErrorHelper:",e.getMessage());
@@ -58,13 +60,37 @@ public class HelperHojarutadetalles extends AsyncTask<Void, Void, Void> {
         super.onPreExecute();
         // Showing progress dialog
 
+
     }
 
 
     @Override
     protected void onPostExecute(Void result) {
         super.onPostExecute(result);
+
+        //Limpiar Tablas Hoja de ruta y
+        hojarutaCtr.abrir().limpiar();
+        hojarutadetalleCtr.abrir().limpiar();
+
+        //Recorrer Lista Hoja de ruta
+        for (int i = 0; i < cp.getListadoHojarutas().size(); i++) {
+
+            //Crea hoja de ruta
+            hojarutaCtr.abrir().agregar(cp.getListadoHojarutas().get(i));
+
+            // Recorrer detalles de la hoja de ruta
+            Hojaruta hr = cp.getListadoHojarutas().get(i);
+
+            for (int d = 0; d < hr.getItems().size(); d++) {
+                //Agregar hoja ruta detalle
+                hojarutadetalleCtr.abrir().agregar(hr.getItems().get(d));
+            }
+
+        }
+        setRespuesta(GlobalValues.getINSTANCIA().RETURN_OK);
+
         if (getRespuesta()== GlobalValues.getINSTANCIA().RETURN_OK){
+
 
         }
     }
@@ -91,4 +117,6 @@ public class HelperHojarutadetalles extends AsyncTask<Void, Void, Void> {
     public void setOpcion(int opcion) {
         this.opcion = opcion;
     }
+
+
 }

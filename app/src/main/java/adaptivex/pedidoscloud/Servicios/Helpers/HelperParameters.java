@@ -1,4 +1,4 @@
-package adaptivex.pedidoscloud.Servicios;
+package adaptivex.pedidoscloud.Servicios.Helpers;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -13,6 +13,7 @@ import adaptivex.pedidoscloud.Config.GlobalValues;
 import adaptivex.pedidoscloud.Controller.ParameterController;
 import adaptivex.pedidoscloud.Core.parserJSONtoModel.ParameterParser;
 import adaptivex.pedidoscloud.Model.Parameter;
+import adaptivex.pedidoscloud.Servicios.WebRequest;
 
 /**
  * Created by Ezequiel on 02/04/2017.

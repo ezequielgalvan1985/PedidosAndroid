@@ -2,13 +2,6 @@ package adaptivex.pedidoscloud.View.EventListeners;
 
 import android.content.Context;
 import android.view.View;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import adaptivex.pedidoscloud.Config.GlobalValues;
-import adaptivex.pedidoscloud.Controller.PedidoController;
-import adaptivex.pedidoscloud.R;
-import adaptivex.pedidoscloud.Servicios.HelperPedidos;
 
 /**
  * Created by Ezequiel on 06/04/2017.

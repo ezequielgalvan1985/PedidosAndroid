@@ -33,6 +33,12 @@ import adaptivex.pedidoscloud.Model.PedidoDataBaseHelper;
 import adaptivex.pedidoscloud.Model.Producto;
 import adaptivex.pedidoscloud.Model.ProductoDataBaseHelper;
 import adaptivex.pedidoscloud.R;
+import adaptivex.pedidoscloud.Servicios.Helpers.HelperCategorias;
+import adaptivex.pedidoscloud.Servicios.Helpers.HelperClientes;
+import adaptivex.pedidoscloud.Servicios.Helpers.HelperHojarutadetalles;
+import adaptivex.pedidoscloud.Servicios.Helpers.HelperHojarutas;
+import adaptivex.pedidoscloud.Servicios.Helpers.HelperMarcas;
+import adaptivex.pedidoscloud.Servicios.Helpers.HelperProductos;
 
 import org.json.JSONArray;
 import org.json.JSONException;

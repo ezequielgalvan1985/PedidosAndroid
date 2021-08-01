@@ -2,7 +2,6 @@ package adaptivex.pedidoscloud;
 
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
@@ -16,8 +15,7 @@ import adaptivex.pedidoscloud.Config.GlobalValues;
 import adaptivex.pedidoscloud.Controller.PedidoController;
 import adaptivex.pedidoscloud.Core.IniciarApp;
 import adaptivex.pedidoscloud.Model.Pedido;
-import adaptivex.pedidoscloud.Servicios.HelperPedidos;
-import adaptivex.pedidoscloud.View.Pedidos.CargarDireccionFragment;
+import adaptivex.pedidoscloud.Servicios.Helpers.HelperPedidos;
 import adaptivex.pedidoscloud.View.Pedidos.CargarHeladosFragment;
 
 public class NuevoPedidoActivity extends AppCompatActivity implements  CargarHeladosFragment.OnFragmentInteractionListener {

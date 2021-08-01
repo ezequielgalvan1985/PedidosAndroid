@@ -6,20 +6,16 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.Toast;
 
-import adaptivex.pedidoscloud.Core.WorkString;
 import adaptivex.pedidoscloud.Model.User;
 import adaptivex.pedidoscloud.R;
-import adaptivex.pedidoscloud.Servicios.HelperUser;
+import adaptivex.pedidoscloud.Servicios.Helpers.HelperUser;
 
 
 public class RegisterFragment extends Fragment implements View.OnClickListener {

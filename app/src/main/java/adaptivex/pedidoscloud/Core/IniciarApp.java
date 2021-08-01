@@ -5,17 +5,11 @@ package adaptivex.pedidoscloud.Core;
  */
 
 import android.content.Context;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.provider.Settings;
-import android.support.v7.widget.ThemedSpinnerAdapter;
 import android.util.Log;
-import android.util.Property;
 import android.widget.Toast;
 
-import adaptivex.pedidoscloud.Config.Constants;
 import adaptivex.pedidoscloud.Config.GlobalValues;
-import adaptivex.pedidoscloud.Controller.ClienteController;
 import adaptivex.pedidoscloud.Controller.ParameterController;
 import adaptivex.pedidoscloud.Controller.UserController;
 import adaptivex.pedidoscloud.Model.CategoriaDataBaseHelper;
@@ -30,13 +24,13 @@ import adaptivex.pedidoscloud.Model.ProductoDataBaseHelper;
 import adaptivex.pedidoscloud.Model.PromoDataBaseHelper;
 import adaptivex.pedidoscloud.Model.User;
 import adaptivex.pedidoscloud.Model.UserDataBaseHelper;
-import adaptivex.pedidoscloud.Servicios.HelperCategorias;
-import adaptivex.pedidoscloud.Servicios.HelperClientes;
-import adaptivex.pedidoscloud.Servicios.HelperHorarios;
-import adaptivex.pedidoscloud.Servicios.HelperMarcas;
-import adaptivex.pedidoscloud.Servicios.HelperParameters;
-import adaptivex.pedidoscloud.Servicios.HelperProductos;
-import adaptivex.pedidoscloud.Servicios.HelperPromos;
+import adaptivex.pedidoscloud.Servicios.Helpers.HelperCategorias;
+import adaptivex.pedidoscloud.Servicios.Helpers.HelperClientes;
+import adaptivex.pedidoscloud.Servicios.Helpers.HelperHorarios;
+import adaptivex.pedidoscloud.Servicios.Helpers.HelperMarcas;
+import adaptivex.pedidoscloud.Servicios.Helpers.HelperParameters;
+import adaptivex.pedidoscloud.Servicios.Helpers.HelperProductos;
+import adaptivex.pedidoscloud.Servicios.Helpers.HelperPromos;
 
 import static java.lang.Thread.sleep;
 

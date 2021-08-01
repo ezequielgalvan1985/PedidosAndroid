@@ -1,4 +1,4 @@
-package adaptivex.pedidoscloud.Servicios;
+package adaptivex.pedidoscloud.Servicios.Helpers;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -12,6 +12,7 @@ import adaptivex.pedidoscloud.Controller.HorarioController;
 
 import adaptivex.pedidoscloud.Core.parserJSONtoModel.HorarioParser;
 import adaptivex.pedidoscloud.Model.Horario;
+import adaptivex.pedidoscloud.Servicios.WebRequest;
 
 
 /**

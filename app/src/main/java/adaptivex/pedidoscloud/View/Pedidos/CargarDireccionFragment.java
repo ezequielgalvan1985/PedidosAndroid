@@ -1,6 +1,5 @@
 package adaptivex.pedidoscloud.View.Pedidos;
 
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -20,7 +19,7 @@ import adaptivex.pedidoscloud.Controller.PedidoController;
 import adaptivex.pedidoscloud.Controller.UserController;
 import adaptivex.pedidoscloud.Model.User;
 import adaptivex.pedidoscloud.R;
-import adaptivex.pedidoscloud.Servicios.HelperUser;
+import adaptivex.pedidoscloud.Servicios.Helpers.HelperUser;
 
 public class CargarDireccionFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match

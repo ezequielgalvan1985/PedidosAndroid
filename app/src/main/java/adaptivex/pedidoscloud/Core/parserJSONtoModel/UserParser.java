@@ -29,6 +29,7 @@ public class UserParser {
 
         try{
             JSONObject object = new JSONObject(json);
+
             setStatus(object.getString("code"));
             setMessage( object.getString("message"));
 

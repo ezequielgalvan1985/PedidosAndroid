@@ -1,4 +1,4 @@
-package adaptivex.pedidoscloud.Servicios;
+package adaptivex.pedidoscloud.Servicios.Helpers;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -10,11 +10,14 @@ import adaptivex.pedidoscloud.Config.GlobalValues;
 import adaptivex.pedidoscloud.Controller.CategoriaController;
 import adaptivex.pedidoscloud.Core.parserJSONtoModel.CategoriaParser;
 import adaptivex.pedidoscloud.Model.Categoria;
+import adaptivex.pedidoscloud.Servicios.WebRequest;
 
 import java.util.HashMap;
 
 /**
  * Created by Ezequiel on 02/04/2017.
+ * Proposito:
+ * descargar todos los registros de categoria y gudardarlos en la base local
  */
 
 public class HelperCategorias extends AsyncTask<Void, Void, Void> {

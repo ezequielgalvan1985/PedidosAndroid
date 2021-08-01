@@ -44,13 +44,6 @@ public class GlobalValues {
     public static final Integer ID_ANDROID = 1;
 
 
-
-
-
-
-
-
-
     //Variables de Login user
     private int USER_ID_LOGIN;
     private User userlogued;
@@ -143,8 +136,6 @@ public class GlobalValues {
     public static final String PARAM_PRECIOXCUARTO                  = "precioxcuarto";
     public static final String PARAM_PRECIOCUCURUCHO                = "preciocucurucho";
 
-
-
     public static final String VALUE_SERVICE_STOCK_PRECIOS_WORKING = "Y";
     public static final String VALUE_SERVICE_STOCK_PRECIOS_WORKING_NOT = "N";
 
@@ -164,9 +155,6 @@ public class GlobalValues {
 
     //Valores impuestos
     public static final Double consIva = 21.00;
-
-
-
 
 
     public  static GlobalValues getINSTANCIA() {

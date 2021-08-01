@@ -18,7 +18,7 @@ import adaptivex.pedidoscloud.Core.IniciarApp;
 import adaptivex.pedidoscloud.Core.ParameterHelper;
 import adaptivex.pedidoscloud.Model.Parameter;
 import adaptivex.pedidoscloud.R;
-import adaptivex.pedidoscloud.Servicios.HelperMemo;
+import adaptivex.pedidoscloud.Servicios.Helpers.HelperMemo;
 import adaptivex.pedidoscloud.Servicios.IntentServiceEnvioPedidos;
 import adaptivex.pedidoscloud.Servicios.IntentServiceStockPrecios;
 

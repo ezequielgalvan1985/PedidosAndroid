@@ -1,4 +1,4 @@
-package adaptivex.pedidoscloud.Servicios;
+package adaptivex.pedidoscloud.Servicios.Helpers;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -15,6 +15,7 @@ import adaptivex.pedidoscloud.Core.ParameterHelper;
 import adaptivex.pedidoscloud.Core.parserJSONtoModel.UserParser;
 import adaptivex.pedidoscloud.MainActivity;
 import adaptivex.pedidoscloud.Model.User;
+import adaptivex.pedidoscloud.Servicios.WebRequest;
 
 import org.json.JSONObject;
 

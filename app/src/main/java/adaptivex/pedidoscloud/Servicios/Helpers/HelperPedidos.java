@@ -1,4 +1,4 @@
-package adaptivex.pedidoscloud.Servicios;
+package adaptivex.pedidoscloud.Servicios.Helpers;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -31,6 +31,7 @@ import adaptivex.pedidoscloud.Core.Interfaces.OnTaskCompleted;
 import adaptivex.pedidoscloud.Core.parserJSONtoModel.PedidoParser;
 import adaptivex.pedidoscloud.Model.Pedido;
 import adaptivex.pedidoscloud.Model.Pedidodetalle;
+import adaptivex.pedidoscloud.Servicios.WebRequest;
 
 
 /**

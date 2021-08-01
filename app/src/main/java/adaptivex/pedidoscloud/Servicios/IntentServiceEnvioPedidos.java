@@ -32,6 +32,7 @@ import adaptivex.pedidoscloud.Core.parserJSONtoModel.PedidoParser;
 import adaptivex.pedidoscloud.Model.Pedido;
 import adaptivex.pedidoscloud.Model.Pedidodetalle;
 import adaptivex.pedidoscloud.Model.Producto;
+import adaptivex.pedidoscloud.Servicios.Helpers.HelperPedidos;
 
 /**
  * An {@link IntentService} subclass for handling asynchronous task requests in

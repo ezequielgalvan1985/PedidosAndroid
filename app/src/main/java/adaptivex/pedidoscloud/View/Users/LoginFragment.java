@@ -1,36 +1,59 @@
 package adaptivex.pedidoscloud.View.Users;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.TextUtils;
-import android.view.KeyEvent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import adaptivex.pedidoscloud.Config.Configurador;
+import adaptivex.pedidoscloud.MainActivity;
+import adaptivex.pedidoscloud.Model.LoginData;
+import adaptivex.pedidoscloud.Model.LoginResult;
+import adaptivex.pedidoscloud.Model.Marca;
+import adaptivex.pedidoscloud.Servicios.Retrofit.CallBackListener;
+import adaptivex.pedidoscloud.Servicios.Retrofit.IMarcaRetrofit;
+import adaptivex.pedidoscloud.Servicios.Retrofit.IUserRetrofit;
+import adaptivex.pedidoscloud.Servicios.Retrofit.MarcaServices;
+import adaptivex.pedidoscloud.Servicios.Retrofit.Posts;
+import adaptivex.pedidoscloud.Servicios.Retrofit.UserServices;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Converter.Factory.*;
+import com.google.gson.GsonBuilder;
+
+import org.w3c.dom.Text;
+
+import java.util.List;
+
 import adaptivex.pedidoscloud.Model.User;
 import adaptivex.pedidoscloud.R;
-import adaptivex.pedidoscloud.RegisterActivity;
-import adaptivex.pedidoscloud.Servicios.HelperUser;
+import adaptivex.pedidoscloud.Servicios.Helpers.HelperUser;
+import adaptivex.pedidoscloud.Servicios.Retrofit.JsonPlaceHolderApi;
+import retrofit.converter.GsonConverter;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
-public class LoginFragment extends Fragment implements View.OnClickListener {
+public class LoginFragment extends Fragment implements View.OnClickListener{
 
     private OnFragmentInteractionListener mListener;
 
     private EditText login_password, login_email;
-
-
+    private TextView loginTxtCartel;
     private Button btn_login, btn_register;
+
     private User usertmp;
 
+    private List<Marca>marcasList;
 
     public LoginFragment() {
 
@@ -61,6 +84,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         login_password = (EditText) v.findViewById(R.id.login_password);
         btn_login      = (Button)   v.findViewById(R.id.login_btn_login);
         btn_register   = (Button)   v.findViewById(R.id.login_btn_register);
+        loginTxtCartel = (TextView) v.findViewById(R.id.loginTxtCartel);
 
         //Asignar Funcionalidad
         btn_login.setOnClickListener(this);
@@ -96,14 +120,50 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
 
     private void clickLogin(){
+
         if (validateLogin()){
+            //se reemplaza la funcionalidad utilizando RETROFIT usando las clases Services
+            /*
             HelperUser hu = new HelperUser(getContext());
             hu.setOpcion(HelperUser.OPTION_LOGIN);
             hu.setUser(usertmp);
             hu.execute();
+             */
+            UserServices us = new UserServices();
+            us.postLogin(usertmp.getUsername(), usertmp.getPassword());
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl(Configurador.urlBase)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+
+            IUserRetrofit service = retrofit.create(IUserRetrofit.class);
+
+            Call<LoginResult> call=service.getLoginToken(new LoginData(usertmp.getUsername(),usertmp.getPassword()));
+            call.enqueue(new Callback<LoginResult>() {
+                @Override
+                public void onResponse(Call<LoginResult> call, Response<LoginResult> response) {
+                    if(!response.isSuccessful()){
+                        Log.println(Log.INFO,"user: Error",String.valueOf(response.code()));
+                        return;
+                    }
+                    Log.println(Log.INFO,"Login: ","Login Exitoso");
+
+                    Intent i = new Intent(getActivity(), MainActivity.class);
+                    startActivity(i);
+                    getActivity().finish();
+                }
+
+                @Override
+                public void onFailure(Call<LoginResult> call, Throwable t) {
+                    Log.println(Log.ERROR,"Codigo: ",t.getMessage());
+                }
+            });
         }
 
+
+
     }
+
     private boolean validateLogin(){
         try {
             boolean validate = true;
@@ -145,6 +205,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                 break;
         }
     }
+
 
 
     public interface OnFragmentInteractionListener {

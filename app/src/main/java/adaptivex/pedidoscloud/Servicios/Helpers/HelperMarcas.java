@@ -1,4 +1,4 @@
-package adaptivex.pedidoscloud.Servicios;
+package adaptivex.pedidoscloud.Servicios.Helpers;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -10,6 +10,7 @@ import adaptivex.pedidoscloud.Config.GlobalValues;
 import adaptivex.pedidoscloud.Controller.MarcaController;
 import adaptivex.pedidoscloud.Core.parserJSONtoModel.MarcaParser;
 import adaptivex.pedidoscloud.Model.Marca;
+import adaptivex.pedidoscloud.Servicios.WebRequest;
 
 import java.util.HashMap;
 

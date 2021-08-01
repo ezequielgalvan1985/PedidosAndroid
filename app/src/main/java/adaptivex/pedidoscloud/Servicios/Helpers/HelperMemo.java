@@ -1,33 +1,36 @@
-package adaptivex.pedidoscloud.Servicios;
+package adaptivex.pedidoscloud.Servicios.Helpers;
+
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
+import java.util.HashMap;
+
 import adaptivex.pedidoscloud.Config.Configurador;
 import adaptivex.pedidoscloud.Config.GlobalValues;
-import adaptivex.pedidoscloud.Controller.ClienteController;
-import adaptivex.pedidoscloud.Core.parserJSONtoModel.ClienteParser;
-import adaptivex.pedidoscloud.Model.Cliente;
-
-import java.util.HashMap;
+import adaptivex.pedidoscloud.Controller.MemoController;
+import adaptivex.pedidoscloud.Core.parserJSONtoModel.MemoParser;
+import adaptivex.pedidoscloud.Model.Memo;
+import adaptivex.pedidoscloud.Servicios.WebRequest;
 
 /**
  * Created by Ezequiel on 02/04/2017.
  */
 
-public class HelperClientes extends AsyncTask<Void, Void, Void> {
+public class HelperMemo extends AsyncTask<Void, Void, Void> {
     private Context ctx;
     private HashMap<String,String> registro;
-    private Cliente cliente;
-    private ClienteController clienteCtr;
+    private Memo memos;
+    private MemoController memosCtr;
     private int respuesta; //1=ok, 200=error
-    private int opcion; //1 enviar Post Cliente
-    private ClienteParser cp;
+    private int opcion; //1 enviar Post Memo
+    private MemoParser cp;
 
-    public HelperClientes(Context pCtx){
+
+    public HelperMemo(Context pCtx){
         this.setCtx(pCtx);
-        this.clienteCtr = new ClienteController(this.getCtx());
+        this.memosCtr = new MemoController(this.getCtx());
     }
 
 
@@ -36,8 +39,8 @@ public class HelperClientes extends AsyncTask<Void, Void, Void> {
         try{
             WebRequest webreq = new WebRequest();
 
-            String jsonStr = webreq.makeWebServiceCall(Configurador.urlClientes, WebRequest.POST,null);
-            cp = new ClienteParser(jsonStr);
+            String jsonStr = webreq.makeWebServiceCall(Configurador.urlMemos, WebRequest.POST,null);
+            cp = new MemoParser(jsonStr);
             cp.parseJsonToObject();
 
         }catch (Exception e){
@@ -50,10 +53,8 @@ public class HelperClientes extends AsyncTask<Void, Void, Void> {
 
     @Override
     protected void onPreExecute() {
-
         super.onPreExecute();
         // Showing progress dialog
-
 
     }
 
@@ -61,16 +62,20 @@ public class HelperClientes extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPostExecute(Void result) {
         super.onPostExecute(result);
-        clienteCtr.abrir().limpiar();
-        //Recorrer Lista
-        for (int i = 0; i < cp.getListadoClientes().size(); i++) {
-            clienteCtr.abrir().agregar(cp.getListadoClientes().get(i));
-        }
-        setRespuesta(GlobalValues.getINSTANCIA().RETURN_OK);
 
-        if (getRespuesta()== GlobalValues.getINSTANCIA().RETURN_OK){
+        try{
+            memosCtr.abrir().limpiar();
+            for (int i = 0; i < cp.getListadoMemos().size(); i++) {
+                memosCtr.abrir().agregar(cp.getListadoMemos().get(i));
+            }
+            memosCtr.cerrar();
+            setRespuesta(GlobalValues.getINSTANCIA().RETURN_OK);
 
+
+        }catch(Exception e){
+            Toast.makeText(getCtx(), "Error: "+e.getMessage().toString(), Toast.LENGTH_SHORT).show();
         }
+
     }
     public Context getCtx() {
         return ctx;

@@ -1,4 +1,4 @@
-package adaptivex.pedidoscloud.Servicios;
+package adaptivex.pedidoscloud.Servicios.Helpers;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -13,6 +13,7 @@ import adaptivex.pedidoscloud.Config.GlobalValues;
 import adaptivex.pedidoscloud.Controller.PromoController;
 import adaptivex.pedidoscloud.Core.parserJSONtoModel.PromoParser;
 import adaptivex.pedidoscloud.Model.Promo;
+import adaptivex.pedidoscloud.Servicios.WebRequest;
 
 /**
  * Created by Ezequiel on 02/04/2017.

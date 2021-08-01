@@ -1,4 +1,4 @@
-package adaptivex.pedidoscloud.Servicios;
+package adaptivex.pedidoscloud.Servicios.Helpers;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -11,6 +11,7 @@ import adaptivex.pedidoscloud.Config.GlobalValues;
 import adaptivex.pedidoscloud.Controller.ProductoController;
 import adaptivex.pedidoscloud.Core.parserJSONtoModel.ProductoParser;
 import adaptivex.pedidoscloud.Model.Producto;
+import adaptivex.pedidoscloud.Servicios.WebRequest;
 
 import java.util.HashMap;
 
