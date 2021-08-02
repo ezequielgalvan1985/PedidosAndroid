@@ -18,7 +18,6 @@ import adaptivex.pedidoscloud.Core.IniciarApp;
 import adaptivex.pedidoscloud.Core.ParameterHelper;
 import adaptivex.pedidoscloud.Model.Parameter;
 import adaptivex.pedidoscloud.R;
-import adaptivex.pedidoscloud.Servicios.Helpers.HelperMemo;
 import adaptivex.pedidoscloud.Servicios.IntentServiceEnvioPedidos;
 import adaptivex.pedidoscloud.Servicios.IntentServiceStockPrecios;
 
@@ -100,8 +99,7 @@ public class ConfigFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 try{
-                    HelperMemo hm = new HelperMemo(getContext());
-                    hm.execute();
+
                 }catch (Exception e ){
                     Toast.makeText(getContext(), "Error " + e.getMessage().toString(), Toast.LENGTH_LONG).show();
                 }

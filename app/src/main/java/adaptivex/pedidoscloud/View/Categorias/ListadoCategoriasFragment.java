@@ -15,7 +15,7 @@ import android.widget.Toast;
 import adaptivex.pedidoscloud.Controller.AdaptersListView.CategoriaAdapter;
 import adaptivex.pedidoscloud.Controller.CategoriaController;
 import adaptivex.pedidoscloud.Model.Categoria;
-import adaptivex.pedidoscloud.Model.CategoriaDataBaseHelper;
+import adaptivex.pedidoscloud.Model.DatabaseHelper.CategoriaDataBaseHelper;
 import adaptivex.pedidoscloud.R;
 
 import java.util.ArrayList;

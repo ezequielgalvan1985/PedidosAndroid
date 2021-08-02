@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 import adaptivex.pedidoscloud.Controller.PedidodetalleController;
 import adaptivex.pedidoscloud.Controller.ProductoController;
 import adaptivex.pedidoscloud.Model.Pedidodetalle;
-import adaptivex.pedidoscloud.Model.PedidodetalleDataBaseHelper;
+import adaptivex.pedidoscloud.Model.DatabaseHelper.PedidodetalleDataBaseHelper;
 import adaptivex.pedidoscloud.Model.Producto;
 import adaptivex.pedidoscloud.R;
 import adaptivex.pedidoscloud.View.RVAdapters.RVAdapterPedidodetalle;

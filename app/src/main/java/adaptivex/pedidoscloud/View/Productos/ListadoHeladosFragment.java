@@ -1,14 +1,9 @@
 package adaptivex.pedidoscloud.View.Productos;
 
-import android.content.Context;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,11 +14,8 @@ import java.util.ArrayList;
 import adaptivex.pedidoscloud.Config.Constants;
 import adaptivex.pedidoscloud.Controller.ProductoController;
 import adaptivex.pedidoscloud.Core.Sql.SqlManager;
-import adaptivex.pedidoscloud.Core.Sql.SqlWhere;
-import adaptivex.pedidoscloud.Model.Producto;
-import adaptivex.pedidoscloud.Model.ProductoDataBaseHelper;
+import adaptivex.pedidoscloud.Model.DatabaseHelper.ProductoDataBaseHelper;
 import adaptivex.pedidoscloud.R;
-import adaptivex.pedidoscloud.View.RVAdapters.RVAdapterHelado;
 import adaptivex.pedidoscloud.View.RVAdapters.RVAdapterProducto;
 
 public class ListadoHeladosFragment extends Fragment {

@@ -15,6 +15,7 @@ import java.util.List;
 import adaptivex.pedidoscloud.Config.Configurador;
 import adaptivex.pedidoscloud.Controller.MarcaController;
 import adaptivex.pedidoscloud.Model.Marca;
+import adaptivex.pedidoscloud.Servicios.Retrofit.Interface.IMarcaRetrofit;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

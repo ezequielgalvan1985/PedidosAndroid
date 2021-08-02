@@ -13,30 +13,22 @@ import android.widget.Toast;
 import adaptivex.pedidoscloud.Config.Configurador;
 import adaptivex.pedidoscloud.Config.GlobalValues;
 import adaptivex.pedidoscloud.Controller.CategoriaController;
-import adaptivex.pedidoscloud.Controller.HojarutaController;
-import adaptivex.pedidoscloud.Controller.HojarutadetalleController;
 import adaptivex.pedidoscloud.Controller.MarcaController;
 import adaptivex.pedidoscloud.Controller.PedidoController;
 import adaptivex.pedidoscloud.Controller.PedidodetalleController;
 import adaptivex.pedidoscloud.Controller.ProductoController;
 import adaptivex.pedidoscloud.Model.Categoria;
-import adaptivex.pedidoscloud.Model.CategoriaDataBaseHelper;
-import adaptivex.pedidoscloud.Model.ClienteDataBaseHelper;
-import adaptivex.pedidoscloud.Model.Hojaruta;
-import adaptivex.pedidoscloud.Model.HojarutaDataBaseHelper;
-import adaptivex.pedidoscloud.Model.Hojarutadetalle;
-import adaptivex.pedidoscloud.Model.HojarutadetalleDataBaseHelper;
+import adaptivex.pedidoscloud.Model.DatabaseHelper.CategoriaDataBaseHelper;
+import adaptivex.pedidoscloud.Model.DatabaseHelper.ClienteDataBaseHelper;
 import adaptivex.pedidoscloud.Model.Marca;
-import adaptivex.pedidoscloud.Model.MarcaDataBaseHelper;
+import adaptivex.pedidoscloud.Model.DatabaseHelper.MarcaDataBaseHelper;
 import adaptivex.pedidoscloud.Model.Pedido;
-import adaptivex.pedidoscloud.Model.PedidoDataBaseHelper;
+import adaptivex.pedidoscloud.Model.DatabaseHelper.PedidoDataBaseHelper;
 import adaptivex.pedidoscloud.Model.Producto;
-import adaptivex.pedidoscloud.Model.ProductoDataBaseHelper;
+import adaptivex.pedidoscloud.Model.DatabaseHelper.ProductoDataBaseHelper;
 import adaptivex.pedidoscloud.R;
 import adaptivex.pedidoscloud.Servicios.Helpers.HelperCategorias;
 import adaptivex.pedidoscloud.Servicios.Helpers.HelperClientes;
-import adaptivex.pedidoscloud.Servicios.Helpers.HelperHojarutadetalles;
-import adaptivex.pedidoscloud.Servicios.Helpers.HelperHojarutas;
 import adaptivex.pedidoscloud.Servicios.Helpers.HelperMarcas;
 import adaptivex.pedidoscloud.Servicios.Helpers.HelperProductos;
 
@@ -127,17 +119,6 @@ public class SyncDatosActivity extends AppCompatActivity implements View.OnClick
                 sync.execute();
                 break;
 
-            case R.id.btnSyncHojarutas:
-                Toast.makeText(getBaseContext(), "Descargando Hoja de Ruta ", Toast.LENGTH_LONG).show();
-                HelperHojarutas hhr = new HelperHojarutas(getBaseContext());
-                hhr.execute();
-                break;
-
-            case R.id.btnSyncHojarutadetalles:
-                Toast.makeText(getBaseContext(), "Descargando Hoja de Ruta items", Toast.LENGTH_LONG).show();
-                HelperHojarutadetalles hhrd = new HelperHojarutadetalles(getBaseContext());
-                hhrd.execute();
-                break;
 
 
             case R.id.btnLimpiarPedidos:
@@ -236,20 +217,6 @@ public class SyncDatosActivity extends AppCompatActivity implements View.OnClick
                     SincronizarMarcas(jsonStr);
                     break;
 
-
-                case HojarutaDataBaseHelper.TABLE_NAME:
-                    jsonStr = webreq.makeWebServiceCall(Configurador.urlHojarutas, WebRequest.GET,this.registro);
-                    SincronizarHojarutas(jsonStr);
-                    break;
-
-
-                case HojarutadetalleDataBaseHelper.TABLE_NAME:
-                    jsonStr = webreq.makeWebServiceCall(Configurador.urlHojarutadetalles, WebRequest.GET,this.registro);
-                    SincronizarHojarutadetalles(jsonStr);
-                    break;
-
-
-
             }
 
             //setListaregistros(ParseJSON(jsonStr));
@@ -286,15 +253,6 @@ public class SyncDatosActivity extends AppCompatActivity implements View.OnClick
 
                 case "marca":
                     SincronizarMarcas(jsontexto);
-
-                    break;
-
-                case "hojaruta":
-                    SincronizarHojarutas(jsontexto);
-
-                    break;
-                case "hojarutadetalle":
-                    SincronizarHojarutadetalles(jsontexto);
                     break;
 
                 default:
@@ -537,95 +495,5 @@ public class SyncDatosActivity extends AppCompatActivity implements View.OnClick
 
 
 
-    private boolean SincronizarHojarutas(String json){
-        HojarutaController dbHelper = new HojarutaController(getBaseContext());
-        dbHelper.abrir();
-
-        if (json != null) {
-            try {
-                Boolean resultado;
-                resultado = false;
-                JSONObject jsonObj = new JSONObject(json);
-                JSONArray hojarutas = jsonObj.getJSONArray("data");
-                Hojaruta item = new Hojaruta();
-                dbHelper.limpiar();
-
-                Log.e("Debug:",item.toString() );
-                //Recorrer Lista
-                for (int i = 0; i < hojarutas.length(); i++) {
-                    JSONObject c = hojarutas.getJSONObject(i);
-                    JSONObject registro = c.getJSONObject("Hojaruta");
-                    Log.d("Debuging1: ", "> " + registro.toString());
-                    item.setId(registro.getInt("id"));
-                    item.setUser_id(registro.getInt(HojarutaDataBaseHelper.USER_ID));
-                    item.setDia_id(registro.getInt(HojarutaDataBaseHelper.DIA_ID));
-                    item.setTitulo(registro.getString(HojarutaDataBaseHelper.TITULO));
-                    item.setNotas(registro.getString(HojarutaDataBaseHelper.NOTAS));
-                    dbHelper.abrir().agregar(item);
-                }
-                resultado = true;
-                Toast.makeText(getBaseContext(), "Sincronizacion OK", Toast.LENGTH_LONG).show();
-
-                return resultado;
-            } catch (JSONException e) {
-                Log.d("SyncDatosActivity: ", e.toString());
-                setvMensaje(e.getMessage());
-                return false;
-            }
-        } else {
-            Log.e("Sincronizacion:", "No se pudo obtener informacion del web servisces Hojarutas");
-
-            return false;
-        }
-
-    } // Fin SincronizarHojarutas
-
-    private boolean SincronizarHojarutadetalles(String json){
-        HojarutadetalleController dbHelper = new HojarutadetalleController(getBaseContext());
-        dbHelper.abrir();
-
-        if (json != null) {
-            try {
-                Boolean resultado;
-                resultado = false;
-
-                JSONObject jsonObj = new JSONObject(json);
-                JSONArray Hojarutadetalles = jsonObj.getJSONArray("data");
-                Hojarutadetalle item = new Hojarutadetalle();
-                dbHelper.limpiar();
-
-                Log.e("Debug:",item.toString() );
-                //Recorrer Lista
-                for (int i = 0; i < Hojarutadetalles.length(); i++) {
-
-                    JSONObject c = Hojarutadetalles.getJSONObject(i);
-                    JSONObject registro = c.getJSONObject("Hojarutadetalle");
-                    Log.d("Debuging1: ", "> " + registro.toString());
-
-                    item.setId(registro.getInt("id"));
-                    item.setHojaruta_id(registro.getInt(HojarutadetalleDataBaseHelper.HOJARUTA_ID));
-                    item.setCliente_id(registro.getInt(HojarutadetalleDataBaseHelper.CLIENTE_ID));
-                    item.setHora(registro.getString(HojarutadetalleDataBaseHelper.HORA));
-                    item.setNotas(registro.getString(HojarutadetalleDataBaseHelper.NOTAS));
-
-                    dbHelper.abrir().agregar(item);
-                }
-                resultado = true;
-                setvMensaje("Sincro OK");
-
-                return resultado;
-
-            } catch (JSONException e) {
-                Log.d("SyncDatosActivity: ", e.toString());
-                setvMensaje(e.getMessage());
-                return false;
-            }
-        } else {
-            Log.e("Sincronizacion:", "No se pudo obtener informacion del web servisces Hojarutadetalles");
-
-            return false;
-        }
-
-    } // Fin SincronizarHojarutadetalle
     }
 }

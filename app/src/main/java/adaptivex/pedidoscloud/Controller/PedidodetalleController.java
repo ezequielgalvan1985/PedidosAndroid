@@ -10,9 +10,8 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import adaptivex.pedidoscloud.Model.PedidoDataBaseHelper;
 import adaptivex.pedidoscloud.Model.Pedidodetalle;
-import adaptivex.pedidoscloud.Model.PedidodetalleDataBaseHelper;
+import adaptivex.pedidoscloud.Model.DatabaseHelper.PedidodetalleDataBaseHelper;
 import adaptivex.pedidoscloud.Model.Pote;
 import adaptivex.pedidoscloud.Model.Producto;
 

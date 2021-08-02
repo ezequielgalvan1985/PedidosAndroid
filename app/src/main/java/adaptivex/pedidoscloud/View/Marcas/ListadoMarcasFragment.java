@@ -15,7 +15,7 @@ import android.widget.Toast;
 import adaptivex.pedidoscloud.Controller.AdaptersListView.MarcaAdapter;
 import adaptivex.pedidoscloud.Controller.MarcaController;
 import adaptivex.pedidoscloud.Model.Marca;
-import adaptivex.pedidoscloud.Model.MarcaDataBaseHelper;
+import adaptivex.pedidoscloud.Model.DatabaseHelper.MarcaDataBaseHelper;
 import adaptivex.pedidoscloud.R;
 
 import java.util.ArrayList;

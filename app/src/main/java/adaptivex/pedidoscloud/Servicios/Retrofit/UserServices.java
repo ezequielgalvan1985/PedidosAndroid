@@ -17,7 +17,7 @@ import adaptivex.pedidoscloud.Controller.UserController;
 import adaptivex.pedidoscloud.Model.LoginData;
 import adaptivex.pedidoscloud.Model.LoginResult;
 import adaptivex.pedidoscloud.Model.User;
-import adaptivex.pedidoscloud.Servicios.WebRequest;
+import adaptivex.pedidoscloud.Servicios.Retrofit.Interface.IUserRetrofit;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

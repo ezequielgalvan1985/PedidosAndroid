@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 import adaptivex.pedidoscloud.Core.WorkDate;
 import adaptivex.pedidoscloud.Model.Parameter;
-import adaptivex.pedidoscloud.Model.ParameterDataBaseHelper;
+import adaptivex.pedidoscloud.Model.DatabaseHelper.ParameterDataBaseHelper;
 
 /**
  * Created by ezequiel on 16/8/2017.

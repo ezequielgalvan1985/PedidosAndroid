@@ -26,7 +26,6 @@ import adaptivex.pedidoscloud.Servicios.Helpers.HelperPedidos;
 import adaptivex.pedidoscloud.View.Categorias.ListadoCategoriasFragment;
 import adaptivex.pedidoscloud.View.Consulting.ConfigFragment;
 import adaptivex.pedidoscloud.View.Consulting.ResumenFragment;
-import adaptivex.pedidoscloud.View.Hojarutas.ListadoHojarutasFragment;
 import adaptivex.pedidoscloud.View.Marcas.ListadoMarcasFragment;
 import adaptivex.pedidoscloud.View.Pedidodetalles.ListadoPedidodetallesFragment;
 import adaptivex.pedidoscloud.View.Pedidos.CargarDireccionFragment;
@@ -250,12 +249,6 @@ public class MainActivity extends AppCompatActivity
                     fragment = new ListadoMarcasFragment();
                     fragmentTransaction = true;
                     GlobalValues.getINSTANCIA().setActualFragment(GlobalValues.getINSTANCIA().LISTADOMARCAS);
-                    break;
-
-                case R.id.nav_hojarutas:
-                    fragment = new ListadoHojarutasFragment();
-                    fragmentTransaction = true;
-                    GlobalValues.getINSTANCIA().setActualFragment(GlobalValues.getINSTANCIA().LISTADOHOJARUTA);
                     break;
 
                 case R.id.nav_pedidosentrega:

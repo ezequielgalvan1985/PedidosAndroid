@@ -9,7 +9,7 @@ import android.widget.Toast;
 
 import adaptivex.pedidoscloud.Config.GlobalValues;
 import adaptivex.pedidoscloud.Model.User;
-import adaptivex.pedidoscloud.Model.UserDataBaseHelper;
+import adaptivex.pedidoscloud.Model.DatabaseHelper.UserDataBaseHelper;
 import adaptivex.pedidoscloud.Servicios.Helpers.HelperUser;
 
 /**

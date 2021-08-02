@@ -4,6 +4,8 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import adaptivex.pedidoscloud.Model.DatabaseHelper.ProductoDataBaseHelper;
+
 /**
  * Created by Ezequiel on 19/03/2017.
  */

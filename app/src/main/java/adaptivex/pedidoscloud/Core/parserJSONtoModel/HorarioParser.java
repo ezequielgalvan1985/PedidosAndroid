@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 import adaptivex.pedidoscloud.Core.WorkDate;
 import adaptivex.pedidoscloud.Model.Horario;
-import adaptivex.pedidoscloud.Model.HorarioDataBaseHelper;
+import adaptivex.pedidoscloud.Model.DatabaseHelper.HorarioDataBaseHelper;
 
 /**
  * Created by ezequiel on 16/8/2017.

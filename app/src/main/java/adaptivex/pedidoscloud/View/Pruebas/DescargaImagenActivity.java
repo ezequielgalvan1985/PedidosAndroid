@@ -20,7 +20,7 @@ import android.widget.Toast;
 
 import adaptivex.pedidoscloud.Controller.ProductoController;
 import adaptivex.pedidoscloud.Model.Producto;
-import adaptivex.pedidoscloud.Model.ProductoDataBaseHelper;
+import adaptivex.pedidoscloud.Model.DatabaseHelper.ProductoDataBaseHelper;
 import adaptivex.pedidoscloud.R;
 
 import java.io.File;

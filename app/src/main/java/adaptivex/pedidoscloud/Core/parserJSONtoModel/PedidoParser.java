@@ -5,16 +5,13 @@ import android.util.Log;
 import adaptivex.pedidoscloud.Core.WorkDate;
 import adaptivex.pedidoscloud.Core.WorkJsonField;
 import adaptivex.pedidoscloud.Model.Pedido;
-import adaptivex.pedidoscloud.Model.PedidoDataBaseHelper;
+import adaptivex.pedidoscloud.Model.DatabaseHelper.PedidoDataBaseHelper;
 import adaptivex.pedidoscloud.Model.Pedidodetalle;
-import adaptivex.pedidoscloud.Model.PedidodetalleDataBaseHelper;
+import adaptivex.pedidoscloud.Model.DatabaseHelper.PedidodetalleDataBaseHelper;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.lang.reflect.Array;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 /**

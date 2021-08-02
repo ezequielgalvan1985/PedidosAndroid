@@ -3,7 +3,7 @@ package adaptivex.pedidoscloud.Core.parserJSONtoModel;
 import android.util.Log;
 
 import adaptivex.pedidoscloud.Model.User;
-import adaptivex.pedidoscloud.Model.UserDataBaseHelper;
+import adaptivex.pedidoscloud.Model.DatabaseHelper.UserDataBaseHelper;
 
 import org.json.JSONObject;
 

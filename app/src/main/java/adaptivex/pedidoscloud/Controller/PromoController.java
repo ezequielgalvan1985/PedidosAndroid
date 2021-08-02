@@ -8,12 +8,11 @@ import android.database.sqlite.SQLiteException;
 import android.util.Log;
 import android.widget.Toast;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import adaptivex.pedidoscloud.Model.Pedido;
 import adaptivex.pedidoscloud.Model.Promo;
-import adaptivex.pedidoscloud.Model.PromoDataBaseHelper;
+import adaptivex.pedidoscloud.Model.DatabaseHelper.PromoDataBaseHelper;
 
 /**
  * Created by ezequiel on 30/05/2016.

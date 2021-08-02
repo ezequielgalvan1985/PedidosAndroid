@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 
 import adaptivex.pedidoscloud.Model.Persona;
-import adaptivex.pedidoscloud.Model.PersonaDataBaseHelper;
+import adaptivex.pedidoscloud.Model.DatabaseHelper.PersonaDataBaseHelper;
 
 /**
  * Created by ezequiel on 30/05/2016.

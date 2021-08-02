@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteException;
 import android.util.Log;
 
 import adaptivex.pedidoscloud.Model.Parameter;
-import adaptivex.pedidoscloud.Model.ParameterDataBaseHelper;
+import adaptivex.pedidoscloud.Model.DatabaseHelper.ParameterDataBaseHelper;
 
 /**
  * Created by ezequiel on 30/05/2016.

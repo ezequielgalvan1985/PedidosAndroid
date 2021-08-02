@@ -12,25 +12,29 @@ import android.widget.Toast;
 import adaptivex.pedidoscloud.Config.GlobalValues;
 import adaptivex.pedidoscloud.Controller.ParameterController;
 import adaptivex.pedidoscloud.Controller.UserController;
-import adaptivex.pedidoscloud.Model.CategoriaDataBaseHelper;
-import adaptivex.pedidoscloud.Model.ClienteDataBaseHelper;
-import adaptivex.pedidoscloud.Model.HorarioDataBaseHelper;
-import adaptivex.pedidoscloud.Model.MarcaDataBaseHelper;
+import adaptivex.pedidoscloud.Model.DatabaseHelper.CategoriaDataBaseHelper;
+import adaptivex.pedidoscloud.Model.DatabaseHelper.ClienteDataBaseHelper;
+import adaptivex.pedidoscloud.Model.DatabaseHelper.HorarioDataBaseHelper;
+import adaptivex.pedidoscloud.Model.DatabaseHelper.MarcaDataBaseHelper;
 import adaptivex.pedidoscloud.Model.Parameter;
-import adaptivex.pedidoscloud.Model.ParameterDataBaseHelper;
-import adaptivex.pedidoscloud.Model.PedidoDataBaseHelper;
-import adaptivex.pedidoscloud.Model.PedidodetalleDataBaseHelper;
-import adaptivex.pedidoscloud.Model.ProductoDataBaseHelper;
-import adaptivex.pedidoscloud.Model.PromoDataBaseHelper;
+import adaptivex.pedidoscloud.Model.DatabaseHelper.ParameterDataBaseHelper;
+import adaptivex.pedidoscloud.Model.DatabaseHelper.PedidoDataBaseHelper;
+import adaptivex.pedidoscloud.Model.DatabaseHelper.PedidodetalleDataBaseHelper;
+import adaptivex.pedidoscloud.Model.DatabaseHelper.ProductoDataBaseHelper;
+import adaptivex.pedidoscloud.Model.DatabaseHelper.PromoDataBaseHelper;
 import adaptivex.pedidoscloud.Model.User;
-import adaptivex.pedidoscloud.Model.UserDataBaseHelper;
-import adaptivex.pedidoscloud.Servicios.Helpers.HelperCategorias;
-import adaptivex.pedidoscloud.Servicios.Helpers.HelperClientes;
+import adaptivex.pedidoscloud.Model.DatabaseHelper.UserDataBaseHelper;
 import adaptivex.pedidoscloud.Servicios.Helpers.HelperHorarios;
-import adaptivex.pedidoscloud.Servicios.Helpers.HelperMarcas;
 import adaptivex.pedidoscloud.Servicios.Helpers.HelperParameters;
 import adaptivex.pedidoscloud.Servicios.Helpers.HelperProductos;
 import adaptivex.pedidoscloud.Servicios.Helpers.HelperPromos;
+import adaptivex.pedidoscloud.Servicios.Retrofit.CategoriaServices;
+import adaptivex.pedidoscloud.Servicios.Retrofit.HorarioServices;
+import adaptivex.pedidoscloud.Servicios.Retrofit.MarcaServices;
+import adaptivex.pedidoscloud.Servicios.Retrofit.ParameterServices;
+import adaptivex.pedidoscloud.Servicios.Retrofit.ProductoServices;
+import adaptivex.pedidoscloud.Servicios.Retrofit.MarcaServices;
+import adaptivex.pedidoscloud.Servicios.Retrofit.PromoServices;
 
 import static java.lang.Thread.sleep;
 
@@ -184,6 +188,29 @@ public  class IniciarApp  {
 
     public boolean downloadDatabase(){
         try {
+            MarcaServices m = new MarcaServices();
+            m.getMarcas();
+
+            CategoriaServices cat = new CategoriaServices();
+            cat.getCategorias();
+
+            ProductoServices ps = new ProductoServices();
+            ps.getProductos();
+
+            ParameterServices par = new ParameterServices();
+            par.getParameters();
+
+            PromoServices ph = new PromoServices();
+            ph.getMarcas();
+
+            HorarioServices hs = new HorarioServices();
+            hs.getHorarios();
+
+            //cliente solo se tiene que bajara el usuario logueado
+
+            /*
+            * se reemplaza por implementacion de Retrofit2
+            *
             HelperMarcas m = new HelperMarcas(getContext());
             m.execute();
 
@@ -207,6 +234,8 @@ public  class IniciarApp  {
             hh.setOpcion(HelperHorarios.OPTION_FIND_ALL);
             hh.execute();
 
+            return true;
+            */
             return true;
         }catch (Exception e ){
           Log.d("IniciarAPP", e.getMessage());
@@ -336,6 +365,5 @@ public  class IniciarApp  {
     public void setContext(Context context) {
         this.context = context;
     }
-
 
 }

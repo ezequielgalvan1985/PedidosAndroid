@@ -19,26 +19,15 @@ import adaptivex.pedidoscloud.MainActivity;
 import adaptivex.pedidoscloud.Model.LoginData;
 import adaptivex.pedidoscloud.Model.LoginResult;
 import adaptivex.pedidoscloud.Model.Marca;
-import adaptivex.pedidoscloud.Servicios.Retrofit.CallBackListener;
-import adaptivex.pedidoscloud.Servicios.Retrofit.IMarcaRetrofit;
-import adaptivex.pedidoscloud.Servicios.Retrofit.IUserRetrofit;
-import adaptivex.pedidoscloud.Servicios.Retrofit.MarcaServices;
-import adaptivex.pedidoscloud.Servicios.Retrofit.Posts;
+import adaptivex.pedidoscloud.Servicios.Retrofit.Interface.IUserRetrofit;
 import adaptivex.pedidoscloud.Servicios.Retrofit.UserServices;
 import retrofit2.Call;
 import retrofit2.Callback;
-import retrofit2.Converter.Factory.*;
-import com.google.gson.GsonBuilder;
-
-import org.w3c.dom.Text;
 
 import java.util.List;
 
 import adaptivex.pedidoscloud.Model.User;
 import adaptivex.pedidoscloud.R;
-import adaptivex.pedidoscloud.Servicios.Helpers.HelperUser;
-import adaptivex.pedidoscloud.Servicios.Retrofit.JsonPlaceHolderApi;
-import retrofit.converter.GsonConverter;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;

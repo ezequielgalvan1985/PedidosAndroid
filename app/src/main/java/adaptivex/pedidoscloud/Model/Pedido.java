@@ -2,7 +2,6 @@ package adaptivex.pedidoscloud.Model;
 
 import android.database.Cursor;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -15,6 +14,7 @@ import adaptivex.pedidoscloud.Config.Constants;
 import adaptivex.pedidoscloud.Config.GlobalValues;
 import adaptivex.pedidoscloud.Core.WorkDate;
 import adaptivex.pedidoscloud.Core.WorkNumber;
+import adaptivex.pedidoscloud.Model.DatabaseHelper.PedidodetalleDataBaseHelper;
 
 /**
  * Created by ezequiel on 25/06/2016.

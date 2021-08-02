@@ -8,17 +8,13 @@ import android.database.sqlite.SQLiteException;
 import android.util.Log;
 import android.widget.Toast;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import adaptivex.pedidoscloud.Core.Interfaces.ControllerInterface;
 import adaptivex.pedidoscloud.Core.ParameterHelper;
 import adaptivex.pedidoscloud.Core.Sql.SqlManager;
-import adaptivex.pedidoscloud.Core.Sql.SqlWhere;
-import adaptivex.pedidoscloud.Model.Cliente;
 import adaptivex.pedidoscloud.Model.Producto;
-import adaptivex.pedidoscloud.Model.ProductoDataBaseHelper;
+import adaptivex.pedidoscloud.Model.DatabaseHelper.ProductoDataBaseHelper;
 
 /**
  * Created by ezequiel on 30/05/2016.

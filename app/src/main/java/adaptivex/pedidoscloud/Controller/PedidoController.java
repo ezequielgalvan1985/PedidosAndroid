@@ -8,14 +8,10 @@ import android.database.sqlite.SQLiteException;
 import android.util.Log;
 import android.widget.Toast;
 
-import adaptivex.pedidoscloud.Config.Constants;
-import adaptivex.pedidoscloud.Config.GlobalValues;
 import adaptivex.pedidoscloud.Core.Interfaces.ControllerInterface;
-import adaptivex.pedidoscloud.Model.Cliente;
 import adaptivex.pedidoscloud.Model.Pedido;
-import adaptivex.pedidoscloud.Model.PedidoDataBaseHelper;
+import adaptivex.pedidoscloud.Model.DatabaseHelper.PedidoDataBaseHelper;
 import adaptivex.pedidoscloud.Model.Pedidodetalle;
-import adaptivex.pedidoscloud.Model.PedidodetalleDataBaseHelper;
 import adaptivex.pedidoscloud.Model.Pote;
 import adaptivex.pedidoscloud.Model.PoteItem;
 import adaptivex.pedidoscloud.Model.Promo;

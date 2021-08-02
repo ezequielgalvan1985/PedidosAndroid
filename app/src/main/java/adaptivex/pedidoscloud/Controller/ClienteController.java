@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteException;
 import android.util.Log;
 
 import adaptivex.pedidoscloud.Model.Cliente;
-import adaptivex.pedidoscloud.Model.ClienteDataBaseHelper;
+import adaptivex.pedidoscloud.Model.DatabaseHelper.ClienteDataBaseHelper;
 
 import java.util.ArrayList;
 

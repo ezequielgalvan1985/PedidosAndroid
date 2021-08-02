@@ -16,7 +16,7 @@ import adaptivex.pedidoscloud.Controller.ClienteController;
 import adaptivex.pedidoscloud.Controller.PedidoController;
 import adaptivex.pedidoscloud.Model.Cliente;
 import adaptivex.pedidoscloud.Model.Pedido;
-import adaptivex.pedidoscloud.Model.PedidoDataBaseHelper;
+import adaptivex.pedidoscloud.Model.DatabaseHelper.PedidoDataBaseHelper;
 import adaptivex.pedidoscloud.R;
 import adaptivex.pedidoscloud.View.RVAdapters.RVAdapterPedido;
 
