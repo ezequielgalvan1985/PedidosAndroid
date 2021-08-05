@@ -6,28 +6,27 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import adaptivex.pedidoscloud.Config.Configurador;
+import adaptivex.pedidoscloud.Model.IModelMethods;
 
 /**
  * Created by ezequiel on 30/05/2016.
  */
-public class CategoriaDataBaseHelper extends SQLiteOpenHelper
+public class EstadoDataBaseHelper extends SQLiteOpenHelper
 {
-    public static final String TABLE_NAME = "categorias";
+    public static final String TABLE_NAME = "estados";
     public static final String CAMPO_ID = "id";
     public static final String CAMPO_NOMBRE = "nombre";
     public static final String CAMPO_DESCRIPCION = "descripcion";
 
-    public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
-
     public static final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " (" +
             CAMPO_ID + " integer not null," +
-            CAMPO_NOMBRE + " text , " +
-            CAMPO_DESCRIPCION + " text " +
+            CAMPO_NOMBRE + " text not null, " +
+            CAMPO_DESCRIPCION + " text  " +
             " )";
 
+    public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
 
-
-    public CategoriaDataBaseHelper(Context context)
+    public EstadoDataBaseHelper(Context context)
     {
         super(context, Configurador.DBName, null, Configurador.DBVersion);
     }
@@ -47,4 +46,5 @@ public class CategoriaDataBaseHelper extends SQLiteOpenHelper
         db.execSQL(DROP_TABLE);
         onCreate(db);
     }
+
 }

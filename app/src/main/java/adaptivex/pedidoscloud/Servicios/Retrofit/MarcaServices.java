@@ -28,6 +28,15 @@ public  class MarcaServices {
 
     private Context ctx;
     private HashMap<String, String> registro;
+
+    public MarcaController getMarcasCtr() {
+        return marcasCtr;
+    }
+
+    public void setMarcasCtr(MarcaController marcasCtr) {
+        this.marcasCtr = marcasCtr;
+    }
+
     private MarcaController marcasCtr;
 
     public MarcaServices() {
@@ -35,7 +44,7 @@ public  class MarcaServices {
 
     public MarcaServices(Context pCtx){
         this.setCtx(pCtx);
-        this.marcasCtr = new MarcaController(this.getCtx());
+        this.setMarcasCtr(new MarcaController(pCtx));
     }
 
     private void setCtx(Context pCtx) {
@@ -46,37 +55,42 @@ public  class MarcaServices {
     }
 
     public List<Marca> getMarcas(){
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(Configurador.urlBase)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+        try{
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl(Configurador.urlBase)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
 
-        IMarcaRetrofit service = retrofit.create(IMarcaRetrofit.class);
-        //UserSessionLogin.getINSTANCIA().getUser().setToken("5d3b54d7422aa18506d26656bd93a0db5e4fcc6c");
-        Call<List<Marca>> call = service.getMarcas("Basic YWRtaW4yOjEyMzQ=");
-        call.enqueue(new Callback<List<Marca>>() {
-            @Override
-            public void onResponse(Call<List<Marca>> call, Response<List<Marca>> response) {
-                if(!response.isSuccessful()){
-                    Log.println(Log.INFO,"Marca: Error",String.valueOf(response.code()));
-                    return;
+            IMarcaRetrofit service = retrofit.create(IMarcaRetrofit.class);
+            //UserSessionLogin.getINSTANCIA().getUser().setToken("5d3b54d7422aa18506d26656bd93a0db5e4fcc6c");
+            Call<List<Marca>> call = service.getMarcas("Basic YWRtaW4yOjEyMzQ=");
+            call.enqueue(new Callback<List<Marca>>() {
+                @Override
+                public void onResponse(Call<List<Marca>> call, Response<List<Marca>> response) {
+                    if(!response.isSuccessful()){
+                        Log.println(Log.INFO,"Marca: Error",String.valueOf(response.code()));
+                        return;
+                    }
+                    getMarcasCtr().abrir().limpiar();
+                    marcasList = response.body();
+                    String content = "";
+                    for (Marca marca: marcasList){
+                        //Recorrer Lista
+                        getMarcasCtr().abrir().agregar(marca);
+                        content = marca.getId() + " " +marca.getNombre() + " " + marca.getDescripcion();
+                        Log.println(Log.INFO,"Marca: ",content);
+                    }
                 }
-                marcasCtr.abrir().limpiar();
-                marcasList = response.body();
-                String content = "";
-                for (Marca marca: marcasList){
-                    content += marca.getId() + " " +marca.getNombre() + " " + marca.getDescripcion();
-                    //Recorrer Lista
-                    marcasCtr.abrir().agregar(marca);
-                }
-                Log.println(Log.INFO,"Marca: ",content);
-            }
 
-            @Override
-            public void onFailure(Call<List<Marca>> call, Throwable t) {
-                Log.println(Log.ERROR,"Codigo: ",t.getMessage());
-            }
-        });
-        return marcasList;
+                @Override
+                public void onFailure(Call<List<Marca>> call, Throwable t) {
+                    Log.println(Log.ERROR,"Codigo: ",t.getMessage());
+                }
+            });
+            return marcasList;
+        }catch (Exception e){
+            Log.println(Log.ERROR,"Error Marca services: ",e.getMessage());
+            return null;
+        }
     }
 }

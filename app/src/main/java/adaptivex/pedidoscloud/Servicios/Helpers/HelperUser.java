@@ -87,13 +87,6 @@ public class HelperUser extends AsyncTask<Void, Void, Void> {
             registro.put("password", getUser().getPassword().toString());
             registro.put("email", getUser().getEmail().toString());
 
-            registro.put("localidad", getUser().getLocalidad().toString());
-            registro.put("calle", getUser().getCalle().toString());
-            registro.put("nro", getUser().getNro().toString());
-            registro.put("piso", getUser().getPiso().toString());
-            registro.put("contacto", getUser().getContacto().toString());
-            registro.put("telefono", getUser().getTelefono().toString());
-
             //Enviar Post
             jsonStr = webreq.makeWebServiceCall(Configurador.urlPostRegister, WebRequest.POST, this.registro);
 
@@ -115,14 +108,6 @@ public class HelperUser extends AsyncTask<Void, Void, Void> {
             registro.put("id", getUser().getId().toString());
             registro.put("username", getUser().getUsername().toString());
             registro.put("email", getUser().getEmail().toString());
-
-            registro.put("localidad", getUser().getLocalidad().toString());
-            registro.put("calle", getUser().getCalle().toString());
-            registro.put("nro", getUser().getNro().toString());
-            registro.put("piso", getUser().getPiso().toString());
-            registro.put("contacto", getUser().getContacto().toString());
-            registro.put("telefono", getUser().getTelefono().toString());
-
             //Enviar Post
             jsonStr = webreq.makeWebServiceCall(Configurador.urlPostUpdateUser, WebRequest.POST, this.registro);
 

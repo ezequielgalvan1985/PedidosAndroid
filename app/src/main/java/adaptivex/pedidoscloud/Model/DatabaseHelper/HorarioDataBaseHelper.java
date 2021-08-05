@@ -3,6 +3,7 @@ package adaptivex.pedidoscloud.Model.DatabaseHelper;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import adaptivex.pedidoscloud.Config.Configurador;
 
@@ -11,9 +12,7 @@ import adaptivex.pedidoscloud.Config.Configurador;
  */
 public class HorarioDataBaseHelper extends SQLiteOpenHelper
 {
-    public static final String DB_NAME = Configurador.DBName;
-    public static final String TABLE_NAME = "horarios";
-    public static final int DB_VERSION = Configurador.DBVersion;
+    public static final String TABLE_NAME           = "horarios";
     public static final String CAMPO_ID             = "id";
     public static final String CAMPO_DIA            = "dia";
     public static final String CAMPO_APERTURA       = "apertura";
@@ -23,7 +22,6 @@ public class HorarioDataBaseHelper extends SQLiteOpenHelper
     public static final String CAMPO_ROOT           = "horario";
 
     public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
-
     public static final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS "
             + TABLE_NAME
             + " (" +
@@ -36,21 +34,23 @@ public class HorarioDataBaseHelper extends SQLiteOpenHelper
 
     public HorarioDataBaseHelper(Context context)
     {
-        super(context, DB_NAME, null, DB_VERSION);
+        super(context, Configurador.DBName, null, Configurador.DBVersion);
     }
+
 
     @Override
     public void onCreate(SQLiteDatabase db)
     {
+        Log.println(Log.INFO,"DatabaseHelper: ",CREATE_TABLE);
         db.execSQL(CREATE_TABLE);
+
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
     {
+        Log.println(Log.INFO,"DatabaseHelper: ",DROP_TABLE);
         db.execSQL(DROP_TABLE);
         onCreate(db);
-
     }
-
 }

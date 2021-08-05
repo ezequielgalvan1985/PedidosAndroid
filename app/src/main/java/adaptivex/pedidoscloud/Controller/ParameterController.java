@@ -18,6 +18,7 @@ public class ParameterController
     private Context context;
     private ParameterDataBaseHelper dbHelper;
     private SQLiteDatabase db;
+
     public ParameterController(Context context)
     {
         this.context = context;

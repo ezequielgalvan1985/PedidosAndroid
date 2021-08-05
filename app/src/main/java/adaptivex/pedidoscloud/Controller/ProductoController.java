@@ -70,9 +70,15 @@ public class ProductoController implements ControllerInterface
             valores.put(ProductoDataBaseHelper.CAMPO_STOCK, item.getStock());
             valores.put(ProductoDataBaseHelper.CAMPO_CODIGOEXTERNO, item.getCodigoexterno());
 
-            valores.put(ProductoDataBaseHelper.CAMPO_CATEGORIA_ID, item.getCategoriaId());
-            valores.put(ProductoDataBaseHelper.CAMPO_MARCA_ID, item.getMarcaId());
+            valores.put(ProductoDataBaseHelper.CAMPO_CATEGORIA_ID, item.getCategoria().getId());
+            valores.put(ProductoDataBaseHelper.CAMPO_MARCA_ID, item.getMarca().getId());
             valores.put(ProductoDataBaseHelper.CAMPO_ENABLED, item.getEnabled());
+
+            valores.put(ProductoDataBaseHelper.CAMPO_ISPROMO, item.getIspromo());
+            valores.put(ProductoDataBaseHelper.CAMPO_UNIDADMEDIDA_ID, item.getUnidadmedida().getId());
+            valores.put(ProductoDataBaseHelper.CAMPO_ISFRACCIONADO, item.getIsfraccionado());
+            valores.put(ProductoDataBaseHelper.CAMPO_PRECIOPROMO, item.getPreciopromo());
+
 
             return db.insert(ProductoDataBaseHelper.TABLE_NAME, null, valores);
         }catch(Exception e ){
@@ -96,9 +102,14 @@ public class ProductoController implements ControllerInterface
             valores.put(ProductoDataBaseHelper.CAMPO_IMAGENURL, item.getImagenurl());
             valores.put(ProductoDataBaseHelper.CAMPO_CODIGOEXTERNO, item.getCodigoexterno());
             valores.put(ProductoDataBaseHelper.CAMPO_STOCK, item.getStock());
-            valores.put(ProductoDataBaseHelper.CAMPO_CATEGORIA_ID, item.getCategoriaId());
-            valores.put(ProductoDataBaseHelper.CAMPO_MARCA_ID, item.getMarcaId());
+            valores.put(ProductoDataBaseHelper.CAMPO_CATEGORIA_ID, item.getCategoria().getId());
+            valores.put(ProductoDataBaseHelper.CAMPO_MARCA_ID, item.getMarca().getId());
             valores.put(ProductoDataBaseHelper.CAMPO_ENABLED, item.getEnabled());
+
+            valores.put(ProductoDataBaseHelper.CAMPO_ISPROMO, item.getIspromo());
+            valores.put(ProductoDataBaseHelper.CAMPO_UNIDADMEDIDA_ID, item.getUnidadmedida().getId());
+            valores.put(ProductoDataBaseHelper.CAMPO_ISFRACCIONADO, item.getIsfraccionado());
+            valores.put(ProductoDataBaseHelper.CAMPO_PRECIOPROMO, item.getPreciopromo());
 
             db.update(ProductoDataBaseHelper.TABLE_NAME, valores,
                     ProductoDataBaseHelper.CAMPO_ID + " = ?", argumentos);
@@ -138,7 +149,13 @@ public class ProductoController implements ControllerInterface
                     ProductoDataBaseHelper.CAMPO_CODIGOEXTERNO,
                     ProductoDataBaseHelper.CAMPO_CATEGORIA_ID,
                     ProductoDataBaseHelper.CAMPO_MARCA_ID,
-                    ProductoDataBaseHelper.CAMPO_ENABLED
+                    ProductoDataBaseHelper.CAMPO_ENABLED,
+
+                    ProductoDataBaseHelper.CAMPO_ISPROMO,
+                    ProductoDataBaseHelper.CAMPO_UNIDADMEDIDA_ID,
+                    ProductoDataBaseHelper.CAMPO_ISFRACCIONADO,
+                    ProductoDataBaseHelper.CAMPO_PRECIOPROMO
+
             };
             String orderBy=  ProductoDataBaseHelper.CAMPO_NOMBRE + " ASC ";
             Cursor resultado = db.query(ProductoDataBaseHelper.TABLE_NAME, campos, null, null, null, null, orderBy);
@@ -167,7 +184,11 @@ public class ProductoController implements ControllerInterface
                     ProductoDataBaseHelper.CAMPO_CODIGOEXTERNO,
                     ProductoDataBaseHelper.CAMPO_CATEGORIA_ID,
                     ProductoDataBaseHelper.CAMPO_MARCA_ID,
-                    ProductoDataBaseHelper.CAMPO_ENABLED
+                    ProductoDataBaseHelper.CAMPO_ENABLED,
+                    ProductoDataBaseHelper.CAMPO_ISPROMO,
+                    ProductoDataBaseHelper.CAMPO_UNIDADMEDIDA_ID,
+                    ProductoDataBaseHelper.CAMPO_ISFRACCIONADO,
+                    ProductoDataBaseHelper.CAMPO_PRECIOPROMO
             };
             String orderBy=  ProductoDataBaseHelper.CAMPO_NOMBRE + " ASC ";
             String selection = ProductoDataBaseHelper.CAMPO_ENABLED +"=?";
@@ -201,7 +222,11 @@ public class ProductoController implements ControllerInterface
                     ProductoDataBaseHelper.CAMPO_CODIGOEXTERNO,
                     ProductoDataBaseHelper.CAMPO_CATEGORIA_ID,
                     ProductoDataBaseHelper.CAMPO_MARCA_ID,
-                    ProductoDataBaseHelper.CAMPO_ENABLED
+                    ProductoDataBaseHelper.CAMPO_ENABLED,
+                    ProductoDataBaseHelper.CAMPO_ISPROMO,
+                    ProductoDataBaseHelper.CAMPO_UNIDADMEDIDA_ID,
+                    ProductoDataBaseHelper.CAMPO_ISFRACCIONADO,
+                    ProductoDataBaseHelper.CAMPO_PRECIOPROMO
             };
             String orderBy = ProductoDataBaseHelper.CAMPO_NOMBRE + " ASC ";
             String[] argumentos = sm.getArguments();
@@ -277,7 +302,12 @@ public class ProductoController implements ControllerInterface
                 registro.setStock(c.getInt(c.getColumnIndex(ProductoDataBaseHelper.CAMPO_STOCK)));
                 registro.setCategoriaId(c.getInt(c.getColumnIndex(ProductoDataBaseHelper.CAMPO_CATEGORIA_ID)));
                 registro.setMarcaId(c.getInt(c.getColumnIndex(ProductoDataBaseHelper.CAMPO_MARCA_ID)));
-                registro.setEnabled(c.getInt(c.getColumnIndex(ProductoDataBaseHelper.CAMPO_ENABLED)));
+                registro.setEnabled(c.getInt(c.getColumnIndex(ProductoDataBaseHelper.CAMPO_ENABLED))==1);
+                registro.setIspromo(c.getInt(c.getColumnIndex(ProductoDataBaseHelper.CAMPO_ISPROMO))==1);
+                registro.setUnidadmedidaId(c.getInt(c.getColumnIndex(ProductoDataBaseHelper.CAMPO_UNIDADMEDIDA_ID)));
+                registro.setIsfraccionado(c.getInt(c.getColumnIndex(ProductoDataBaseHelper.CAMPO_ISFRACCIONADO))==1);
+                registro.setPreciopromo(c.getFloat(c.getColumnIndex(ProductoDataBaseHelper.CAMPO_PRECIOPROMO)));
+
                 al.add(registro);
                 registro = null;
             }while (c.moveToNext());
@@ -301,7 +331,13 @@ public class ProductoController implements ControllerInterface
             registro.setStock(c.getInt(c.getColumnIndex(ProductoDataBaseHelper.CAMPO_STOCK)));
             registro.setCategoriaId(c.getInt(c.getColumnIndex(ProductoDataBaseHelper.CAMPO_CATEGORIA_ID)));
             registro.setMarcaId(c.getInt(c.getColumnIndex(ProductoDataBaseHelper.CAMPO_MARCA_ID)));
-            registro.setEnabled(c.getInt(c.getColumnIndex(ProductoDataBaseHelper.CAMPO_ENABLED)));
+            registro.setEnabled(c.getInt(c.getColumnIndex(ProductoDataBaseHelper.CAMPO_ENABLED))==1);
+
+            registro.setIspromo(c.getInt(c.getColumnIndex(ProductoDataBaseHelper.CAMPO_ISPROMO))==1);
+            registro.setUnidadmedidaId(c.getInt(c.getColumnIndex(ProductoDataBaseHelper.CAMPO_UNIDADMEDIDA_ID)));
+            registro.setIsfraccionado(c.getInt(c.getColumnIndex(ProductoDataBaseHelper.CAMPO_ISFRACCIONADO))==1);
+            registro.setPreciopromo(c.getFloat(c.getColumnIndex(ProductoDataBaseHelper.CAMPO_PRECIOPROMO)));
+
             return registro;
         }catch(Exception e ){
             Log.d("ProductosController", e.getMessage());
@@ -343,7 +379,12 @@ public class ProductoController implements ControllerInterface
                 ProductoDataBaseHelper.CAMPO_CODIGOEXTERNO,
                 ProductoDataBaseHelper.CAMPO_CATEGORIA_ID,
                 ProductoDataBaseHelper.CAMPO_MARCA_ID,
-                ProductoDataBaseHelper.CAMPO_ENABLED
+                ProductoDataBaseHelper.CAMPO_ENABLED,
+
+                ProductoDataBaseHelper.CAMPO_ISPROMO,
+                ProductoDataBaseHelper.CAMPO_ISFRACCIONADO,
+                ProductoDataBaseHelper.CAMPO_PRECIOPROMO,
+                ProductoDataBaseHelper.CAMPO_UNIDADMEDIDA_ID
 
         };
 
@@ -373,7 +414,11 @@ public class ProductoController implements ControllerInterface
                     ProductoDataBaseHelper.CAMPO_CODIGOEXTERNO,
                     ProductoDataBaseHelper.CAMPO_CATEGORIA_ID,
                     ProductoDataBaseHelper.CAMPO_MARCA_ID,
-                    ProductoDataBaseHelper.CAMPO_ENABLED
+                    ProductoDataBaseHelper.CAMPO_ENABLED,
+                    ProductoDataBaseHelper.CAMPO_ISPROMO,
+                    ProductoDataBaseHelper.CAMPO_ISFRACCIONADO,
+                    ProductoDataBaseHelper.CAMPO_PRECIOPROMO,
+                    ProductoDataBaseHelper.CAMPO_UNIDADMEDIDA_ID,
             };
             String[] argumentos = {String.valueOf(id)};
             Cursor resultado = db.query(ProductoDataBaseHelper.TABLE_NAME, campos,
@@ -393,7 +438,12 @@ public class ProductoController implements ControllerInterface
                 registro.setCodigoexterno(resultado.getString(resultado.getColumnIndex(ProductoDataBaseHelper.CAMPO_CODIGOEXTERNO)));
                 registro.setCategoriaId(resultado.getInt(resultado.getColumnIndex(ProductoDataBaseHelper.CAMPO_CATEGORIA_ID)));
                 registro.setMarcaId(resultado.getInt(resultado.getColumnIndex(ProductoDataBaseHelper.CAMPO_MARCA_ID)));
-                registro.setEnabled(resultado.getInt(resultado.getColumnIndex(ProductoDataBaseHelper.CAMPO_ENABLED)));
+                registro.setEnabled(resultado.getInt(resultado.getColumnIndex(ProductoDataBaseHelper.CAMPO_ENABLED))==1);
+
+                registro.setIspromo(resultado.getInt(resultado.getColumnIndex(ProductoDataBaseHelper.CAMPO_ISPROMO))==1);
+                registro.setUnidadmedidaId(resultado.getInt(resultado.getColumnIndex(ProductoDataBaseHelper.CAMPO_UNIDADMEDIDA_ID)));
+                registro.setIsfraccionado(resultado.getInt(resultado.getColumnIndex(ProductoDataBaseHelper.CAMPO_ISFRACCIONADO))==1);
+                registro.setPreciopromo(resultado.getFloat(resultado.getColumnIndex(ProductoDataBaseHelper.CAMPO_PRECIOPROMO)));
 
             }
             return registro;
@@ -418,9 +468,11 @@ public class ProductoController implements ControllerInterface
                     ProductoDataBaseHelper.CAMPO_CODIGOEXTERNO,
                     ProductoDataBaseHelper.CAMPO_CATEGORIA_ID,
                     ProductoDataBaseHelper.CAMPO_MARCA_ID,
-                    ProductoDataBaseHelper.CAMPO_ENABLED
-
-
+                    ProductoDataBaseHelper.CAMPO_ENABLED,
+                    ProductoDataBaseHelper.CAMPO_ISPROMO,
+                    ProductoDataBaseHelper.CAMPO_ISFRACCIONADO,
+                    ProductoDataBaseHelper.CAMPO_PRECIOPROMO,
+                    ProductoDataBaseHelper.CAMPO_UNIDADMEDIDA_ID
             };
             String[] argumentos = {codigoExterno};
             String where =ProductoDataBaseHelper.CAMPO_CODIGOEXTERNO + "=?";
@@ -441,7 +493,12 @@ public class ProductoController implements ControllerInterface
                     registro.setCodigoexterno(resultado.getString(resultado.getColumnIndex(ProductoDataBaseHelper.CAMPO_CODIGOEXTERNO)));
                     registro.setCategoriaId(resultado.getInt(resultado.getColumnIndex(ProductoDataBaseHelper.CAMPO_CATEGORIA_ID)));
                     registro.setMarcaId(resultado.getInt(resultado.getColumnIndex(ProductoDataBaseHelper.CAMPO_MARCA_ID)));
-                    registro.setEnabled(resultado.getInt(resultado.getColumnIndex(ProductoDataBaseHelper.CAMPO_ENABLED)));
+                    registro.setEnabled(resultado.getInt(resultado.getColumnIndex(ProductoDataBaseHelper.CAMPO_ENABLED))==1);
+
+                    registro.setIspromo(resultado.getInt(resultado.getColumnIndex(ProductoDataBaseHelper.CAMPO_ISPROMO))==1);
+                    registro.setPreciopromo(resultado.getFloat(resultado.getColumnIndex(ProductoDataBaseHelper.CAMPO_PRECIOPROMO)));
+                    registro.setIsfraccionado(resultado.getInt(resultado.getColumnIndex(ProductoDataBaseHelper.CAMPO_ISFRACCIONADO))==1);
+                    registro.setUnidadmedidaId(resultado.getInt(resultado.getColumnIndex(ProductoDataBaseHelper.CAMPO_UNIDADMEDIDA_ID)));
 
                 }
             }

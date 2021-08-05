@@ -57,7 +57,7 @@ public class ProductoParser {
                     if (registro.has(ProductoDataBaseHelper.CAMPO_STOCK)) producto.setStock(registro.getInt(ProductoDataBaseHelper.CAMPO_STOCK)); else producto.setStock(0);
                     if (registro.has(ProductoDataBaseHelper.CAMPO_CODIGOEXTERNO)) producto.setCodigoexterno(registro.getString(ProductoDataBaseHelper.CAMPO_CODIGOEXTERNO)); else producto.setCodigoexterno("");
                     if (registro.has(ProductoDataBaseHelper.CAMPO_ENABLED)) {  enabled = registro.getBoolean(ProductoDataBaseHelper.CAMPO_ENABLED) ? 1 : 0; }
-                    producto.setEnabled(enabled);
+                    //producto.setEnabled(enabled);
 
                     if (registro.has(ProductoDataBaseHelper.JSON_CAMPO_CATEGORIA)){
                         JSONObject categoria = registro.getJSONObject(ProductoDataBaseHelper.JSON_CAMPO_CATEGORIA);

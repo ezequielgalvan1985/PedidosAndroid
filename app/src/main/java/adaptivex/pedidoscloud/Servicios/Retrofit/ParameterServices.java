@@ -28,6 +28,15 @@ public  class ParameterServices {
 
     private Context ctx;
     private HashMap<String, String> registro;
+
+    public ParameterController getParametersCtr() {
+        return parametersCtr;
+    }
+
+    public void setParametersCtr(ParameterController parametersCtr) {
+        this.parametersCtr = parametersCtr;
+    }
+
     private ParameterController parametersCtr;
 
     public ParameterServices() {
@@ -35,7 +44,7 @@ public  class ParameterServices {
 
     public ParameterServices(Context pCtx){
         this.setCtx(pCtx);
-        this.parametersCtr = new ParameterController(this.getCtx());
+        this.setParametersCtr(new ParameterController(pCtx));
     }
 
     private void setCtx(Context pCtx) {
@@ -61,15 +70,16 @@ public  class ParameterServices {
                     Log.println(Log.INFO,"Parameter: Error",String.valueOf(response.code()));
                     return;
                 }
-                parametersCtr.abrir().limpiar();
+                getParametersCtr().abrir().limpiar();
                 parametersList = response.body();
                 String content = "";
                 for (Parameter parameter: parametersList){
-                    content += parameter.getId() + " " +parameter.getNombre() + " " + parameter.getDescripcion();
+                    content = parameter.getId() + " " +parameter.getNombre() + " " + parameter.getDescripcion();
                     //Recorrer Lista
                     parametersCtr.abrir().agregar(parameter);
+                    Log.println(Log.INFO,"Parameter: ",content);
                 }
-                Log.println(Log.INFO,"Parameter: ",content);
+
             }
 
             @Override

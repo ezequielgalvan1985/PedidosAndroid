@@ -167,7 +167,7 @@ public class SyncDatosActivity extends AppCompatActivity implements View.OnClick
             Log.d("Debug: ", "> " + this.getEntidad());
             this.setEntidad(entidad);
             registro = new HashMap<String, String>();
-            registro.put("empresa_id", String.valueOf(GlobalValues.getINSTANCIA().getUserlogued().getEntidad_id()));
+            //registro.put("empresa_id", String.valueOf(GlobalValues.getINSTANCIA().getUserlogued().getEntidad_id()));
             this.setvMensaje("Registros Agregados correctamente");
         }
 

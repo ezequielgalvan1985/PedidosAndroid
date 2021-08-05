@@ -17,18 +17,21 @@ import adaptivex.pedidoscloud.Servicios.Helpers.HelperUser;
  */
 public class UserController extends AppController{
     private User user;
-    private User[] users;
-    private boolean wreturn;
     private String tabla = "User";
+
+    /*      DATABASE        */
+    private Context context;
+    private UserDataBaseHelper dbHelper;
+    private SQLiteDatabase db;
 
 
 
 
     //Obtener datos del usuario guardado en la base de datos
-    public User getUserDB(){
+    public User getUserDB(int id){
         try{
             UserController pc = new UserController(this.getContext());
-            User u = pc.abrir().findUser();
+            User u = pc.abrir().findUser(id);
             return u;
         }catch(Exception e){
             Toast.makeText(getContext(), "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
@@ -53,12 +56,12 @@ public class UserController extends AppController{
 
         try {
             this.getConn().add(tabla, valores);
+
         } catch (Exception e) {
             e.printStackTrace();
+            return false;
         }
-
-        return wreturn;
-
+        return true;
     }
 
     public boolean login(String username, String pass){
@@ -102,11 +105,6 @@ public class UserController extends AppController{
 
 
 
-    /*      DATABASE        */
-    private Context context;
-    private UserDataBaseHelper dbHelper;
-    private SQLiteDatabase db;
-
     public UserController(Context context)
     {
         this.context = context;
@@ -126,18 +124,8 @@ public class UserController extends AppController{
 
             valores.put(UserDataBaseHelper.ID, item.getId());
             valores.put(UserDataBaseHelper.USERNAME, item.getUsername());
-            valores.put(UserDataBaseHelper.ENTIDAD_ID, item.getEntidad_id());
-            valores.put(UserDataBaseHelper.GROUP_ID, item.getGroup_id());
             valores.put(UserDataBaseHelper.EMAIL, item.getEmail());
-            valores.put(UserDataBaseHelper.LOCALIDAD, item.getLocalidad());
-            valores.put(UserDataBaseHelper.CALLE, item.getCalle());
-            valores.put(UserDataBaseHelper.NRO, item.getNro());
-            valores.put(UserDataBaseHelper.PISO, item.getPiso());
-            valores.put(UserDataBaseHelper.TELEFONO, item.getTelefono());
-            valores.put(UserDataBaseHelper.CONTACTO, item.getContacto());
-            valores.put(UserDataBaseHelper.CONTACTO, item.getContacto());
             valores.put(UserDataBaseHelper.LOGUED, item.getLogued());
-            valores.put(UserDataBaseHelper.ID_ANDROID, GlobalValues.getINSTANCIA().ID_ANDROID);
 
             return db.insert(UserDataBaseHelper.TABLE_NAME, null, valores);
         }catch (Exception e){
@@ -152,28 +140,18 @@ public class UserController extends AppController{
     public void editDB(User item)
     {
         try {
-            String[] argumentos = new String[] {String.valueOf(GlobalValues.getINSTANCIA().ID_ANDROID)};
+            String[] argumentos = new String[] {String.valueOf(item.getId())};
 
             ContentValues valores = new ContentValues();
 
             valores.put(UserDataBaseHelper.ID, item.getId());
-
             valores.put(UserDataBaseHelper.USERNAME, item.getUsername());
-            valores.put(UserDataBaseHelper.ENTIDAD_ID, item.getEntidad_id());
-            valores.put(UserDataBaseHelper.GROUP_ID, item.getGroup_id());
             valores.put(UserDataBaseHelper.EMAIL, item.getEmail());
-            valores.put(UserDataBaseHelper.LOCALIDAD, item.getLocalidad());
-            valores.put(UserDataBaseHelper.CALLE, item.getCalle());
-            valores.put(UserDataBaseHelper.NRO, item.getNro());
-            valores.put(UserDataBaseHelper.PISO, item.getPiso());
-            valores.put(UserDataBaseHelper.TELEFONO, item.getTelefono());
-            valores.put(UserDataBaseHelper.CONTACTO, item.getContacto());
             valores.put(UserDataBaseHelper.LOGUED, item.getLogued());
-            valores.put(UserDataBaseHelper.ID_ANDROID, GlobalValues.getINSTANCIA().ID_ANDROID);
 
             db.update(UserDataBaseHelper.TABLE_NAME,
                     valores,
-                    UserDataBaseHelper.ID_ANDROID + " = ?",
+                    UserDataBaseHelper.ID + " = ?",
                     argumentos);
         }catch (Exception e){
             Toast.makeText(context, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -199,15 +177,8 @@ public class UserController extends AppController{
         String[] campos = {
                 UserDataBaseHelper.ID,
                 UserDataBaseHelper.USERNAME,
-                UserDataBaseHelper.ENTIDAD_ID,
                 UserDataBaseHelper.GROUP_ID,
-                UserDataBaseHelper.EMAIL,
-                UserDataBaseHelper.LOCALIDAD,
-                UserDataBaseHelper.CALLE,
-                UserDataBaseHelper.NRO,
-                UserDataBaseHelper.PISO,
-                UserDataBaseHelper.TELEFONO,
-                UserDataBaseHelper.CONTACTO
+                UserDataBaseHelper.EMAIL
         };
         String[] argumentos = {String.valueOf(id)};
 
@@ -221,28 +192,21 @@ public class UserController extends AppController{
         return registro;
     }
 
-    public User findUser()
+    public User findUser(int id)
     {
         try {
             User registro = new User();
             String[] campos = {
                     UserDataBaseHelper.ID,
                     UserDataBaseHelper.USERNAME,
-                    UserDataBaseHelper.ENTIDAD_ID,
                     UserDataBaseHelper.GROUP_ID,
                     UserDataBaseHelper.EMAIL,
-                    UserDataBaseHelper.LOCALIDAD,
-                    UserDataBaseHelper.CALLE,
-                    UserDataBaseHelper.NRO,
-                    UserDataBaseHelper.PISO,
-                    UserDataBaseHelper.TELEFONO,
-                    UserDataBaseHelper.CONTACTO,
                     UserDataBaseHelper.LOGUED,
             };
-            String[] argumentos = new String[]{String.valueOf(GlobalValues.getINSTANCIA().ID_ANDROID)};
+            String[] argumentos = new String[]{String.valueOf(id)};
 
             Cursor resultado = db.query(UserDataBaseHelper.TABLE_NAME, campos,
-                    UserDataBaseHelper.ID_ANDROID + " = ?", argumentos, null, null, null);
+                    UserDataBaseHelper.ID + " = ?", argumentos, null, null, null);
             if (resultado != null) {
                 registro = parseObjectFromRecord(resultado);
             }
@@ -261,17 +225,8 @@ public class UserController extends AppController{
             if (c!=null){
                     c.moveToFirst();
                     object.setId(c.getInt(c.getColumnIndex(UserDataBaseHelper.ID)));
-
                     object.setUsername(c.getString(c.getColumnIndex(UserDataBaseHelper.USERNAME)));
-                    object.setEntidad_id(c.getInt(c.getColumnIndex(UserDataBaseHelper.ENTIDAD_ID)));
-                    object.setGroup_id(c.getInt(c.getColumnIndex(UserDataBaseHelper.GROUP_ID)));
                     object.setEmail(c.getString(c.getColumnIndex(UserDataBaseHelper.EMAIL)));
-                    object.setLocalidad(c.getString(c.getColumnIndex(UserDataBaseHelper.LOCALIDAD)));
-                    object.setCalle(c.getString(c.getColumnIndex(UserDataBaseHelper.CALLE)));
-                    object.setNro(c.getString(c.getColumnIndex(UserDataBaseHelper.NRO)));
-                    object.setPiso(c.getString(c.getColumnIndex(UserDataBaseHelper.PISO)));
-                    object.setTelefono(c.getString(c.getColumnIndex(UserDataBaseHelper.TELEFONO)));
-                    object.setContacto(c.getString(c.getColumnIndex(UserDataBaseHelper.CONTACTO)));
                     object.setLogued(c.getString(c.getColumnIndex(UserDataBaseHelper.LOGUED)));
                 }
 
@@ -281,10 +236,4 @@ public class UserController extends AppController{
             return null;
         }
     }
-
-
-
-
-
-
 }

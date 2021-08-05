@@ -13,9 +13,9 @@ import java.util.HashMap;
 import java.util.List;
 
 import adaptivex.pedidoscloud.Config.Configurador;
-import adaptivex.pedidoscloud.Controller.MarcaController;
-import adaptivex.pedidoscloud.Model.Marca;
-import adaptivex.pedidoscloud.Servicios.Retrofit.Interface.IMarcaRetrofit;
+import adaptivex.pedidoscloud.Controller.PromoController;
+import adaptivex.pedidoscloud.Model.Promo;
+import adaptivex.pedidoscloud.Servicios.Retrofit.Interface.IPromoRetrofit;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -23,19 +23,19 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public  class PromoServices {
-    public List<Marca> marcasList;
-    public Marca marca;
+    public List<Promo> promosList;
+    public Promo promo;
 
     private Context ctx;
     private HashMap<String, String> registro;
-    private MarcaController marcasCtr;
+    private PromoController promosCtr;
 
     public PromoServices() {
     }
 
     public PromoServices(Context pCtx){
         this.setCtx(pCtx);
-        this.marcasCtr = new MarcaController(this.getCtx());
+        this.promosCtr = new PromoController(this.getCtx());
     }
 
     private void setCtx(Context pCtx) {
@@ -45,38 +45,38 @@ public  class PromoServices {
         return ctx;
     }
 
-    public List<Marca> getMarcas(){
+    public List<Promo> getPromos(){
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(Configurador.urlBase)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        IMarcaRetrofit service = retrofit.create(IMarcaRetrofit.class);
+        IPromoRetrofit service = retrofit.create(IPromoRetrofit.class);
         //UserSessionLogin.getINSTANCIA().getUser().setToken("5d3b54d7422aa18506d26656bd93a0db5e4fcc6c");
-        Call<List<Marca>> call = service.getMarcas("Basic YWRtaW4yOjEyMzQ=");
-        call.enqueue(new Callback<List<Marca>>() {
+        Call<List<Promo>> call = service.getPromos("Basic YWRtaW4yOjEyMzQ=");
+        call.enqueue(new Callback<List<Promo>>() {
             @Override
-            public void onResponse(Call<List<Marca>> call, Response<List<Marca>> response) {
+            public void onResponse(Call<List<Promo>> call, Response<List<Promo>> response) {
                 if(!response.isSuccessful()){
-                    Log.println(Log.INFO,"Marca: Error",String.valueOf(response.code()));
+                    Log.println(Log.INFO,"Promo: Error",String.valueOf(response.code()));
                     return;
                 }
-                marcasCtr.abrir().limpiar();
-                marcasList = response.body();
+                promosCtr.abrir().limpiar();
+                promosList = response.body();
                 String content = "";
-                for (Marca marca: marcasList){
-                    content += marca.getId() + " " +marca.getNombre() + " " + marca.getDescripcion();
+                for (Promo promo: promosList){
+                    content += promo.getId() + " " +promo.getNombre() + " " + promo.getDescripcion();
                     //Recorrer Lista
-                    marcasCtr.abrir().agregar(marca);
+                    promosCtr.abrir().add(promo);
                 }
-                Log.println(Log.INFO,"Marca: ",content);
+                Log.println(Log.INFO,"Promo: ",content);
             }
 
             @Override
-            public void onFailure(Call<List<Marca>> call, Throwable t) {
+            public void onFailure(Call<List<Promo>> call, Throwable t) {
                 Log.println(Log.ERROR,"Codigo: ",t.getMessage());
             }
         });
-        return marcasList;
+        return promosList;
     }
 }

@@ -37,7 +37,7 @@ public class HelperMarcas extends AsyncTask<Void, Void, Void> {
         try{
             WebRequest webreq = new WebRequest();
             registro = new HashMap<String, String>();
-            registro.put("empresa_id", String.valueOf(GlobalValues.getINSTANCIA().getUserlogued().getEntidad_id()));
+            //registro.put("empresa_id", String.valueOf(GlobalValues.getINSTANCIA().getUserlogued().getEntidad_id()));
             String jsonStr = webreq.makeWebServiceCall(Configurador.urlMarcas, WebRequest.POST,registro);
             MarcaParser cp = new MarcaParser(jsonStr);
             cp.parseJsonToObject();

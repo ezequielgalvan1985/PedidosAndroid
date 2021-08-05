@@ -14,7 +14,67 @@ public class Producto {
     private String  codigoexterno;
     private Integer categoriaId;
     private Integer marcaId;
-    private Integer enabled;
+    private Boolean enabled;
+
+    private Boolean ispromo;
+    private Integer unidadmedidaId;
+    private Boolean isfraccionado;
+    private float   preciopromo;
+
+    private Marca marca;
+    private Categoria categoria;
+    private Unidadmedida unidadmedida;
+
+    public Unidadmedida getUnidadmedida() {
+        return unidadmedida;
+    }
+
+    public void setUnidadmedida(Unidadmedida unidadmedida) {
+        this.unidadmedida = unidadmedida;
+    }
+
+    public Marca getMarca() {
+        return marca;
+    }
+
+    public void setMarca(Marca marca) {
+        this.marca = marca;
+    }
+
+    public Categoria getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(Categoria categoria) {
+        this.categoria = categoria;
+    }
+
+    public Boolean getIsfraccionado() {
+        return isfraccionado;
+    }
+
+    public void setIsfraccionado(Boolean isfraccionado) {
+        this.isfraccionado = isfraccionado;
+    }
+
+    public Integer getUnidadmedidaId() {
+        return unidadmedidaId;
+    }
+
+    public void setUnidadmedidaId(Integer unidadmedidaId) {
+        this.unidadmedidaId = unidadmedidaId;
+    }
+
+
+
+    public float getPreciopromo() {
+        return preciopromo;
+    }
+
+    public void setPreciopromo(float preciopromo) {
+        this.preciopromo = preciopromo;
+    }
+
 
     public Integer getId() {
         return id;
@@ -41,6 +101,10 @@ public class Producto {
     }
 
 
+    public Boolean getEnabled() {
+        return enabled;
+    }
+
     public String getImagen() {
         return imagen;
     }
@@ -63,14 +127,6 @@ public class Producto {
 
     public void setStock(Integer stock) {
         this.stock = stock;
-    }
-
-    public float getPrecio() {
-        return precio;
-    }
-
-    public void setPrecio(float precio) {
-        this.precio = precio;
     }
 
     public String getCodigoexterno() {
@@ -97,11 +153,27 @@ public class Producto {
         this.marcaId = marcaId;
     }
 
-    public Integer getEnabled() {
-        return enabled;
+
+    public float getPrecio() {
+        return precio;
     }
 
-    public void setEnabled(Integer enabled) {
+    public void setPrecio(float precio) {
+        this.precio = precio;
+    }
+
+    public void setEnabled(Boolean enabled) {
         this.enabled = enabled;
     }
+
+    public Boolean getIspromo() {
+        return ispromo;
+    }
+
+    public void setIspromo(Boolean ispromo) {
+        this.ispromo = ispromo;
+    }
+
+
+
 }

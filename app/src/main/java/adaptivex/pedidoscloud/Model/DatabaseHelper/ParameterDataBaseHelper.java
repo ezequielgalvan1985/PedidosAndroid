@@ -3,6 +3,7 @@ package adaptivex.pedidoscloud.Model.DatabaseHelper;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import adaptivex.pedidoscloud.Config.Configurador;
 
@@ -29,7 +30,7 @@ public class ParameterDataBaseHelper extends SQLiteOpenHelper
     public static final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME
             + " (" +
             ID + " integer primary key autoincrement not null," +
-            NOMBRE + " text null, " +
+            NOMBRE + " text , " +
             DESCRIPCION + " text null, " +
             VALOR_TEXTO + " text null, " +
             VALOR_INTEGER + " integer null, " +
@@ -45,12 +46,16 @@ public class ParameterDataBaseHelper extends SQLiteOpenHelper
     @Override
     public void onCreate(SQLiteDatabase db)
     {
+        Log.println(Log.INFO,"DatabaseHelper: ",CREATE_TABLE);
+
         db.execSQL(CREATE_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
     {
+        Log.println(Log.INFO,"DatabaseHelper: ",DROP_TABLE);
+
         db.execSQL(DROP_TABLE);
         onCreate(db);
 

@@ -87,23 +87,23 @@
         <item
             android:id="@+id/nav_pedidodetalles"
             android:title="Pedidos Detalles"
-            android:visible="false"/>
+            android:visible="true"/>
         <item
             android:id="@+id/nav_categorias"
             android:title="Categorias"
-            android:visible="false"
+            android:visible="true"
             />
 
         <item
             android:id="@+id/nav_marcas"
             android:title="Marcas"
-            android:visible="false"
+            android:visible="true"
             />
 
         <item
             android:id="@+id/nav_hojarutas"
             android:title="Hojarutas"
-            android:visible="false"/>
+            android:visible="true"/>
 
 
     </group>

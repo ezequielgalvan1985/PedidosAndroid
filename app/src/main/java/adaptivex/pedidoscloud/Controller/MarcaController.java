@@ -41,6 +41,7 @@ public class MarcaController
     {
         ContentValues valores = new ContentValues();
         valores.put(MarcaDataBaseHelper.CAMPO_ID, item.getId());
+        valores.put(MarcaDataBaseHelper.CAMPO_NOMBRE, item.getNombre());
         valores.put(MarcaDataBaseHelper.CAMPO_DESCRIPCION, item.getDescripcion());
 
         return db.insert(MarcaDataBaseHelper.TABLE_NAME, null, valores);
@@ -52,6 +53,8 @@ public class MarcaController
         String[] argumentos = new String[]
                 {String.valueOf(item.getId())};
         ContentValues valores = new ContentValues();
+
+        valores.put(MarcaDataBaseHelper.CAMPO_NOMBRE, item.getNombre());
         valores.put(MarcaDataBaseHelper.CAMPO_DESCRIPCION, item.getDescripcion());
 
         db.update(MarcaDataBaseHelper.TABLE_NAME, valores,
@@ -67,6 +70,7 @@ public class MarcaController
     public Cursor obtenerTodos()
     {
         String[] campos = {MarcaDataBaseHelper.CAMPO_ID,
+                MarcaDataBaseHelper.CAMPO_NOMBRE,
                 MarcaDataBaseHelper.CAMPO_DESCRIPCION
 
         };
@@ -83,7 +87,7 @@ public class MarcaController
     {
         Marca registro = null;
         String[] campos = {MarcaDataBaseHelper.CAMPO_ID,
-
+                MarcaDataBaseHelper.CAMPO_NOMBRE,
                 MarcaDataBaseHelper.CAMPO_DESCRIPCION
 
         };
@@ -95,9 +99,8 @@ public class MarcaController
             resultado.moveToFirst();
             registro = new Marca();
             registro.setId(resultado.getInt(resultado.getColumnIndex(MarcaDataBaseHelper.CAMPO_ID)));
-
+            registro.setNombre(resultado.getString(resultado.getColumnIndex(MarcaDataBaseHelper.CAMPO_NOMBRE)));
             registro.setDescripcion(resultado.getString(resultado.getColumnIndex(MarcaDataBaseHelper.CAMPO_DESCRIPCION)));
-
         }
         return registro;
 

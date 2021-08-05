@@ -28,6 +28,15 @@ public  class HorarioServices {
 
     private Context ctx;
     private HashMap<String, String> registro;
+
+    public HorarioController getHorariosCtr() {
+        return horariosCtr;
+    }
+
+    public void setHorariosCtr(HorarioController horariosCtr) {
+        this.horariosCtr = horariosCtr;
+    }
+
     private HorarioController horariosCtr;
 
     public HorarioServices() {
@@ -35,7 +44,7 @@ public  class HorarioServices {
 
     public HorarioServices(Context pCtx){
         this.setCtx(pCtx);
-        this.horariosCtr = new HorarioController(this.getCtx());
+        this.setHorariosCtr(new HorarioController(pCtx));
     }
 
     private void setCtx(Context pCtx) {
@@ -61,13 +70,15 @@ public  class HorarioServices {
                     Log.println(Log.INFO,"Horario: Error",String.valueOf(response.code()));
                     return;
                 }
-                horariosCtr.abrir().limpiar();
+                getHorariosCtr().abrir().limpiar();
                 horariosList = response.body();
                 String content = "";
                 for (Horario horario: horariosList){
                     horariosCtr.abrir().agregar(horario);
+                    content = horario.getDia().toString() +" - " + horario.getObservaciones();
+                    Log.println(Log.INFO,"Horario: ",content );
                 }
-                Log.println(Log.INFO,"Horario: ",content);
+
             }
 
             @Override

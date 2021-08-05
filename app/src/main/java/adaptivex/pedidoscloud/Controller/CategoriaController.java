@@ -50,7 +50,7 @@ public class CategoriaController
     {
         ContentValues valores = new ContentValues();
         valores.put(CategoriaDataBaseHelper.CAMPO_ID, item.getId());
-
+        valores.put(CategoriaDataBaseHelper.CAMPO_NOMBRE, item.getNombre());
         valores.put(CategoriaDataBaseHelper.CAMPO_DESCRIPCION, item.getDescripcion());
 
 
@@ -63,8 +63,7 @@ public class CategoriaController
         String[] argumentos = new String[]
                 {String.valueOf(item.getId())};
         ContentValues valores = new ContentValues();
-
-
+        valores.put(CategoriaDataBaseHelper.CAMPO_NOMBRE, item.getNombre());
         valores.put(CategoriaDataBaseHelper.CAMPO_DESCRIPCION, item.getDescripcion());
         db.update(CategoriaDataBaseHelper.TABLE_NAME, valores,
                 CategoriaDataBaseHelper.CAMPO_ID + " = ?", argumentos);
@@ -79,6 +78,7 @@ public class CategoriaController
     public Cursor obtenerTodos()
     {
         String[] campos = {CategoriaDataBaseHelper.CAMPO_ID,
+                CategoriaDataBaseHelper.CAMPO_NOMBRE,
                 CategoriaDataBaseHelper.CAMPO_DESCRIPCION
 
         };

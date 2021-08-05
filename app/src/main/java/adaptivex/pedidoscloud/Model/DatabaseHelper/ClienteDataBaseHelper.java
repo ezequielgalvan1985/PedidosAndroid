@@ -28,12 +28,12 @@ public class ClienteDataBaseHelper extends SQLiteOpenHelper
 
     public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " (" +
             CAMPO_ID + " integer not null," +
-            CAMPO_RAZONSOCIAL + " text null ," +
-            CAMPO_DIRECCION + " text null ," +
-            CAMPO_TELEFONO + " text null ," +
-            CAMPO_CONTACTO + " text null, " +
-            CAMPO_EMAIL + " text null, " +
-            CAMPO_NDOC + " text null " +
+            CAMPO_RAZONSOCIAL + " text  ," +
+            CAMPO_DIRECCION + " text  ," +
+            CAMPO_TELEFONO + " text  ," +
+            CAMPO_CONTACTO + " text , " +
+            CAMPO_EMAIL + " text , " +
+            CAMPO_NDOC + " text  " +
             ")";
 
     public ClienteDataBaseHelper(Context context)

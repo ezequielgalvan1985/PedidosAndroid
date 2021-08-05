@@ -8,8 +8,8 @@ import adaptivex.pedidoscloud.Model.User;
  */
 public class Configurador {
 
-    public static final int DBVersion = 11;
-    public static final String DBName = "heladeria";
+    public static final int DBVersion = 3;
+    public static final String DBName = "DB_ROMA6";
     private static Configurador INSTANCIA;
     public static  User userlogin;
     public static final String urlImgClientes = "http://www.ellechero.com.ar/files/producto/imagen/";
@@ -45,7 +45,12 @@ public class Configurador {
     public static final String urlPostUpdateUser      = strRoot +"/v1/user/update";
     public static final String urlPromos              = strRoot +"/v1/promos";
     public static final String urlParameters          = strRoot +"/v1/parametros/";
-    public static final String urlHorarios            = strRoot + "/v1/horario/";
+    public static final String urlHorarios            = strRoot + "/v1/horarios/";
+    public static final String urlEstados             = strRoot + "/v1/estados/";
+    public static final String urlUnidadmedidas       = strRoot +"/v1/unidadmedidas/";
+    public static final String urlUserProfile         = strRoot +"/v1/userprofiles/";
+
+
 
     public  static Configurador getConfigurador() {
 

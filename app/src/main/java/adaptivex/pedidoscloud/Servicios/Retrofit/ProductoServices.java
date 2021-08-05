@@ -28,6 +28,15 @@ public  class ProductoServices {
 
     private Context ctx;
     private HashMap<String, String> registro;
+
+    public ProductoController getProductosCtr() {
+        return productosCtr;
+    }
+
+    public void setProductosCtr(ProductoController productosCtr) {
+        this.productosCtr = productosCtr;
+    }
+
     private ProductoController productosCtr;
 
     public ProductoServices() {
@@ -35,10 +44,11 @@ public  class ProductoServices {
 
     public ProductoServices(Context pCtx){
         this.setCtx(pCtx);
-        this.productosCtr = new ProductoController(this.getCtx());
+        this.setProductosCtr(new ProductoController(getCtx()));
     }
 
     private void setCtx(Context pCtx) {
+        this.ctx= pCtx;
     }
 
     public Context getCtx() {
@@ -61,13 +71,14 @@ public  class ProductoServices {
                     Log.println(Log.INFO,"Producto: Error",String.valueOf(response.code()));
                     return;
                 }
-                productosCtr.abrir().limpiar();
+                getProductosCtr().abrir().limpiar();
                 productosList = response.body();
                 String content = "";
                 for (Producto producto: productosList){
                     productosCtr.abrir().add(producto);
+                    Log.println(Log.INFO,"Producto: ",producto.getNombre().toString());
+
                 }
-                Log.println(Log.INFO,"Producto: ",content);
             }
 
             @Override

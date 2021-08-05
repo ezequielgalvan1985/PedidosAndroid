@@ -20,11 +20,16 @@ public class ProductoDataBaseHelper extends SQLiteOpenHelper
     public static final String CAMPO_PRECIO        = "precio";
     public static final String CAMPO_STOCK         = "stock";
     public static final String CAMPO_IMAGEN        = "imagen";
-    public static final String CAMPO_IMAGENURL     = "imagenurl";
-    public static final String CAMPO_CODIGOEXTERNO = "codigoexterno";
-    public static final String CAMPO_ENABLED       = "enabled";
-    public static final String CAMPO_CATEGORIA_ID = "categoria_id";
-    public static final String CAMPO_MARCA_ID = "marca_id";
+    public static final String CAMPO_IMAGENURL      = "imagenurl";
+    public static final String CAMPO_CODIGOEXTERNO  = "codigoexterno";
+    public static final String CAMPO_ENABLED        = "enabled";
+    public static final String CAMPO_CATEGORIA_ID   = "categoria_id";
+    public static final String CAMPO_MARCA_ID       = "marca_id";
+    public static final String CAMPO_ISPROMO        = "ispromo";
+    public static final String CAMPO_UNIDADMEDIDA_ID = "unidadmedida_id";
+    public static final String CAMPO_PRECIOPROMO     = "preciopromo_id";
+    public static final String CAMPO_ISFRACCIONADO   = "isfraccionado";
+
 
 
     public static final String JSON_CAMPO_CATEGORIA = "categoria";
@@ -46,8 +51,11 @@ public class ProductoDataBaseHelper extends SQLiteOpenHelper
             CAMPO_CODIGOEXTERNO + " text null default '', " +
             CAMPO_CATEGORIA_ID  + " integer not null ," +
             CAMPO_MARCA_ID      + " integer not null ," +
-            CAMPO_ENABLED       + " integer null default 0 " +
-
+            CAMPO_ENABLED       + " integer null default 0, " +
+            CAMPO_ISPROMO       + " integer null default 0, " +
+            CAMPO_UNIDADMEDIDA_ID + " integer not null, " +
+            CAMPO_PRECIOPROMO     + " decimal (7,2) default 0, " +
+            CAMPO_ISFRACCIONADO   + " integer null default 0 " +
             ")";
 
     public ProductoDataBaseHelper(Context context)

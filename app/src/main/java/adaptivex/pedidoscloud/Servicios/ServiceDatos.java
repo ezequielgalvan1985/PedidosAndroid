@@ -75,7 +75,7 @@ public class ServiceDatos extends Service {
             try{
                 WebRequest webreq = new WebRequest();
                 registro = new HashMap<String, String>();
-                registro.put("empresa_id", String.valueOf(GlobalValues.getINSTANCIA().getUserlogued().getEntidad_id()));
+                //registro.put("empresa_id", String.valueOf(GlobalValues.getINSTANCIA().getUserlogued().getEntidad_id()));
                 String jsonStr = webreq.makeWebServiceCall(Configurador.urlProductos, WebRequest.POST,registro);
                 ProductoParser cp = new ProductoParser(jsonStr);
                 cp.parseJsonToObject();

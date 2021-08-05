@@ -39,7 +39,6 @@ public class HelperCategorias extends AsyncTask<Void, Void, Void> {
         try{
             WebRequest webreq = new WebRequest();
             registro = new HashMap<String, String>();
-            registro.put("empresa_id", String.valueOf(GlobalValues.getINSTANCIA().getUserlogued().getEntidad_id()));
             jsonStr = webreq.makeWebServiceCall(Configurador.urlCategorias, WebRequest.POST,registro);
 
             setRespuesta(GlobalValues.getINSTANCIA().RETURN_OK);

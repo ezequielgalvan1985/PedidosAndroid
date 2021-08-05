@@ -236,7 +236,6 @@ public class HelperPedidos extends AsyncTask<Void, Void, Void> {
 
             pedido.put("id", String.valueOf(paramPedido.getId()));
             //pedido.put("fecha", String.valueOf(fechahoystr));
-            pedido.put("empresa_id", String.valueOf(GlobalValues.getINSTANCIA().getUserlogued().getEntidad_id()));
             pedido.put("user_id", String.valueOf(GlobalValues.getINSTANCIA().getUserlogued().getId()));
             pedido.put("android_id", String.valueOf(paramPedido.getIdTmp()));
             pedido.put("subtotal", String.valueOf(paramPedido.getSubtotal()));

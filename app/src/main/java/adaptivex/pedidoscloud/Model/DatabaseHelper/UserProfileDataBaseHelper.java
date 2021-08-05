@@ -10,30 +10,35 @@ import adaptivex.pedidoscloud.Config.Configurador;
 /**
  * Created by ezequiel on 30/05/2016.
  */
-public class UserDataBaseHelper extends SQLiteOpenHelper
+public class UserProfileDataBaseHelper extends SQLiteOpenHelper
 {
     public static final String DB_NAME = Configurador.DBName;
-    public static final String TABLE_NAME = "users";
+    public static final String TABLE_NAME = "userprofiles";
     public static final int    DB_VERSION = Configurador.DBVersion ;
-
-    public static final String ID = "id";
-    public static final String USERNAME = "username";
-    public static final String EMAIL = "email";
-    public static final String GROUP_ID = "group_id";
-    public static final String LOGUED    = "logued";
+    public static final String ID        = "id";
+    public static final String NOMBRE    = "nombre";
+    public static final String APELLIDO  = "apellido";
+    public static final String CALLE   = "calle";
+    public static final String NRO     = "nro";
+    public static final String PISO    = "piso";
+    public static final String CONTACTO    = "contacto";
+    public static final String TELEFONO    = "telefono";
 
 
     public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
 
     public static final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " (" +
-            ID + "         integer  null," +
-            USERNAME + "   text null, " +
-            GROUP_ID + "   text null, " +
-            EMAIL + "      text null, " +
-            LOGUED    + "  text null " +
+            ID          + "  integer not null," +
+            NOMBRE      + "  text, " +
+            APELLIDO    + "  text, " +
+            CALLE       + "  text, " +
+            NRO         + "  text, " +
+            PISO        + "  text, " +
+            CONTACTO    + "  text, " +
+            TELEFONO    + "  text " +
             " )";
 
-    public UserDataBaseHelper(Context context)
+    public UserProfileDataBaseHelper(Context context)
     {
         super(context, DB_NAME, null, DB_VERSION);
     }

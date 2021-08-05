@@ -44,9 +44,20 @@ public class GlobalValues {
     public static final Integer ID_ANDROID = 1;
 
 
-    //Variables de Login user
-    private int USER_ID_LOGIN;
-    private User userlogued;
+    //UNICA VARIABLE USADA PARA VERIFICAR SI EL USUARIO ESTA LOGUEADO
+    // NULL = NO ESTA LOGUEADO
+    // SI TIENE VALOR, ENTONCES ESTA LOGUEADO
+    private User usuariologueado;
+
+    public User getUsuariologueado() {
+        return usuariologueado;
+    }
+
+    public void setUsuariologueado(User usuariologueado) {
+        this.usuariologueado = usuariologueado;
+    }
+
+
 
     private int ActualFragment;
     public static final int LISTADOPRODUCTOS = 1;
@@ -181,7 +192,7 @@ public class GlobalValues {
     }
 
     public boolean isUserAuthenticated(){
-        if (getUserlogued()==null){
+        if (getUsuariologueado()==null){
             return false;
         }else{
             return true;
@@ -208,13 +219,7 @@ public class GlobalValues {
         this.vgFlagMenuNuevoPedido = vgFlagMenuNuevoPedido;
     }
 
-    public int getUSER_ID_LOGIN() {
-        return USER_ID_LOGIN;
-    }
 
-    public void setUSER_ID_LOGIN(int USER_ID_LOGIN) {
-        this.USER_ID_LOGIN = USER_ID_LOGIN;
-    }
 
     public long getVgPedidoSeleccionado() {
         return vgPedidoSeleccionado;
@@ -246,14 +251,6 @@ public class GlobalValues {
 
     public void setDiaSelecionado(int diaSelecionado) {
         this.diaSelecionado = diaSelecionado;
-    }
-
-    public User getUserlogued() {
-        return userlogued;
-    }
-
-    public void setUserlogued(User userlogued) {
-        this.userlogued = userlogued;
     }
 
 
@@ -294,7 +291,7 @@ public class GlobalValues {
                 //Nuevo Pedido
                 Pedido pedido = new Pedido();
                 pedido.setEstadoId(Constants.ESTADO_NUEVO);
-                pedido.setCliente_id(GlobalValues.getINSTANCIA().getUserlogued().getId());
+                pedido.setCliente_id(GlobalValues.getINSTANCIA().getUsuariologueado().getId());
                 pedido.setCreated(fechaDMY);
 
                 id = gestdb.abrir().agregar(pedido);
@@ -307,9 +304,7 @@ public class GlobalValues {
                 Toast.makeText(ctx, "Generando Nuevo Pedido  "+ String.valueOf(id) , Toast.LENGTH_SHORT).show();
 
                 //Refrescar los paramteros
-                User u = GlobalValues.getINSTANCIA().getUserlogued();
-
-
+                User u = GlobalValues.getINSTANCIA().getUsuariologueado();
 
                 ParameterController pc = new ParameterController(ctx);
                 Parameter p = pc.abrir().findByNombre(Constants.PARAM_PRECIO_CUCURUCHO);

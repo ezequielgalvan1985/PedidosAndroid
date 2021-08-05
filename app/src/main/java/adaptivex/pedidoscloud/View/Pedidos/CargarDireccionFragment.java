@@ -98,7 +98,7 @@ public class CargarDireccionFragment extends Fragment {
         //Cargar datos del usuario logueado
 
         UserController uc = new UserController(v.getContext());
-        User u = uc.abrir().findUser();
+        User u = uc.abrir().findUser(GlobalValues.getINSTANCIA().getUSER_ID_LOGIN());
         if (u!=null){
             //Asignar los valores a los campos
             txtTelefono   = (AutoCompleteTextView) v.findViewById(R.id.cargar_direccion_telefono);
@@ -108,14 +108,6 @@ public class CargarDireccionFragment extends Fragment {
             txtPiso       = (AutoCompleteTextView) v.findViewById(R.id.cargar_direccion_piso);
             txtContacto   = (AutoCompleteTextView) v.findViewById(R.id.cargar_direccion_contacto);
             lblTitulo = (TextView) v.findViewById(R.id.cargar_direccion_lbl_titulo);
-
-            txtTelefono.setText(u.getTelefono());
-            txtLocalidad.setText(u.getLocalidad());
-            txtCalle.setText(u.getCalle());
-            txtNro.setText(u.getNro());
-            txtPiso.setText(u.getPiso());
-            txtContacto.setText(u.getContacto());
-
             btnSiguiente = (Button) v.findViewById(R.id.cargar_direccion_btn_siguiente);
 
             btnSiguiente.setOnClickListener(new View.OnClickListener() {
@@ -166,13 +158,7 @@ public class CargarDireccionFragment extends Fragment {
     public boolean saveDireccionUser() {
         try{
             UserController uc = new UserController(getContext());
-            User u = uc.abrir().getUserDB();
-            u.setTelefono(txtTelefono.getText().toString());
-            u.setLocalidad(txtLocalidad.getText().toString());
-            u.setCalle(txtCalle.getText().toString());
-            u.setNro(txtNro.getText().toString());
-            u.setPiso(txtPiso.getText().toString());
-            u.setContacto(txtContacto.getText().toString());
+            User u = uc.abrir().getUserDB(GlobalValues.getINSTANCIA().getUSER_ID_LOGIN());
             uc.abrir().editDB(u);
 
             //Envia datos al servidor
@@ -206,8 +192,5 @@ public class CargarDireccionFragment extends Fragment {
             MODE_EDIT_USER = getArguments().getBoolean(Constants.PARAM_MODE_EDIT_USER);
         }
     }
-
-
-
 
 }

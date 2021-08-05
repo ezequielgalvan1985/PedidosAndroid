@@ -6,6 +6,8 @@ package adaptivex.pedidoscloud.Core;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -14,29 +16,41 @@ import adaptivex.pedidoscloud.Controller.ParameterController;
 import adaptivex.pedidoscloud.Controller.UserController;
 import adaptivex.pedidoscloud.Model.DatabaseHelper.CategoriaDataBaseHelper;
 import adaptivex.pedidoscloud.Model.DatabaseHelper.ClienteDataBaseHelper;
+import adaptivex.pedidoscloud.Model.DatabaseHelper.DatabaseHelper;
+import adaptivex.pedidoscloud.Model.DatabaseHelper.EstadoDataBaseHelper;
 import adaptivex.pedidoscloud.Model.DatabaseHelper.HorarioDataBaseHelper;
 import adaptivex.pedidoscloud.Model.DatabaseHelper.MarcaDataBaseHelper;
+import adaptivex.pedidoscloud.Model.DatabaseHelper.UnidadmedidaDataBaseHelper;
+import adaptivex.pedidoscloud.Model.DatabaseHelper.UserProfileDataBaseHelper;
+import adaptivex.pedidoscloud.Model.IModelMethods;
 import adaptivex.pedidoscloud.Model.Parameter;
 import adaptivex.pedidoscloud.Model.DatabaseHelper.ParameterDataBaseHelper;
 import adaptivex.pedidoscloud.Model.DatabaseHelper.PedidoDataBaseHelper;
 import adaptivex.pedidoscloud.Model.DatabaseHelper.PedidodetalleDataBaseHelper;
 import adaptivex.pedidoscloud.Model.DatabaseHelper.ProductoDataBaseHelper;
 import adaptivex.pedidoscloud.Model.DatabaseHelper.PromoDataBaseHelper;
+import adaptivex.pedidoscloud.Model.Unidadmedida;
 import adaptivex.pedidoscloud.Model.User;
 import adaptivex.pedidoscloud.Model.DatabaseHelper.UserDataBaseHelper;
+import adaptivex.pedidoscloud.Model.UserProfile;
 import adaptivex.pedidoscloud.Servicios.Helpers.HelperHorarios;
 import adaptivex.pedidoscloud.Servicios.Helpers.HelperParameters;
 import adaptivex.pedidoscloud.Servicios.Helpers.HelperProductos;
 import adaptivex.pedidoscloud.Servicios.Helpers.HelperPromos;
 import adaptivex.pedidoscloud.Servicios.Retrofit.CategoriaServices;
+import adaptivex.pedidoscloud.Servicios.Retrofit.EstadoServices;
 import adaptivex.pedidoscloud.Servicios.Retrofit.HorarioServices;
 import adaptivex.pedidoscloud.Servicios.Retrofit.MarcaServices;
 import adaptivex.pedidoscloud.Servicios.Retrofit.ParameterServices;
 import adaptivex.pedidoscloud.Servicios.Retrofit.ProductoServices;
 import adaptivex.pedidoscloud.Servicios.Retrofit.MarcaServices;
 import adaptivex.pedidoscloud.Servicios.Retrofit.PromoServices;
+import adaptivex.pedidoscloud.Servicios.Retrofit.UnidadmedidaServices;
+import adaptivex.pedidoscloud.Servicios.Retrofit.UserServices;
 
 import static java.lang.Thread.sleep;
+
+import java.util.List;
 
 public  class IniciarApp  {
     private Context context;
@@ -50,6 +64,7 @@ public  class IniciarApp  {
 
     public  boolean  iniciarBD(){
         try{
+
             SQLiteDatabase db;
             //Tablas
             ClienteDataBaseHelper dba = new ClienteDataBaseHelper(this.getContext());
@@ -70,11 +85,6 @@ public  class IniciarApp  {
             db.execSQL(m.CREATE_TABLE);
             db.close();
 
-            CategoriaDataBaseHelper ca = new CategoriaDataBaseHelper(getContext());
-            db = ca.getWritableDatabase();
-            db.execSQL(ca.DROP_TABLE);
-            db.execSQL(ca.CREATE_TABLE);
-            db.close();
 
             PedidoDataBaseHelper pe = new PedidoDataBaseHelper(getContext());
             db = pe.getWritableDatabase();
@@ -110,11 +120,48 @@ public  class IniciarApp  {
             db.execSQL(userdb.CREATE_TABLE);
             db.close();
 
-            HorarioDataBaseHelper horario = new HorarioDataBaseHelper(getContext());
-            db = horario.getWritableDatabase();
-            db.execSQL(horario.DROP_TABLE);
-            db.execSQL(horario.CREATE_TABLE);
+            HorarioDataBaseHelper ho = new HorarioDataBaseHelper(getContext());
+            db = ho.getWritableDatabase();
+            db.execSQL(ho.DROP_TABLE);
+            db.execSQL(ho.CREATE_TABLE);
             db.close();
+
+            CategoriaDataBaseHelper cat = new CategoriaDataBaseHelper(getContext());
+            db = cat.getWritableDatabase();
+            db.execSQL(cat.DROP_TABLE);
+            db.execSQL(cat.CREATE_TABLE);
+            db.close();
+
+            EstadoDataBaseHelper est = new EstadoDataBaseHelper(getContext());
+            db = est.getWritableDatabase();
+            db.execSQL(est.DROP_TABLE);
+            db.execSQL(est.CREATE_TABLE);
+            db.close();
+
+            UnidadmedidaDataBaseHelper um = new UnidadmedidaDataBaseHelper(getContext());
+            db = um.getWritableDatabase();
+            db.execSQL(um.DROP_TABLE);
+            db.execSQL(um.CREATE_TABLE);
+            db.close();
+
+
+            UserProfileDataBaseHelper up = new UserProfileDataBaseHelper(getContext());
+            db = up.getWritableDatabase();
+            db.execSQL(up.DROP_TABLE);
+            db.execSQL(up.CREATE_TABLE);
+            db.close();
+
+            //HorarioDataBaseHelper   tabla_horario   = new HorarioDataBaseHelper(getContext());
+            //CategoriaDataBaseHelper tabla_categoria = new CategoriaDataBaseHelper(getContext());
+            //EstadoDataBaseHelper    tabla_estado    = new EstadoDataBaseHelper(getContext());
+
+            //List<DatabaseHelper> listaTablas = null;
+
+            //listaTablas.add(tabla_estado);
+            //listaTablas.add(tabla_categoria);
+            //listaTablas.add(tabla_horario);
+
+            //crearTablas(listaTablas);
 
             return true;
         }catch(Exception e ){
@@ -125,15 +172,31 @@ public  class IniciarApp  {
 
     }
 
+    /* no se usa, desarrollo por hacer
+    public boolean crearTablas(List<DatabaseHelper> listaTablas){
+        try{
+            SQLiteDatabase db;
+            for(DatabaseHelper tabla: listaTablas){
 
+                Log.println(Log.INFO,"Tabla: ", tabla.getNameTable());
+                db = tabla.getWritableDatabase();
+                db.execSQL(tabla.getDropTable());
+                db.execSQL(tabla.getCreateTable());
+                db.close();
+            }
+            return true;
+        }catch (Exception e){
+            Log.println(Log.DEBUG,"Error al Crear Tablas: ", e.getMessage());
+            return false;
+        }
+    }
+*/
     public boolean loginRemember(User user){
         try{
             /* Lee parametros, y los setea con el valor del usuario. Si no existen, los crea */
             boolean respuesta = true;
-            //ParameterController pc = new ParameterController(this.getContext());
             UserController uc = new UserController(this.getContext());
-
-            User u = uc.abrir().findUser();
+            User u = uc.abrir().findUser(user.getId());
 
             user.setLogued("Y");
             if (u == null){
@@ -155,12 +218,12 @@ public  class IniciarApp  {
         try{
             boolean respuesta = false;
             UserController uc = new UserController(this.getContext());
-            User u = uc.abrir().findUser();
+            User u = uc.abrir().findUser(1);
 
             if (u!=null){
                 if(u.getLogued().equals("Y")){
                     respuesta = true;
-                    GlobalValues.getINSTANCIA().setUserlogued(u);
+                   // GlobalValues.getINSTANCIA().setUserlogued(u);
                 };
             }
             return respuesta;
@@ -173,7 +236,7 @@ public  class IniciarApp  {
     public void logout(){
         try{
             UserController uc = new UserController(this.getContext());
-            User u = uc.abrir().findUser();
+            User u = uc.abrir().findUser(GlobalValues.getINSTANCIA().getUsuariologueado().getId());
             if (u != null){
                 u.setLogued("N");
                 uc.abrir().editDB(u);
@@ -188,25 +251,32 @@ public  class IniciarApp  {
 
     public boolean downloadDatabase(){
         try {
-            MarcaServices m = new MarcaServices();
+            MarcaServices m = new MarcaServices(getContext());
             m.getMarcas();
 
-            CategoriaServices cat = new CategoriaServices();
+            CategoriaServices cat = new CategoriaServices(getContext());
             cat.getCategorias();
 
-            ProductoServices ps = new ProductoServices();
+            ProductoServices ps = new ProductoServices(getContext());
             ps.getProductos();
 
-            ParameterServices par = new ParameterServices();
+            ParameterServices par = new ParameterServices(getContext());
             par.getParameters();
 
-            PromoServices ph = new PromoServices();
-            ph.getMarcas();
+            //PromoServices ph = new PromoServices(getContext());
+            //ph.getPromos();
 
-            HorarioServices hs = new HorarioServices();
+            HorarioServices hs = new HorarioServices(getContext());
             hs.getHorarios();
 
-            //cliente solo se tiene que bajara el usuario logueado
+            EstadoServices es = new EstadoServices(getContext());
+            es.getEstados();
+
+            UnidadmedidaServices um = new UnidadmedidaServices(getContext());
+            um.getUnidadmedidas();
+
+            UserProfile datos = new UserProfile((getContext());
+            datos.getUser();
 
             /*
             * se reemplaza por implementacion de Retrofit2

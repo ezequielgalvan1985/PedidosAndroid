@@ -1,4 +1,13 @@
 Desarrollar:
+--
+-- CREAR ENTIDAD
+--
+model
+databasehelper
+controller
+IRetrofit
+Services
+agregar en iniciarapp
 
 
 

@@ -7,12 +7,16 @@ import java.util.Date;
  */
 public class Parameter {
     private Integer id;
-    private String nombre;
-    private String valor_texto;
-    private Date valor_fecha;
-    private Double valor_decimal;
+    private String  nombre;
+    private String  descripcion;
+    private Date    valor_fecha;
     private Integer valor_integer;
-    private String descripcion;
+    private Double  valor_decimal;
+    private String  valor_texto;
+
+
+
+
 
 
     public Integer getId() {

@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import adaptivex.pedidoscloud.Config.Configurador;
+import adaptivex.pedidoscloud.Config.GlobalValues;
 import adaptivex.pedidoscloud.MainActivity;
 import adaptivex.pedidoscloud.Model.LoginData;
 import adaptivex.pedidoscloud.Model.LoginResult;
@@ -112,12 +113,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
 
         if (validateLogin()){
             //se reemplaza la funcionalidad utilizando RETROFIT usando las clases Services
-            /*
-            HelperUser hu = new HelperUser(getContext());
-            hu.setOpcion(HelperUser.OPTION_LOGIN);
-            hu.setUser(usertmp);
-            hu.execute();
-             */
+
             UserServices us = new UserServices();
             us.postLogin(usertmp.getUsername(), usertmp.getPassword());
             Retrofit retrofit = new Retrofit.Builder()
@@ -136,7 +132,16 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
                         return;
                     }
                     Log.println(Log.INFO,"Login: ","Login Exitoso");
+                    //Guardar info del usuario en la base local
+                    List<LoginResult> loginresultList = null;
+                    getEstadosCtr().abrir().limpiar();
 
+                    loginresultList= response.body();
+                    for (LoginResult loginresult: loginresultList)
+                    {
+
+                    }
+                    GlobalValues.getINSTANCIA().getUsuariologueado().setToken(call);
                     Intent i = new Intent(getActivity(), MainActivity.class);
                     startActivity(i);
                     getActivity().finish();

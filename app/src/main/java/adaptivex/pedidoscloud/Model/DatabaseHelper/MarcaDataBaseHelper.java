@@ -23,8 +23,8 @@ public class MarcaDataBaseHelper extends SQLiteOpenHelper
 
     public static final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " (" +
             CAMPO_ID + " integer not null," +
-            CAMPO_NOMBRE + " text  null," +
-            CAMPO_DESCRIPCION + " text null )";
+            CAMPO_NOMBRE + " text," +
+            CAMPO_DESCRIPCION + " text  )";
 
     public MarcaDataBaseHelper(Context context)
     {

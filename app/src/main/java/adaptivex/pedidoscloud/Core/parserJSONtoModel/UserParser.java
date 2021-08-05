@@ -42,7 +42,7 @@ public class UserParser {
                 vuser.setUsername(data.getString(UserDataBaseHelper.USERNAME));
                 vuser.setEmail(data.getString(UserDataBaseHelper.EMAIL));
 
-
+/*
                 if (data.has(UserDataBaseHelper.TELEFONO)) vuser.setTelefono(data.getString(UserDataBaseHelper.TELEFONO)); else vuser.setTelefono("");
                 if (data.has(UserDataBaseHelper.LOCALIDAD)) vuser.setLocalidad(data.getString(UserDataBaseHelper.LOCALIDAD)); else vuser.setLocalidad("");
                 if (data.has(UserDataBaseHelper.CALLE)) vuser.setCalle(data.getString(UserDataBaseHelper.CALLE)); else vuser.setCalle("");
@@ -50,7 +50,7 @@ public class UserParser {
                 if (data.has(UserDataBaseHelper.PISO)) vuser.setPiso(data.getString(UserDataBaseHelper.PISO)); else vuser.setPiso("");
                 if (data.has(UserDataBaseHelper.CONTACTO)) vuser.setContacto(data.getString(UserDataBaseHelper.CONTACTO)); else vuser.setContacto("");
                 setUser(vuser);
-
+*/
             }else {
                 Log.e("UserParser: ", "Status: " + getStatus().toString());
                 Log.e("UserParser: ", "Status: " + getMessage().toString());

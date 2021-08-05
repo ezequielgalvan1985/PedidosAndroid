@@ -28,6 +28,15 @@ public  class CategoriaServices {
 
     private Context ctx;
     private HashMap<String, String> registro;
+
+    public CategoriaController getCategoriasCtr() {
+        return categoriasCtr;
+    }
+
+    public void setCategoriasCtr(CategoriaController categoriasCtr) {
+        this.categoriasCtr = categoriasCtr;
+    }
+
     private CategoriaController categoriasCtr;
 
     public CategoriaServices() {
@@ -35,7 +44,7 @@ public  class CategoriaServices {
 
     public CategoriaServices(Context pCtx){
         this.setCtx(pCtx);
-        this.categoriasCtr = new CategoriaController(this.getCtx());
+        this.setCategoriasCtr(new CategoriaController(pCtx));
     }
 
     private void setCtx(Context pCtx) {
@@ -61,13 +70,14 @@ public  class CategoriaServices {
                     Log.println(Log.INFO,"Categoria: Error",String.valueOf(response.code()));
                     return;
                 }
-                categoriasCtr.abrir().limpiar();
+                getCategoriasCtr().abrir().limpiar();
                 categoriasList = response.body();
                 String content = "";
                 for (Categoria categoria: categoriasList){
-                    categoriasCtr.abrir().agregar(categoria);
+                    getCategoriasCtr().abrir().agregar(categoria);
+                    content = categoria.getId() + " " +categoria.getNombre() + " " + categoria.getDescripcion();
+                    Log.println(Log.INFO,"Categoria: ",content);
                 }
-                Log.println(Log.INFO,"Categoria: ",content);
             }
 
             @Override
