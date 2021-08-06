@@ -4,10 +4,10 @@ import android.util.Log;
 
 import adaptivex.pedidoscloud.Core.WorkDate;
 import adaptivex.pedidoscloud.Core.WorkJsonField;
-import adaptivex.pedidoscloud.Model.Pedido;
-import adaptivex.pedidoscloud.Model.DatabaseHelper.PedidoDataBaseHelper;
-import adaptivex.pedidoscloud.Model.Pedidodetalle;
-import adaptivex.pedidoscloud.Model.DatabaseHelper.PedidodetalleDataBaseHelper;
+import adaptivex.pedidoscloud.Entity.PedidoEntity;
+import adaptivex.pedidoscloud.Entity.DatabaseHelper.PedidoDataBaseHelper;
+import adaptivex.pedidoscloud.Entity.PedidodetalleEntity;
+import adaptivex.pedidoscloud.Entity.DatabaseHelper.PedidodetalleDataBaseHelper;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -26,8 +26,8 @@ public class PedidoParser {
     private String message;
     private JSONObject data;
     private JSONObject pedidojson;
-    private Pedido pedido;
-    private ArrayList<Pedido> listadoPedidos;
+    private PedidoEntity pedido;
+    private ArrayList<PedidoEntity> listadoPedidos;
 
     /* Solamente parsea los datos de un String Json, al Objeto PedidoParser */
     public PedidoParser() {
@@ -37,11 +37,11 @@ public class PedidoParser {
         setJsonstr(jsonstr);
     }
 
-    public Pedido parseJsonToObject() {
+    public PedidoEntity parseJsonToObject() {
         /* Completa datos del objeto  */
         try {
             //leer raiz
-            listadoPedidos = new ArrayList<Pedido>();
+            listadoPedidos = new ArrayList<PedidoEntity>();
 
             setJsonobj(new JSONObject(getJsonstr()));
             setStatus(getJsonobj().getString("code"));
@@ -51,12 +51,12 @@ public class PedidoParser {
             if ((Integer.parseInt(getStatus()) == 200)|| (Integer.parseInt(getStatus()) == 300)) {
                 //parser Usuario
 
-                pedido = new Pedido();
+                pedido = new PedidoEntity();
                 JSONObject pedidoJson = getData();
                 //Pedido header
 
                 pedido.setId(pedidoJson.getInt(PedidoDataBaseHelper.CAMPO_ID));
-                pedido.setIdTmp(pedidoJson.getInt(PedidoDataBaseHelper.ANDROID_ID_JSON));
+                pedido.setAndroid_id(pedidoJson.getInt(PedidoDataBaseHelper.ANDROID_ID_JSON));
                 pedido.setCreated(pedidoJson.getString(PedidoDataBaseHelper.FECHA_JSON));
                 pedido.setEstadoId(pedidoJson.getInt(PedidoDataBaseHelper.CAMPO_ESTADO_ID));
 
@@ -75,11 +75,12 @@ public class PedidoParser {
     }
 
     // Devuelve una lista de pedidos, procesa los datos de getJsonstr
-    public ArrayList<Pedido> parseResponseToArrayList() {
+    public ArrayList<PedidoEntity> parseResponseToArrayList() {
         /* Completa datos del objeto  */
         try {
             //leer raiz
-            listadoPedidos = new ArrayList<Pedido>();
+            listadoPedidos = new ArrayList<PedidoEntity>();
+
 
             setJsonobj(new JSONObject(getJsonstr()));
             setStatus(getJsonobj().getString("code"));
@@ -91,14 +92,14 @@ public class PedidoParser {
                 JSONArray listaPedidosJson = getJsonobj().getJSONArray("data");
 
                 for (int i = 0; i < listaPedidosJson.length(); i++) {
-                    pedido = new Pedido();
+                    pedido = new PedidoEntity();
                     JSONObject pedidoJson = (JSONObject) listaPedidosJson.get(i);
                     JSONArray pedidodetallesJson = pedidoJson.getJSONArray("pedidodetalles");
-                    ArrayList <Pedidodetalle> detalles  = new ArrayList<Pedidodetalle> ();
+                    ArrayList <PedidodetalleEntity> detalles  = new ArrayList<PedidodetalleEntity> ();
 
                     //Pedido header
                     pedido.setId(WorkJsonField.getInt(pedidoJson,    PedidoDataBaseHelper.CAMPO_ID));
-                    pedido.setIdTmp(WorkJsonField.getInt(pedidoJson, PedidoDataBaseHelper.ANDROID_ID_JSON));
+                    pedido.setAndroid_id(WorkJsonField.getInt(pedidoJson, PedidoDataBaseHelper.ANDROID_ID_JSON));
                     pedido.setCreated(WorkJsonField.getString(pedidoJson, PedidoDataBaseHelper.FECHA_JSON));
                     pedido.setEstadoId(WorkJsonField.getInt(pedidoJson, PedidoDataBaseHelper.CAMPO_ESTADO_ID));
                     pedido.setCliente_id(WorkJsonField.getInt(pedidoJson, PedidoDataBaseHelper.CAMPO_CLIENTE_ID));
@@ -141,9 +142,9 @@ public class PedidoParser {
                     * */
                     for (int d = 0; d < pedidodetallesJson.length(); d++) {
                         JSONObject pedidodetalleJson = (JSONObject) pedidodetallesJson.get(d);
-                        Pedidodetalle pd = new Pedidodetalle();
+                        PedidodetalleEntity pd = new PedidodetalleEntity();
 
-                        pd.setIdTmp(WorkJsonField.getInt(pedidodetalleJson, PedidodetalleDataBaseHelper.CAMPO_ID_TMP));
+                        pd.setAndroidId(WorkJsonField.getInt(pedidodetalleJson, PedidodetalleDataBaseHelper.CAMPO_ID_TMP));
                         pd.setId(WorkJsonField.getInt(pedidodetalleJson, PedidodetalleDataBaseHelper.CAMPO_ID));
                         pd.setMonto(WorkJsonField.getDouble(pedidodetalleJson, PedidodetalleDataBaseHelper.CAMPO_MONTO));
                         pd.setCantidad(WorkJsonField.getDouble(pedidodetalleJson, PedidodetalleDataBaseHelper.CAMPO_CANTIDAD));
@@ -151,7 +152,7 @@ public class PedidoParser {
                         pd.setProporcionHelado(WorkJsonField.getInt(pedidodetalleJson, PedidodetalleDataBaseHelper.CAMPO_PROPORCION_HELADO));
                         pd.setNroPote(WorkJsonField.getInt(pedidodetalleJson, PedidodetalleDataBaseHelper.CAMPO_NRO_POTE));
                         pd.setPedidoId(WorkJsonField.getInt(pedidodetalleJson, PedidodetalleDataBaseHelper.CAMPO_PEDIDO_ID));
-                        pd.setPedidoTmpId(WorkJsonField.getInt(pedidodetalleJson, PedidodetalleDataBaseHelper.CAMPO_PEDIDO_ID_TMP));
+                        pd.setPedidoAndroidId(WorkJsonField.getInt(pedidodetalleJson, PedidodetalleDataBaseHelper.CAMPO_PEDIDO_ID_TMP));
 
                         detalles.add(pd);
                     }
@@ -196,11 +197,11 @@ public class PedidoParser {
         this.data = data;
     }
 
-    public Pedido getPedido() {
+    public PedidoEntity getPedido() {
         return pedido;
     }
 
-    public void setPedido(Pedido pedido) {
+    public void setPedido(PedidoEntity pedido) {
         this.pedido = pedido;
     }
 
@@ -236,11 +237,11 @@ public class PedidoParser {
         this.pedidojson = pedidojson;
     }
 
-    public ArrayList<Pedido> getListadoPedidos() {
+    public ArrayList<PedidoEntity> getListadoPedidos() {
         return listadoPedidos;
     }
 
-    public void setListadoPedidos(ArrayList<Pedido> listadoPedidos) {
+    public void setListadoPedidos(ArrayList<PedidoEntity> listadoPedidos) {
         this.listadoPedidos = listadoPedidos;
     }
 }

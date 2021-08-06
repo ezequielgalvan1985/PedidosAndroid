@@ -11,21 +11,20 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import adaptivex.pedidoscloud.Config.Configurador;
-import adaptivex.pedidoscloud.Config.GlobalValues;
-import adaptivex.pedidoscloud.Controller.CategoriaController;
-import adaptivex.pedidoscloud.Controller.MarcaController;
-import adaptivex.pedidoscloud.Controller.PedidoController;
-import adaptivex.pedidoscloud.Controller.PedidodetalleController;
-import adaptivex.pedidoscloud.Controller.ProductoController;
-import adaptivex.pedidoscloud.Model.Categoria;
-import adaptivex.pedidoscloud.Model.DatabaseHelper.CategoriaDataBaseHelper;
-import adaptivex.pedidoscloud.Model.DatabaseHelper.ClienteDataBaseHelper;
-import adaptivex.pedidoscloud.Model.Marca;
-import adaptivex.pedidoscloud.Model.DatabaseHelper.MarcaDataBaseHelper;
-import adaptivex.pedidoscloud.Model.Pedido;
-import adaptivex.pedidoscloud.Model.DatabaseHelper.PedidoDataBaseHelper;
-import adaptivex.pedidoscloud.Model.Producto;
-import adaptivex.pedidoscloud.Model.DatabaseHelper.ProductoDataBaseHelper;
+import adaptivex.pedidoscloud.Repositories.CategoriaRepository;
+import adaptivex.pedidoscloud.Repositories.MarcaRepository;
+import adaptivex.pedidoscloud.Repositories.PedidoRepository;
+import adaptivex.pedidoscloud.Repositories.PedidodetalleRepository;
+import adaptivex.pedidoscloud.Repositories.ProductoRepository;
+import adaptivex.pedidoscloud.Entity.CategoriaEntity;
+import adaptivex.pedidoscloud.Entity.DatabaseHelper.CategoriaDataBaseHelper;
+import adaptivex.pedidoscloud.Entity.DatabaseHelper.ClienteDataBaseHelper;
+import adaptivex.pedidoscloud.Entity.MarcaEntity;
+import adaptivex.pedidoscloud.Entity.DatabaseHelper.MarcaDataBaseHelper;
+import adaptivex.pedidoscloud.Entity.PedidoEntity;
+import adaptivex.pedidoscloud.Entity.DatabaseHelper.PedidoDataBaseHelper;
+import adaptivex.pedidoscloud.Entity.Producto;
+import adaptivex.pedidoscloud.Entity.DatabaseHelper.ProductoDataBaseHelper;
 import adaptivex.pedidoscloud.R;
 import adaptivex.pedidoscloud.Servicios.Helpers.HelperCategorias;
 import adaptivex.pedidoscloud.Servicios.Helpers.HelperClientes;
@@ -122,7 +121,7 @@ public class SyncDatosActivity extends AppCompatActivity implements View.OnClick
 
 
             case R.id.btnLimpiarPedidos:
-                PedidoController pd = new PedidoController(this);
+                PedidoRepository pd = new PedidoRepository(this);
                 pd.abrir();
                 pd.limpiar();
                 pd.cerrar();
@@ -131,7 +130,7 @@ public class SyncDatosActivity extends AppCompatActivity implements View.OnClick
                 break;
 
             case R.id.btnLimpiarPedidoDetalles:
-                PedidodetalleController pdet = new PedidodetalleController(this);
+                PedidodetalleRepository pdet = new PedidodetalleRepository(this);
                 pdet.abrir();
                 pdet.limpiar();
                 pdet.cerrar();
@@ -292,7 +291,7 @@ public class SyncDatosActivity extends AppCompatActivity implements View.OnClick
 
 
     private boolean SincronizarPedidos(String json){
-        PedidoController dbHelper = new PedidoController(getBaseContext());
+        PedidoRepository dbHelper = new PedidoRepository(getBaseContext());
 
         Log.d("Debug: json ", json);
         //dbHelper.beginTransaction();
@@ -307,7 +306,7 @@ public class SyncDatosActivity extends AppCompatActivity implements View.OnClick
 
                 JSONArray pedidos = jsonObj.getJSONArray("pedidos");
 
-                Pedido pedido = new Pedido();
+                PedidoEntity pedido = new PedidoEntity();
                 dbHelper.abrir().limpiar();
                 //Recorrer Lista
                 for (int i = 0; i < pedidos.length(); i++) {
@@ -347,7 +346,7 @@ public class SyncDatosActivity extends AppCompatActivity implements View.OnClick
     }
 
     private boolean SincronizarProductos(String json){
-        ProductoController dbHelper = new ProductoController(getBaseContext());
+        ProductoRepository dbHelper = new ProductoRepository(getBaseContext());
         Log.d("Debug: ", "SincronizarProductos ");
         //dbHelper.beginTransaction();
         if (json != null) {
@@ -406,7 +405,7 @@ public class SyncDatosActivity extends AppCompatActivity implements View.OnClick
 
 
     private boolean SincronizarCategorias(String json){
-        CategoriaController dbHelper = new CategoriaController(getBaseContext());
+        CategoriaRepository dbHelper = new CategoriaRepository(getBaseContext());
         //dbHelper.beginTransaction();
         if (json != null) {
             try {
@@ -416,7 +415,7 @@ public class SyncDatosActivity extends AppCompatActivity implements View.OnClick
                 JSONObject jsonObj = new JSONObject(json);
                 Log.d("Debug: ", jsonObj.toString());
                 JSONArray categorias = jsonObj.getJSONArray("data");
-                Categoria categoria = new Categoria();
+                CategoriaEntity categoria = new CategoriaEntity();
                 dbHelper.abrir().limpiar();
                 //Recorrer Lista
                 for (int i = 0; i < categorias.length(); i++) {
@@ -448,7 +447,7 @@ public class SyncDatosActivity extends AppCompatActivity implements View.OnClick
 
 
     private boolean SincronizarMarcas(String json){
-        MarcaController dbHelper = new MarcaController(getBaseContext());
+        MarcaRepository dbHelper = new MarcaRepository(getBaseContext());
         dbHelper.abrir();
 
         //dbHelper.beginTransaction();
@@ -459,10 +458,10 @@ public class SyncDatosActivity extends AppCompatActivity implements View.OnClick
 
                 JSONObject jsonObj = new JSONObject(json);
                 JSONArray marcas = jsonObj.getJSONArray("data");
-                Marca marca = new Marca();
+                MarcaEntity marcaEntity = new MarcaEntity();
                 dbHelper.limpiar();
 
-                Log.e("Debug:",marca.toString() );
+                Log.e("Debug:", marcaEntity.toString() );
                 //Recorrer Lista
                 for (int i = 0; i < marcas.length(); i++) {
 
@@ -470,10 +469,10 @@ public class SyncDatosActivity extends AppCompatActivity implements View.OnClick
                     JSONObject registro = c.getJSONObject("Marca");
                     Log.d("Debuging1: ", "> " + registro.toString());
 
-                    marca.setId(registro.getInt("id"));
+                    marcaEntity.setId(registro.getInt("id"));
 
-                    marca.setDescripcion(registro.getString(CategoriaDataBaseHelper.CAMPO_DESCRIPCION));
-                    dbHelper.abrir().agregar(marca);
+                    marcaEntity.setDescripcion(registro.getString(CategoriaDataBaseHelper.CAMPO_DESCRIPCION));
+                    dbHelper.abrir().agregar(marcaEntity);
                 }
                 resultado = true;
                 setvMensaje("Sincro OK");

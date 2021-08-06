@@ -13,10 +13,10 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import adaptivex.pedidoscloud.Config.GlobalValues;
-import adaptivex.pedidoscloud.Controller.ParameterController;
+import adaptivex.pedidoscloud.Repositories.ParameterRepository;
 import adaptivex.pedidoscloud.Core.IniciarApp;
 import adaptivex.pedidoscloud.Core.ParameterHelper;
-import adaptivex.pedidoscloud.Model.Parameter;
+import adaptivex.pedidoscloud.Entity.ParameterEntity;
 import adaptivex.pedidoscloud.R;
 import adaptivex.pedidoscloud.Servicios.IntentServiceEnvioPedidos;
 import adaptivex.pedidoscloud.Servicios.IntentServiceStockPrecios;
@@ -136,11 +136,11 @@ public class ConfigFragment extends Fragment {
         public void onClick(View v) {
             try {
 
-                ParameterController pc = new ParameterController(getContext());
-                Parameter p = new Parameter();
+                ParameterRepository pc = new ParameterRepository(getContext());
+                ParameterEntity p = new ParameterEntity();
                 p = pc.abrir().findByNombre(GlobalValues.getINSTANCIA().PARAM_SERVICE_STOCK_PRECIOS_ACTIVATE);
 
-                Parameter pEnvioPedidos = new Parameter();
+                ParameterEntity pEnvioPedidos = new ParameterEntity();
                 pEnvioPedidos = pc.abrir().findByNombre(GlobalValues.getINSTANCIA().PARAM_SERVICE_ENVIO_PEDIDOS_ACTIVATE);
 
                 switch (v.getId()) {

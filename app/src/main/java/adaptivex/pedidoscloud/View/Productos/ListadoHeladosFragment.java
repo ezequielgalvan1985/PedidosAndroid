@@ -12,9 +12,10 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import adaptivex.pedidoscloud.Config.Constants;
-import adaptivex.pedidoscloud.Controller.ProductoController;
+import adaptivex.pedidoscloud.Core.FactoryRepositories;
+import adaptivex.pedidoscloud.Repositories.ProductoRepository;
 import adaptivex.pedidoscloud.Core.Sql.SqlManager;
-import adaptivex.pedidoscloud.Model.DatabaseHelper.ProductoDataBaseHelper;
+import adaptivex.pedidoscloud.Entity.DatabaseHelper.ProductoDataBaseHelper;
 import adaptivex.pedidoscloud.R;
 import adaptivex.pedidoscloud.View.RVAdapters.RVAdapterProducto;
 
@@ -59,7 +60,7 @@ public class ListadoHeladosFragment extends Fragment {
 
 
         //2 - ArrayList Helados
-        ProductoController pc = new ProductoController(getContext());
+        ProductoRepository pc = new ProductoRepository(getContext());
         SqlManager sm = new SqlManager();
         if (tipo_listado== Constants.VALUE_TIPO_LISTADO_POSTRES){
             titulo.setText("Listado de Postres");
@@ -68,9 +69,10 @@ public class ListadoHeladosFragment extends Fragment {
             titulo.setText("Listado de Helados");
             sm.addWhere(ProductoDataBaseHelper.CAMPO_CATEGORIA_ID,Constants.IGUAL, Constants.CATEGORIA_HELADOS.toString());
         }
+
         listaHelados = new ArrayList<Object>();
         listaHelados = pc.abrir().findWhereToArrayList(sm);
-
+        //listaHelados = FactoryRepositories.getInstancia().getProductoRepository().findAll();
 
         //3 - SET ADAPTER
         RVAdapterProducto adapterProducto = new RVAdapterProducto();

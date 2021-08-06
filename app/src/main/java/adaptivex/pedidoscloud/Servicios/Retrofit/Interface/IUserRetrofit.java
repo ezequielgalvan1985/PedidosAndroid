@@ -1,8 +1,8 @@
 package adaptivex.pedidoscloud.Servicios.Retrofit.Interface;
 
 import adaptivex.pedidoscloud.Config.Configurador;
-import adaptivex.pedidoscloud.Model.LoginData;
-import adaptivex.pedidoscloud.Model.LoginResult;
+import adaptivex.pedidoscloud.Entity.LoginData;
+import adaptivex.pedidoscloud.Entity.LoginResult;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;

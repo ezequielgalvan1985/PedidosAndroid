@@ -13,7 +13,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.Toast;
 
-import adaptivex.pedidoscloud.Model.User;
+import adaptivex.pedidoscloud.Entity.User;
 import adaptivex.pedidoscloud.R;
 import adaptivex.pedidoscloud.Servicios.Helpers.HelperUser;
 

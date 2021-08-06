@@ -13,8 +13,10 @@ import java.util.HashMap;
 import java.util.List;
 
 import adaptivex.pedidoscloud.Config.Configurador;
-import adaptivex.pedidoscloud.Controller.CategoriaController;
-import adaptivex.pedidoscloud.Model.Categoria;
+import adaptivex.pedidoscloud.Config.GlobalValues;
+import adaptivex.pedidoscloud.Core.FactoryRepositories;
+import adaptivex.pedidoscloud.Repositories.CategoriaRepository;
+import adaptivex.pedidoscloud.Entity.CategoriaEntity;
 import adaptivex.pedidoscloud.Servicios.Retrofit.Interface.ICategoriaRetrofit;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -23,28 +25,28 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public  class CategoriaServices {
-    public List<Categoria> categoriasList;
-    public Categoria categoria;
+    public List<CategoriaEntity> categoriasList;
+    public CategoriaEntity categoria;
 
     private Context ctx;
     private HashMap<String, String> registro;
 
-    public CategoriaController getCategoriasCtr() {
+    public CategoriaRepository getCategoriasCtr() {
         return categoriasCtr;
     }
 
-    public void setCategoriasCtr(CategoriaController categoriasCtr) {
+    public void setCategoriasCtr(CategoriaRepository categoriasCtr) {
         this.categoriasCtr = categoriasCtr;
     }
 
-    private CategoriaController categoriasCtr;
+    private CategoriaRepository categoriasCtr;
 
     public CategoriaServices() {
     }
 
     public CategoriaServices(Context pCtx){
         this.setCtx(pCtx);
-        this.setCategoriasCtr(new CategoriaController(pCtx));
+        this.setCategoriasCtr(new CategoriaRepository(pCtx));
     }
 
     private void setCtx(Context pCtx) {
@@ -54,7 +56,7 @@ public  class CategoriaServices {
         return ctx;
     }
 
-    public List<Categoria> getCategorias(){
+    public List<CategoriaEntity> getCategorias(){
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(Configurador.urlBase)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -62,26 +64,34 @@ public  class CategoriaServices {
 
         ICategoriaRetrofit service = retrofit.create(ICategoriaRetrofit.class);
         //UserSessionLogin.getINSTANCIA().getUser().setToken("5d3b54d7422aa18506d26656bd93a0db5e4fcc6c");
-        Call<List<Categoria>> call = service.getCategorias("Basic YWRtaW4yOjEyMzQ=");
-        call.enqueue(new Callback<List<Categoria>>() {
+        //Call<List<Categoria>> call = service.getCategorias("Basic YWRtaW4yOjEyMzQ=");
+
+        Call<List<CategoriaEntity>> call = service.getCategorias(GlobalValues.getINSTANCIA().getAuthorization());
+        call.enqueue(new Callback<List<CategoriaEntity>>() {
             @Override
-            public void onResponse(Call<List<Categoria>> call, Response<List<Categoria>> response) {
-                if(!response.isSuccessful()){
-                    Log.println(Log.INFO,"Categoria: Error",String.valueOf(response.code()));
-                    return;
+            public void onResponse(Call<List<CategoriaEntity>> call, Response<List<CategoriaEntity>> response) {
+                try{
+
+                    if(!response.isSuccessful()){
+                        Log.println(Log.INFO,"Categoria: Error",String.valueOf(response.code()));
+                        return;
+                    }
+                    FactoryRepositories.getInstancia().getCategoriaRepository().abrir().limpiar();
+                    categoriasList = response.body();
+                    String content = "";
+                    for (CategoriaEntity categoria: categoriasList){
+                        FactoryRepositories.getInstancia().getCategoriaRepository().abrir().agregar(categoria);
+                        content = categoria.getId() + " " +categoria.getNombre() + " " + categoria.getDescripcion();
+                        Log.println(Log.INFO,"Categoria: ",content);
+                    }
+                }catch (Exception e){
+                    Log.println(Log.ERROR,"Categoria:",e.getMessage());
                 }
-                getCategoriasCtr().abrir().limpiar();
-                categoriasList = response.body();
-                String content = "";
-                for (Categoria categoria: categoriasList){
-                    getCategoriasCtr().abrir().agregar(categoria);
-                    content = categoria.getId() + " " +categoria.getNombre() + " " + categoria.getDescripcion();
-                    Log.println(Log.INFO,"Categoria: ",content);
-                }
+
             }
 
             @Override
-            public void onFailure(Call<List<Categoria>> call, Throwable t) {
+            public void onFailure(Call<List<CategoriaEntity>> call, Throwable t) {
                 Log.println(Log.ERROR,"Codigo: ",t.getMessage());
             }
         });

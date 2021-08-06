@@ -4,8 +4,8 @@ import android.content.Context;
 import android.widget.Toast;
 
 import adaptivex.pedidoscloud.Config.GlobalValues;
-import adaptivex.pedidoscloud.Controller.ParameterController;
-import adaptivex.pedidoscloud.Model.Parameter;
+import adaptivex.pedidoscloud.Repositories.ParameterRepository;
+import adaptivex.pedidoscloud.Entity.ParameterEntity;
 
 /**
  * Created by ezequiel on 3/12/2017.
@@ -26,12 +26,12 @@ public class ParameterHelper {
     public boolean isDownloadDatabase() {
         boolean isdownloaddatabase = false;
         try {
-            ParameterController pc = new ParameterController(ctx);
+            ParameterRepository pc = new ParameterRepository(ctx);
 
-            Parameter p= pc.abrir().findByNombre(GlobalValues.getINSTANCIA().PARAM_DOWNLOAD_DATABASE);
+            ParameterEntity p= pc.abrir().findByNombre(GlobalValues.getINSTANCIA().PARAM_DOWNLOAD_DATABASE);
 
             if (p==null){
-                p = new Parameter();
+                p = new ParameterEntity();
                 p.setNombre(GlobalValues.getINSTANCIA().PARAM_DOWNLOAD_DATABASE);
                 p.setValor_texto("N");
                 pc.abrir().agregar(p);
@@ -51,10 +51,10 @@ public class ParameterHelper {
         boolean resultado = false;
         try{
             //Leer de la tabla parametros cada servicio
-            ParameterController pc = new ParameterController(ctx);
-            Parameter p = pc.abrir().findByNombre(GlobalValues.getINSTANCIA().PARAM_SERVICE_STOCK_PRECIOS_ACTIVATE);
+            ParameterRepository pc = new ParameterRepository(ctx);
+            ParameterEntity p = pc.abrir().findByNombre(GlobalValues.getINSTANCIA().PARAM_SERVICE_STOCK_PRECIOS_ACTIVATE);
             if (p==null){
-                p = new Parameter();
+                p = new ParameterEntity();
                 p.setNombre(GlobalValues.getINSTANCIA().PARAM_SERVICE_STOCK_PRECIOS_ACTIVATE);
                 p.setValor_texto("N");
                 pc.abrir().agregar(p);
@@ -78,10 +78,10 @@ public class ParameterHelper {
         boolean resultado = false;
         try{
             //Leer de la tabla parametros cada servicio
-            ParameterController pc = new ParameterController(ctx);
-            Parameter p = pc.abrir().findByNombre(GlobalValues.getINSTANCIA().PARAM_SERVICE_ENVIO_PEDIDOS_ACTIVATE);
+            ParameterRepository pc = new ParameterRepository(ctx);
+            ParameterEntity p = pc.abrir().findByNombre(GlobalValues.getINSTANCIA().PARAM_SERVICE_ENVIO_PEDIDOS_ACTIVATE);
             if (p==null){
-                p = new Parameter();
+                p = new ParameterEntity();
                 p.setNombre(GlobalValues.getINSTANCIA().PARAM_SERVICE_ENVIO_PEDIDOS_ACTIVATE);
                 p.setValor_texto("N");
                 pc.abrir().agregar(p);
@@ -103,8 +103,8 @@ public class ParameterHelper {
     public String getServiceStockPrecios(){
         String respuesta = "N";
         //Leer de la tabla parametros cada servicio
-        ParameterController pc = new ParameterController(ctx);
-        Parameter p = new Parameter();
+        ParameterRepository pc = new ParameterRepository(ctx);
+        ParameterEntity p = new ParameterEntity();
         p = pc.abrir().findByNombre(GlobalValues.getINSTANCIA().PARAM_SERVICE_STOCK_PRECIOS_ACTIVATE);
         if (p!=null){
             //Si parametro es Y, se debe activar el servicio
@@ -118,8 +118,8 @@ public class ParameterHelper {
     public boolean isServiceStockPrecioWorking(){
         boolean respuesta = false;
         //Leer de la tabla parametros cada servicio
-        ParameterController pc = new ParameterController(ctx);
-        Parameter p = new Parameter();
+        ParameterRepository pc = new ParameterRepository(ctx);
+        ParameterEntity p = new ParameterEntity();
         p = pc.abrir().findByNombre(GlobalValues.getINSTANCIA().PARAM_SERVICE_STOCK_PRECIOS_WORKING);
         pc.cerrar();
         if (p!=null){
@@ -135,8 +135,8 @@ public class ParameterHelper {
     public void setServiceStockPrecioWorking(String working){
 
         //Leer de la tabla parametros cada servicio
-        ParameterController pc = new ParameterController(ctx);
-        Parameter p = new Parameter();
+        ParameterRepository pc = new ParameterRepository(ctx);
+        ParameterEntity p = new ParameterEntity();
         p = pc.abrir().findByNombre(GlobalValues.getINSTANCIA().PARAM_SERVICE_STOCK_PRECIOS_WORKING);
         if (p!=null){
             p.setValor_texto(working);

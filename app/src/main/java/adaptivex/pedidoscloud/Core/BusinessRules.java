@@ -3,15 +3,11 @@ package adaptivex.pedidoscloud.Core;
 import android.content.Context;
 import android.widget.Toast;
 
-import java.sql.Time;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-import adaptivex.pedidoscloud.Controller.HorarioController;
-import adaptivex.pedidoscloud.Model.Horario;
+import adaptivex.pedidoscloud.Repositories.HorarioRepository;
+import adaptivex.pedidoscloud.Entity.HorarioEntity;
 
 public class BusinessRules {
     private Context ctx;
@@ -34,8 +30,8 @@ public class BusinessRules {
             // obtener hora actual
 
             //obtener horario de apertura y cierre del local para el dia actual
-            HorarioController controller = new HorarioController(this.ctx);
-            Horario h = controller.abrir().getByDayOfWeekObject(dayOfWeek);
+            HorarioRepository controller = new HorarioRepository(this.ctx);
+            HorarioEntity h = controller.abrir().getByDayOfWeekObject(dayOfWeek);
 
             long from   = h.getApertura().getHours() * 60 + h.getApertura().getMinutes();
             long to     = h.getCierre().getHours() * 60 + h.getCierre().getMinutes();

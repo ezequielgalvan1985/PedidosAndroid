@@ -10,9 +10,9 @@ import java.util.HashMap;
 
 import adaptivex.pedidoscloud.Config.Configurador;
 import adaptivex.pedidoscloud.Config.GlobalValues;
-import adaptivex.pedidoscloud.Controller.PromoController;
+import adaptivex.pedidoscloud.Repositories.PromoRepository;
 import adaptivex.pedidoscloud.Core.parserJSONtoModel.PromoParser;
-import adaptivex.pedidoscloud.Model.Promo;
+import adaptivex.pedidoscloud.Entity.Promo;
 import adaptivex.pedidoscloud.Servicios.WebRequest;
 
 /**
@@ -23,7 +23,7 @@ public class HelperPromos extends AsyncTask<Void, Void, Void> {
     private Context ctx;
     private HashMap<String,String> registro;
     private Promo promo;
-    private PromoController promoCtr;
+    private PromoRepository promoCtr;
     private int respuesta; //1=ok, 200=error
     private int opcion; //1 enviar Post Promo
     private PromoParser cp;
@@ -32,7 +32,7 @@ public class HelperPromos extends AsyncTask<Void, Void, Void> {
     
     public HelperPromos(Context pCtx){
         this.setCtx(pCtx);
-        this.promoCtr = new PromoController(this.getCtx());
+        this.promoCtr = new PromoRepository(this.getCtx());
     }
 
 

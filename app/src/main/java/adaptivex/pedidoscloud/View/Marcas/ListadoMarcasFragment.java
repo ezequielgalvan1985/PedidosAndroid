@@ -12,10 +12,10 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import adaptivex.pedidoscloud.Controller.AdaptersListView.MarcaAdapter;
-import adaptivex.pedidoscloud.Controller.MarcaController;
-import adaptivex.pedidoscloud.Model.Marca;
-import adaptivex.pedidoscloud.Model.DatabaseHelper.MarcaDataBaseHelper;
+import adaptivex.pedidoscloud.Repositories.AdaptersListView.MarcaAdapter;
+import adaptivex.pedidoscloud.Repositories.MarcaRepository;
+import adaptivex.pedidoscloud.Entity.MarcaEntity;
+import adaptivex.pedidoscloud.Entity.DatabaseHelper.MarcaDataBaseHelper;
 import adaptivex.pedidoscloud.R;
 
 import java.util.ArrayList;
@@ -78,12 +78,12 @@ public class ListadoMarcasFragment extends Fragment {
         View vista = inflater.inflate(R.layout.fragment_listado_marcas, container, false);
 
         //Obtener listview de marca
-        MarcaController dbHelper = new MarcaController(vista.getContext());
+        MarcaRepository dbHelper = new MarcaRepository(vista.getContext());
         dbHelper.abrir();
         // Construct the data source
-        ArrayList<Marca> arrayOfMarcas = new ArrayList<Marca>();
+        ArrayList<MarcaEntity> arrayOfMarcaEntities = new ArrayList<MarcaEntity>();
         // Create the adapter to convert the array to views
-        MarcaAdapter adapter = new MarcaAdapter(vista.getContext(), arrayOfMarcas);
+        MarcaAdapter adapter = new MarcaAdapter(vista.getContext(), arrayOfMarcaEntities);
         // Attach the adapter to a ListView
         ListView lvMarcas = (ListView) vista.findViewById(R.id.lvMarcas);
         lvMarcas.setAdapter(adapter);
@@ -91,13 +91,13 @@ public class ListadoMarcasFragment extends Fragment {
 
         Cursor c = dbHelper.obtenerTodos();
         String datos = "";
-        Marca p2;
+        MarcaEntity p2;
 
         for(c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
-            p2 = new Marca();
+            p2 = new MarcaEntity();
             p2.setDescripcion(c.getString(c.getColumnIndex(MarcaDataBaseHelper.CAMPO_DESCRIPCION)));
             
-            arrayOfMarcas.add(p2);
+            arrayOfMarcaEntities.add(p2);
             p2 = null;
         }
 

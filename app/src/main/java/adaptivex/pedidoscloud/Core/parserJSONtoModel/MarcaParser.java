@@ -2,8 +2,8 @@ package adaptivex.pedidoscloud.Core.parserJSONtoModel;
 
 import android.util.Log;
 
-import adaptivex.pedidoscloud.Model.Marca;
-import adaptivex.pedidoscloud.Model.DatabaseHelper.MarcaDataBaseHelper;
+import adaptivex.pedidoscloud.Entity.MarcaEntity;
+import adaptivex.pedidoscloud.Entity.DatabaseHelper.MarcaDataBaseHelper;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -22,8 +22,8 @@ public class MarcaParser {
     private String message;
     private JSONArray data;
     private JSONObject marcajson;
-    private Marca marca;
-    private ArrayList<Marca> listadoMarcas;
+    private MarcaEntity marcaEntity;
+    private ArrayList<MarcaEntity> listadoMarcaEntities;
     /* Solamente parsea los datos de un String Json, al Objeto MarcaParser */
     public MarcaParser(){
     }
@@ -32,11 +32,11 @@ public class MarcaParser {
         setJsonstr(jsonstr);
     }
 
-    public Marca parseJsonToObject(){
+    public MarcaEntity parseJsonToObject(){
         /* Completa datos del objeto  */
         try{
             //leer raiz
-            listadoMarcas  = new ArrayList<Marca>();
+            listadoMarcaEntities = new ArrayList<MarcaEntity>();
             setJsonobj(new JSONObject(getJsonstr()));
             setStatus(getJsonobj().getString("code"));
             setMessage(getJsonobj().getString("message"));
@@ -44,15 +44,15 @@ public class MarcaParser {
             if (Integer.parseInt(getStatus())== 200){
                 //parser Usuario
                 JSONArray marcas = getData();
-                Marca marca = new Marca();
+                MarcaEntity marcaEntity = new MarcaEntity();
                 for (int i = 0; i < marcas.length(); i++) {
                     JSONObject registro = marcas.getJSONObject(i);
 
-                    marca.setId(registro.getInt("id"));
-                    marca.setNombre(registro.getString(MarcaDataBaseHelper.CAMPO_NOMBRE));
-                    marca.setDescripcion(registro.getString(MarcaDataBaseHelper.CAMPO_DESCRIPCION));
-                    listadoMarcas.add(marca);
-                    marca = new Marca();
+                    marcaEntity.setId(registro.getInt("id"));
+                    marcaEntity.setNombre(registro.getString(MarcaDataBaseHelper.CAMPO_NOMBRE));
+                    marcaEntity.setDescripcion(registro.getString(MarcaDataBaseHelper.CAMPO_DESCRIPCION));
+                    listadoMarcaEntities.add(marcaEntity);
+                    marcaEntity = new MarcaEntity();
                 }//endfor
 
             }else {
@@ -88,12 +88,12 @@ public class MarcaParser {
         this.data = data;
     }
 
-    public Marca getMarca() {
-        return marca;
+    public MarcaEntity getMarca() {
+        return marcaEntity;
     }
 
-    public void setMarca(Marca marca) {
-        this.marca = marca;
+    public void setMarca(MarcaEntity marcaEntity) {
+        this.marcaEntity = marcaEntity;
     }
 
     public String getMessage() {
@@ -128,11 +128,11 @@ public class MarcaParser {
         this.marcajson = marcajson;
     }
 
-    public ArrayList<Marca> getListadoMarcas() {
-        return listadoMarcas;
+    public ArrayList<MarcaEntity> getListadoMarcas() {
+        return listadoMarcaEntities;
     }
 
-    public void setListadoMarcas(ArrayList<Marca> listadoMarcas) {
-        this.listadoMarcas = listadoMarcas;
+    public void setListadoMarcas(ArrayList<MarcaEntity> listadoMarcaEntities) {
+        this.listadoMarcaEntities = listadoMarcaEntities;
     }
 }

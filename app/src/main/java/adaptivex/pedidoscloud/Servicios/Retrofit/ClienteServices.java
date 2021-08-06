@@ -13,8 +13,9 @@ import java.util.HashMap;
 import java.util.List;
 
 import adaptivex.pedidoscloud.Config.Configurador;
-import adaptivex.pedidoscloud.Controller.ClienteController;
-import adaptivex.pedidoscloud.Model.Cliente;
+import adaptivex.pedidoscloud.Config.GlobalValues;
+import adaptivex.pedidoscloud.Repositories.ClienteRepository;
+import adaptivex.pedidoscloud.Entity.ClienteEntity;
 import adaptivex.pedidoscloud.Servicios.Retrofit.Interface.IClienteRetrofit;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -23,19 +24,19 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public  class ClienteServices {
-    public List<Cliente> clientesList;
-    public Cliente cliente;
+    public List<ClienteEntity> clientesList;
+    public ClienteEntity clienteEntity;
 
     private Context ctx;
     private HashMap<String, String> registro;
-    private ClienteController clientesCtr;
+    private ClienteRepository clientesCtr;
 
     public ClienteServices() {
     }
 
     public ClienteServices(Context pCtx){
         this.setCtx(pCtx);
-        this.clientesCtr = new ClienteController(this.getCtx());
+        this.clientesCtr = new ClienteRepository(this.getCtx());
     }
 
     private void setCtx(Context pCtx) {
@@ -45,7 +46,7 @@ public  class ClienteServices {
         return ctx;
     }
 
-    public List<Cliente> getClientes(){
+    public List<ClienteEntity> getClientes(){
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(Configurador.urlBase)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -53,10 +54,10 @@ public  class ClienteServices {
 
         IClienteRetrofit service = retrofit.create(IClienteRetrofit.class);
         //UserSessionLogin.getINSTANCIA().getUser().setToken("5d3b54d7422aa18506d26656bd93a0db5e4fcc6c");
-        Call<List<Cliente>> call = service.getClientes("Basic YWRtaW4yOjEyMzQ=");
-        call.enqueue(new Callback<List<Cliente>>() {
+        Call<List<ClienteEntity>> call = service.getClientes(GlobalValues.getINSTANCIA().getAuthorization());
+        call.enqueue(new Callback<List<ClienteEntity>>() {
             @Override
-            public void onResponse(Call<List<Cliente>> call, Response<List<Cliente>> response) {
+            public void onResponse(Call<List<ClienteEntity>> call, Response<List<ClienteEntity>> response) {
                 if(!response.isSuccessful()){
                     Log.println(Log.INFO,"Cliente: Error",String.valueOf(response.code()));
                     return;
@@ -64,14 +65,14 @@ public  class ClienteServices {
                 clientesCtr.abrir().limpiar();
                 clientesList = response.body();
                 String content = "";
-                for (Cliente cliente: clientesList){
-                    clientesCtr.abrir().agregar(cliente);
+                for (ClienteEntity clienteEntity : clientesList){
+                    clientesCtr.abrir().agregar(clienteEntity);
                 }
                 Log.println(Log.INFO,"Cliente: ",content);
             }
 
             @Override
-            public void onFailure(Call<List<Cliente>> call, Throwable t) {
+            public void onFailure(Call<List<ClienteEntity>> call, Throwable t) {
                 Log.println(Log.ERROR,"Codigo: ",t.getMessage());
             }
         });

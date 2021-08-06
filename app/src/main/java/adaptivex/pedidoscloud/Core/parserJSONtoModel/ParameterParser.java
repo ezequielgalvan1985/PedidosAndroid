@@ -8,8 +8,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import adaptivex.pedidoscloud.Core.WorkDate;
-import adaptivex.pedidoscloud.Model.Parameter;
-import adaptivex.pedidoscloud.Model.DatabaseHelper.ParameterDataBaseHelper;
+import adaptivex.pedidoscloud.Entity.ParameterEntity;
+import adaptivex.pedidoscloud.Entity.DatabaseHelper.ParameterDataBaseHelper;
 
 /**
  * Created by ezequiel on 16/8/2017.
@@ -22,8 +22,8 @@ public class ParameterParser {
     private String status;
     private String message;
     private JSONObject parameterjson;
-    private Parameter parameter;
-    private ArrayList<Parameter> listadoParameters;
+    private ParameterEntity parameterEntity;
+    private ArrayList<ParameterEntity> listadoParameterEntities;
     /* Solamente parsea los datos de un String Json, al Objeto ParameterParser */
     public ParameterParser(){
     }
@@ -32,11 +32,11 @@ public class ParameterParser {
         setJsonstr(jsonstr);
     }
 
-    public Parameter parseJsonToObject(){
+    public ParameterEntity parseJsonToObject(){
         /* Completa datos del objeto  */
         try{
             //leer raiz
-            listadoParameters  = new ArrayList<Parameter>();
+            listadoParameterEntities = new ArrayList<ParameterEntity>();
             setJsonobj(new JSONObject(getJsonstr()));
 
             setStatus(getJsonobj().getString("code"));
@@ -46,33 +46,33 @@ public class ParameterParser {
             if (Integer.parseInt(getStatus())== 200){
                 //parser Usuario
                 JSONArray parameters = getData();
-                Parameter parameter = new Parameter();
+                ParameterEntity parameterEntity = new ParameterEntity();
                 for (int i = 0; i < parameters.length(); i++) {
                     JSONObject c = parameters.getJSONObject(i);
 
                     if (c.has(ParameterDataBaseHelper.ID)){
-                        parameter.setId(c.getInt(ParameterDataBaseHelper.ID));
+                        parameterEntity.setId(c.getInt(ParameterDataBaseHelper.ID));
                     }
                     if (c.has(ParameterDataBaseHelper.NOMBRE)){
-                        parameter.setNombre(c.getString(ParameterDataBaseHelper.NOMBRE));
+                        parameterEntity.setNombre(c.getString(ParameterDataBaseHelper.NOMBRE));
                     }
                     if (c.has(ParameterDataBaseHelper.DESCRIPCION)){
-                        parameter.setDescripcion(c.getString(ParameterDataBaseHelper.DESCRIPCION));
+                        parameterEntity.setDescripcion(c.getString(ParameterDataBaseHelper.DESCRIPCION));
                     }
                     if (c.has(ParameterDataBaseHelper.VALOR_TEXTO)){
-                        parameter.setValor_texto(c.getString(ParameterDataBaseHelper.VALOR_TEXTO));
+                        parameterEntity.setValor_texto(c.getString(ParameterDataBaseHelper.VALOR_TEXTO));
                     }
                     if (c.has(ParameterDataBaseHelper.VALOR_FECHA)){
-                        parameter.setValor_fecha(WorkDate.parseStringToDate(c.getString(ParameterDataBaseHelper.VALOR_FECHA)));
+                        parameterEntity.setValor_fecha(WorkDate.parseStringToDate(c.getString(ParameterDataBaseHelper.VALOR_FECHA)));
                     }
                     if (c.has(ParameterDataBaseHelper.VALOR_DECIMAL)){
-                        parameter.setValor_decimal(c.getDouble(ParameterDataBaseHelper.VALOR_DECIMAL));
+                        parameterEntity.setValor_decimal(c.getDouble(ParameterDataBaseHelper.VALOR_DECIMAL));
                     }
                     if (c.has(ParameterDataBaseHelper.VALOR_INTEGER)){
-                        parameter.setValor_integer(c.getInt(ParameterDataBaseHelper.VALOR_INTEGER));
+                        parameterEntity.setValor_integer(c.getInt(ParameterDataBaseHelper.VALOR_INTEGER));
                     }
-                    listadoParameters.add(parameter);
-                    parameter =  new Parameter();
+                    listadoParameterEntities.add(parameterEntity);
+                    parameterEntity =  new ParameterEntity();
                 }//endfor
 
             }else {
@@ -102,12 +102,12 @@ public class ParameterParser {
         this.data = data;
     }
 
-    public Parameter getParameter() {
-        return parameter;
+    public ParameterEntity getParameter() {
+        return parameterEntity;
     }
 
-    public void setParameter(Parameter parameter) {
-        this.parameter = parameter;
+    public void setParameter(ParameterEntity parameterEntity) {
+        this.parameterEntity = parameterEntity;
     }
 
     public String getMessage() {
@@ -142,11 +142,11 @@ public class ParameterParser {
         this.parameterjson = parameterjson;
     }
 
-    public ArrayList<Parameter> getListadoParameters() {
-        return listadoParameters;
+    public ArrayList<ParameterEntity> getListadoParameters() {
+        return listadoParameterEntities;
     }
 
-    public void setListadoParameters(ArrayList<Parameter> listadoParameters) {
-        this.listadoParameters = listadoParameters;
+    public void setListadoParameters(ArrayList<ParameterEntity> listadoParameterEntities) {
+        this.listadoParameterEntities = listadoParameterEntities;
     }
 }

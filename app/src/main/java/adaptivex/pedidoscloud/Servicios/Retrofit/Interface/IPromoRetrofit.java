@@ -3,8 +3,7 @@ package adaptivex.pedidoscloud.Servicios.Retrofit.Interface;
 import java.util.List;
 
 import adaptivex.pedidoscloud.Config.Configurador;
-import adaptivex.pedidoscloud.Model.Producto;
-import adaptivex.pedidoscloud.Model.Promo;
+import adaptivex.pedidoscloud.Entity.Promo;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Header;

@@ -20,18 +20,19 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 import adaptivex.pedidoscloud.Config.Configurador;
 import adaptivex.pedidoscloud.Config.GlobalValues;
-import adaptivex.pedidoscloud.Controller.PedidoController;
-import adaptivex.pedidoscloud.Controller.PedidodetalleController;
+import adaptivex.pedidoscloud.Core.FactoryRepositories;
+import adaptivex.pedidoscloud.Repositories.PedidoRepository;
+import adaptivex.pedidoscloud.Repositories.PedidodetalleRepository;
 import adaptivex.pedidoscloud.Core.parserJSONtoModel.PedidoParser;
-import adaptivex.pedidoscloud.Model.Pedido;
-import adaptivex.pedidoscloud.Model.Pedidodetalle;
-import adaptivex.pedidoscloud.Model.Producto;
+import adaptivex.pedidoscloud.Entity.PedidoEntity;
+import adaptivex.pedidoscloud.Entity.PedidodetalleEntity;
+import adaptivex.pedidoscloud.Entity.Producto;
 import adaptivex.pedidoscloud.Servicios.Helpers.HelperPedidos;
 
 /**
@@ -49,7 +50,7 @@ public class IntentServiceEnvioPedidos extends IntentService {
     private int respuesta; //1=ok, 200=error
     private int opcion; //1 enviar Post Producto
     private ProgressDialog pDialog;
-    private PedidoController pedidoCtr;
+    private PedidoRepository pedidoCtr;
     private HelperPedidos hp;
     public IntentServiceEnvioPedidos() {
         super("IntentServiceStockPrecios");
@@ -68,9 +69,14 @@ public class IntentServiceEnvioPedidos extends IntentService {
             while (true) {
                 final String action = intent.getAction();
                 try {
-                    Pedido paramPedido = new Pedido();
-                    ArrayList<Pedido> listaPedidos = pedidoCtr.abrir().findByEstadoId_ArrayList(GlobalValues.getINSTANCIA().ESTADO_NUEVO);
-                    for (Pedido pedido : listaPedidos) {
+                    PedidoEntity paramPedido = new PedidoEntity();
+                    List<PedidoEntity> listaPedidos = FactoryRepositories
+                            .getInstancia()
+                            .getPedidoRepository()
+                            .abrir()
+                            .findByEstadoId(GlobalValues.getINSTANCIA().ESTADO_NUEVO);
+
+                    for (PedidoEntity pedido : listaPedidos) {
                         URL url;
                         URLConnection urlConn;
                         DataOutputStream printout;
@@ -97,9 +103,9 @@ public class IntentServiceEnvioPedidos extends IntentService {
                         System.out.println(dateFormat.format(fechahoy));
 
                         pedido_json.put("fecha", String.valueOf(fechahoystr));
-                        pedido_json.put("user_id", String.valueOf(GlobalValues.getINSTANCIA().getUserlogued().getId()));
+                        pedido_json.put("user_id", String.valueOf(GlobalValues.getINSTANCIA().getUsuariologueado().getId()));
                         pedido_json.put("cliente_id", paramPedido.getCliente_id().toString());
-                        pedido_json.put("android_id", String.valueOf(paramPedido.getIdTmp()));
+                        pedido_json.put("android_id", String.valueOf(paramPedido.getAndroid_id()));
                         pedido_json.put("estado_id", String.valueOf(GlobalValues.getINSTANCIA().consPedidoEstadoEnviado));
                         pedido_json.put("monto", String.valueOf(paramPedido.getMonto()));
                         pedido_json.put("iva", String.valueOf(paramPedido.getIva()));
@@ -110,16 +116,16 @@ public class IntentServiceEnvioPedidos extends IntentService {
 
                         //Armar Json detalle de pedidos
                         //Enviar Pedido Items
-                        Pedidodetalle pd = new Pedidodetalle();
-                        PedidodetalleController pdc = new PedidodetalleController(getBaseContext());
+                        PedidodetalleEntity pd = new PedidodetalleEntity();
+                        PedidodetalleRepository pdc = new PedidodetalleRepository(getBaseContext());
 
                         for (int x = 0; x < paramPedido.getDetalles().size(); x++) {
                             JSONObject item = new JSONObject();
-                            pd = (Pedidodetalle) paramPedido.getDetalles().get(x);
+                            pd = (PedidodetalleEntity) paramPedido.getDetalles().get(x);
                             item.put("producto_id", pd.getProductoId().toString());
                             item.put("cantidad", String.valueOf(pd.getCantidad()));
-                            item.put("android_id", String.valueOf(pd.getIdTmp()));
-                            item.put("pedido_android_id", String.valueOf(paramPedido.getIdTmp()));
+                            item.put("android_id", String.valueOf(pd.getAndroidId()));
+                            item.put("pedido_android_id", String.valueOf(paramPedido.getAndroid_id()));
                             pedidodetalles.put(item);
                         }
 
@@ -152,8 +158,8 @@ public class IntentServiceEnvioPedidos extends IntentService {
                         //Procesa post
 
                         PedidoParser pp = new PedidoParser(sb.toString());
-                        Pedido pedidopostsave = pp.parseJsonToObject();
-                        Pedido pedidoprevsave = pedidoCtr.abrir().findByIdTmp(paramPedido.getIdTmp());
+                        PedidoEntity pedidopostsave = pp.parseJsonToObject();
+                        PedidoEntity pedidoprevsave = pedidoCtr.abrir().findByAndroidId(paramPedido.getAndroid_id());
                         pedidoprevsave.setId(pedidopostsave.getId());
                         pedidoprevsave.setEstadoId(GlobalValues.getINSTANCIA().consPedidoEstadoEnviado);
                         pedidoCtr.abrir().modificar(pedidoprevsave, true);

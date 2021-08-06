@@ -11,11 +11,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import adaptivex.pedidoscloud.Controller.PedidodetalleController;
-import adaptivex.pedidoscloud.Controller.ProductoController;
-import adaptivex.pedidoscloud.Model.Pedidodetalle;
-import adaptivex.pedidoscloud.Model.DatabaseHelper.PedidodetalleDataBaseHelper;
-import adaptivex.pedidoscloud.Model.Producto;
+import adaptivex.pedidoscloud.Repositories.PedidodetalleRepository;
+import adaptivex.pedidoscloud.Repositories.ProductoRepository;
+import adaptivex.pedidoscloud.Entity.PedidodetalleEntity;
+import adaptivex.pedidoscloud.Entity.DatabaseHelper.PedidodetalleDataBaseHelper;
+import adaptivex.pedidoscloud.Entity.Producto;
 import adaptivex.pedidoscloud.R;
 import adaptivex.pedidoscloud.View.RVAdapters.RVAdapterPedidodetalle;
 
@@ -84,30 +84,30 @@ public class ListadoPedidodetallesFragment extends Fragment {
         View vista = inflater.inflate(R.layout.fragment_listado_pedidodetalles, container, false);
 
         //DATOS
-        PedidodetalleController dbHelper = new PedidodetalleController(vista.getContext());
-        ArrayList<Pedidodetalle> arrayOfPedidodetalles = new ArrayList<Pedidodetalle>();
+        PedidodetalleRepository dbHelper = new PedidodetalleRepository(vista.getContext());
+        ArrayList<PedidodetalleEntity> arrayOfPedidodetalleEntities = new ArrayList<PedidodetalleEntity>();
         Cursor c = dbHelper.abrir().obtenerTodos();
         String datos = "";
-        Pedidodetalle registro;
+        PedidodetalleEntity registro;
 
         Producto producto;
-        ProductoController dbProducto = new ProductoController(vista.getContext());
+        ProductoRepository dbProducto = new ProductoRepository(vista.getContext());
 
         for(c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
-            registro = new Pedidodetalle();
-            registro.setPedidoTmpId(c.getLong(c.getColumnIndex(PedidodetalleDataBaseHelper.CAMPO_PEDIDO_ID_TMP)));
+            registro = new PedidodetalleEntity();
+            registro.setPedidoAndroidId(c.getLong(c.getColumnIndex(PedidodetalleDataBaseHelper.CAMPO_PEDIDO_ID_TMP)));
             registro.setPedidoId(c.getInt(c.getColumnIndex(PedidodetalleDataBaseHelper.CAMPO_PEDIDO_ID)));
 
             registro.setProductoId(c.getInt(c.getColumnIndex(PedidodetalleDataBaseHelper.CAMPO_PRODUCTO_ID)));
             producto = dbProducto.abrir().buscar(registro.getProductoId());
             registro.setProducto(producto);
             dbProducto.cerrar();
-            int i = registro.getIdTmp();
+            int i = registro.getAndroidId();
             registro.setCantidad(c.getDouble(c.getColumnIndex(PedidodetalleDataBaseHelper.CAMPO_CANTIDAD)));
             registro.setPreciounitario(c.getDouble(c.getColumnIndex(PedidodetalleDataBaseHelper.CAMPO_PRECIOUNITARIO)));
             registro.setMonto(c.getDouble(c.getColumnIndex(PedidodetalleDataBaseHelper.CAMPO_MONTO)));
             registro.setEstadoId(c.getInt(c.getColumnIndex(PedidodetalleDataBaseHelper.CAMPO_ESTADO_ID)));
-            arrayOfPedidodetalles.add(registro);
+            arrayOfPedidodetalleEntities.add(registro);
             registro = null;
         }
 
@@ -119,7 +119,7 @@ public class ListadoPedidodetallesFragment extends Fragment {
         rvPedidodetalles.setLayoutManager(llm);
 
         RVAdapterPedidodetalle rvAdapterPedidodetalle = new RVAdapterPedidodetalle();
-        rvAdapterPedidodetalle.setPedidodetalles(arrayOfPedidodetalles);
+        rvAdapterPedidodetalle.setPedidodetalles(arrayOfPedidodetalleEntities);
         rvPedidodetalles.setAdapter(rvAdapterPedidodetalle);
 
 

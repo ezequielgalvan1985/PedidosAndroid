@@ -4,13 +4,12 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
 
 import adaptivex.pedidoscloud.Config.Configurador;
 import adaptivex.pedidoscloud.Config.GlobalValues;
-import adaptivex.pedidoscloud.Controller.ProductoController;
+import adaptivex.pedidoscloud.Repositories.ProductoRepository;
 import adaptivex.pedidoscloud.Core.parserJSONtoModel.ProductoParser;
-import adaptivex.pedidoscloud.Model.Producto;
+import adaptivex.pedidoscloud.Entity.Producto;
 import adaptivex.pedidoscloud.Servicios.WebRequest;
 
 import java.util.HashMap;
@@ -23,7 +22,7 @@ public class HelperProductos extends AsyncTask<Void, Void, Void> {
     private Context ctx;
     private HashMap<String,String> registro;
     private Producto producto;
-    private ProductoController productoCtr;
+    private ProductoRepository productoCtr;
     private int respuesta; //1=ok, 200=error
     private ProductoParser cp;
     private String jsonStr;
@@ -36,7 +35,7 @@ public class HelperProductos extends AsyncTask<Void, Void, Void> {
 
     public HelperProductos(Context pCtx){
         this.setCtx(pCtx);
-        this.productoCtr = new ProductoController(this.getCtx());
+        this.productoCtr = new ProductoRepository(this.getCtx());
         this.OPTION = OPTION_ALL; // por default trae todos
     }
 

@@ -3,16 +3,15 @@ package adaptivex.pedidoscloud.Servicios.Helpers;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.util.HashMap;
 
 import adaptivex.pedidoscloud.Config.Configurador;
 import adaptivex.pedidoscloud.Config.Constants;
 import adaptivex.pedidoscloud.Config.GlobalValues;
-import adaptivex.pedidoscloud.Controller.ParameterController;
+import adaptivex.pedidoscloud.Repositories.ParameterRepository;
 import adaptivex.pedidoscloud.Core.parserJSONtoModel.ParameterParser;
-import adaptivex.pedidoscloud.Model.Parameter;
+import adaptivex.pedidoscloud.Entity.ParameterEntity;
 import adaptivex.pedidoscloud.Servicios.WebRequest;
 
 /**
@@ -22,8 +21,8 @@ import adaptivex.pedidoscloud.Servicios.WebRequest;
 public class HelperParameters extends AsyncTask<Void, Void, Void> {
     private Context ctx;
     private HashMap<String,String> registro;
-    private Parameter parameter;
-    private ParameterController parameterCtr;
+    private ParameterEntity parameterEntity;
+    private ParameterRepository parameterCtr;
     private int respuesta; //1=ok, 200=error
 
 
@@ -36,7 +35,7 @@ public class HelperParameters extends AsyncTask<Void, Void, Void> {
 
     public HelperParameters(Context pCtx){
         this.setCtx(pCtx);
-        this.parameterCtr = new ParameterController(this.getCtx());
+        this.parameterCtr = new ParameterRepository(this.getCtx());
     }
 
     private void findAll(){
@@ -62,8 +61,8 @@ public class HelperParameters extends AsyncTask<Void, Void, Void> {
     private void setPricesGlobalValues(){
         try{
             //Actulizar variables del sistema con los valores de precio
-            ParameterController parameterCtr = new ParameterController(getCtx());
-            Parameter p;
+            ParameterRepository parameterCtr = new ParameterRepository(getCtx());
+            ParameterEntity p;
             p = parameterCtr.abrir().findByNombre(GlobalValues.getINSTANCIA().PARAM_PRECIOXKILO);
             Constants.PRECIO_HELADO_KILO = p.getValor_decimal();
 
@@ -91,12 +90,12 @@ public class HelperParameters extends AsyncTask<Void, Void, Void> {
             //parameterCtr.abrir().limpiar();
             for (int i = 0; i < cp.getListadoParameters().size(); i++) {
 
-                Parameter parameter_server = cp.getListadoParameters().get(i);
-                Parameter parameter_local = parameterCtr.abrir().findByNombre(cp.getListadoParameters().get(i).getNombre());
-                if (parameter_local==null){
-                    parameterCtr.abrir().agregar(parameter_server);
+                ParameterEntity parameter_Entity_server = cp.getListadoParameters().get(i);
+                ParameterEntity parameter_Entity_local = parameterCtr.abrir().findByNombre(cp.getListadoParameters().get(i).getNombre());
+                if (parameter_Entity_local ==null){
+                    parameterCtr.abrir().agregar(parameter_Entity_server);
                 }else{
-                    parameterCtr.abrir().modificar(parameter_server);
+                    parameterCtr.abrir().modificar(parameter_Entity_server);
                 }
             }
             setPricesGlobalValues();

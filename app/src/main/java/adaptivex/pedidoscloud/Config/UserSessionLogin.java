@@ -1,6 +1,6 @@
 package adaptivex.pedidoscloud.Config;
 
-import adaptivex.pedidoscloud.Model.User;
+import adaptivex.pedidoscloud.Entity.User;
 
 public class UserSessionLogin {
     private static UserSessionLogin INSTANCIA;

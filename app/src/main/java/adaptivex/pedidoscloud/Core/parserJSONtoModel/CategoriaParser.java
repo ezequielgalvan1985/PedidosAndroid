@@ -2,8 +2,8 @@ package adaptivex.pedidoscloud.Core.parserJSONtoModel;
 
 import android.util.Log;
 
-import adaptivex.pedidoscloud.Model.Categoria;
-import adaptivex.pedidoscloud.Model.DatabaseHelper.CategoriaDataBaseHelper;
+import adaptivex.pedidoscloud.Entity.CategoriaEntity;
+import adaptivex.pedidoscloud.Entity.DatabaseHelper.CategoriaDataBaseHelper;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -21,8 +21,8 @@ public class CategoriaParser {
     private String status;
     private String message;
     private JSONObject categoriajson;
-    private Categoria categoria;
-    private ArrayList<Categoria> listadoCategorias;
+    private CategoriaEntity categoria;
+    private ArrayList<CategoriaEntity> listadoCategorias;
     /* Solamente parsea los datos de un String Json, al Objeto CategoriaParser */
     public CategoriaParser(){
     }
@@ -31,11 +31,11 @@ public class CategoriaParser {
         setJsonstr(jsonstr);
     }
 
-    public Categoria parseJsonToObject(){
+    public CategoriaEntity parseJsonToObject(){
         /* Completa datos del objeto  */
         try{
             //leer raiz
-            listadoCategorias  = new ArrayList<Categoria>();
+            listadoCategorias  = new ArrayList<CategoriaEntity>();
             setJsonobj(new JSONObject(getJsonstr()));
 
             setStatus(getJsonobj().getString("code"));
@@ -45,7 +45,7 @@ public class CategoriaParser {
             if (Integer.parseInt(getStatus())== 200){
                 //parser Usuario
                 JSONArray categorias = getData();
-                Categoria categoria = new Categoria();
+                CategoriaEntity categoria = new CategoriaEntity();
                 for (int i = 0; i < categorias.length(); i++) {
                     JSONObject c = categorias.getJSONObject(i);
 
@@ -53,7 +53,7 @@ public class CategoriaParser {
                     categoria.setNombre(c.getString(CategoriaDataBaseHelper.CAMPO_NOMBRE));
                     categoria.setDescripcion(c.getString(CategoriaDataBaseHelper.CAMPO_DESCRIPCION));
                     listadoCategorias.add(categoria);
-                    categoria =  new Categoria();
+                    categoria =  new CategoriaEntity();
 
                 }//endfor
 
@@ -84,11 +84,11 @@ public class CategoriaParser {
         this.data = data;
     }
 
-    public Categoria getCategoria() {
+    public CategoriaEntity getCategoria() {
         return categoria;
     }
 
-    public void setCategoria(Categoria categoria) {
+    public void setCategoria(CategoriaEntity categoria) {
         this.categoria = categoria;
     }
 
@@ -124,11 +124,11 @@ public class CategoriaParser {
         this.categoriajson = categoriajson;
     }
 
-    public ArrayList<Categoria> getListadoCategorias() {
+    public ArrayList<CategoriaEntity> getListadoCategorias() {
         return listadoCategorias;
     }
 
-    public void setListadoCategorias(ArrayList<Categoria> listadoCategorias) {
+    public void setListadoCategorias(ArrayList<CategoriaEntity> listadoCategorias) {
         this.listadoCategorias = listadoCategorias;
     }
 }

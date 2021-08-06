@@ -15,9 +15,10 @@ import android.widget.Toast;
 
 import adaptivex.pedidoscloud.Config.Constants;
 import adaptivex.pedidoscloud.Config.GlobalValues;
-import adaptivex.pedidoscloud.Controller.PedidoController;
-import adaptivex.pedidoscloud.Controller.UserController;
-import adaptivex.pedidoscloud.Model.User;
+import adaptivex.pedidoscloud.Core.FactoryRepositories;
+import adaptivex.pedidoscloud.Repositories.PedidoRepository;
+import adaptivex.pedidoscloud.Repositories.UserRepository;
+import adaptivex.pedidoscloud.Entity.User;
 import adaptivex.pedidoscloud.R;
 import adaptivex.pedidoscloud.Servicios.Helpers.HelperUser;
 
@@ -37,12 +38,12 @@ public class CargarDireccionFragment extends Fragment {
 
 
     private void flushPedidoTemporal(){
-        GlobalValues.getINSTANCIA().PEDIDO_TEMPORAL.setTelefono(txtTelefono.getText().toString());
-        GlobalValues.getINSTANCIA().PEDIDO_TEMPORAL.setLocalidad(txtLocalidad.getText().toString());
-        GlobalValues.getINSTANCIA().PEDIDO_TEMPORAL.setCalle(txtCalle.getText().toString());
-        GlobalValues.getINSTANCIA().PEDIDO_TEMPORAL.setNro(txtNro.getText().toString());
-        GlobalValues.getINSTANCIA().PEDIDO_TEMPORAL.setPiso(txtPiso.getText().toString());
-        GlobalValues.getINSTANCIA().PEDIDO_TEMPORAL.setContacto(txtContacto.getText().toString());
+        FactoryRepositories.getInstancia().PEDIDO_TEMPORAL.setTelefono(txtTelefono.getText().toString());
+        FactoryRepositories.getInstancia().PEDIDO_TEMPORAL.setLocalidad(txtLocalidad.getText().toString());
+        FactoryRepositories.getInstancia().PEDIDO_TEMPORAL.setCalle(txtCalle.getText().toString());
+        FactoryRepositories.getInstancia().PEDIDO_TEMPORAL.setNro(txtNro.getText().toString());
+        FactoryRepositories.getInstancia().PEDIDO_TEMPORAL.setPiso(txtPiso.getText().toString());
+        FactoryRepositories.getInstancia().PEDIDO_TEMPORAL.setContacto(txtContacto.getText().toString());
     }
 
     private boolean validateForm(){
@@ -97,8 +98,8 @@ public class CargarDireccionFragment extends Fragment {
         GlobalValues.getINSTANCIA().CURRENT_FRAGMENT_NUEVO_PEDIDO = GlobalValues.getINSTANCIA().NP_CARGAR_DIRECCION;
         //Cargar datos del usuario logueado
 
-        UserController uc = new UserController(v.getContext());
-        User u = uc.abrir().findUser(GlobalValues.getINSTANCIA().getUSER_ID_LOGIN());
+        UserRepository uc = new UserRepository(v.getContext());
+        User u = uc.abrir().findUser(GlobalValues.getINSTANCIA().getUsuariologueado().getId());
         if (u!=null){
             //Asignar los valores a los campos
             txtTelefono   = (AutoCompleteTextView) v.findViewById(R.id.cargar_direccion_telefono);
@@ -157,8 +158,8 @@ public class CargarDireccionFragment extends Fragment {
 
     public boolean saveDireccionUser() {
         try{
-            UserController uc = new UserController(getContext());
-            User u = uc.abrir().getUserDB(GlobalValues.getINSTANCIA().getUSER_ID_LOGIN());
+            UserRepository uc = new UserRepository(getContext());
+            User u = uc.abrir().getUserDB(GlobalValues.getINSTANCIA().getUsuariologueado().getId());
             uc.abrir().editDB(u);
 
             //Envia datos al servidor
@@ -178,8 +179,8 @@ public class CargarDireccionFragment extends Fragment {
     public boolean saveDireccion(){
         boolean validate = false;
         flushPedidoTemporal();
-        PedidoController pc = new PedidoController(getContext());
-        pc.abrir().edit(GlobalValues.getINSTANCIA().PEDIDO_TEMPORAL);
+        PedidoRepository pc = new PedidoRepository(getContext());
+        pc.abrir().edit(FactoryRepositories.getInstancia().PEDIDO_TEMPORAL);
         validate = true;
         return validate;
     }

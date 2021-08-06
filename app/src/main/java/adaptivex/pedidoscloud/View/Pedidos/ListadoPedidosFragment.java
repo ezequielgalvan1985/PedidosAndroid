@@ -1,7 +1,6 @@
 package adaptivex.pedidoscloud.View.Pedidos;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,15 +11,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import adaptivex.pedidoscloud.Config.GlobalValues;
-import adaptivex.pedidoscloud.Controller.ClienteController;
-import adaptivex.pedidoscloud.Controller.PedidoController;
-import adaptivex.pedidoscloud.Model.Cliente;
-import adaptivex.pedidoscloud.Model.Pedido;
-import adaptivex.pedidoscloud.Model.DatabaseHelper.PedidoDataBaseHelper;
+import adaptivex.pedidoscloud.Core.FactoryRepositories;
+import adaptivex.pedidoscloud.Entity.PedidoEntity;
 import adaptivex.pedidoscloud.R;
 import adaptivex.pedidoscloud.View.RVAdapters.RVAdapterPedido;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -86,45 +83,23 @@ public class ListadoPedidosFragment extends Fragment {
             View vista = inflater.inflate(R.layout.fragment_listado_pedidos, container, false);
 
             //DATOS
-            PedidoController dbHelper = new PedidoController(vista.getContext());
-            ArrayList<Pedido> arrayOfPedidos = new ArrayList<Pedido>();
-            Cursor c;
+            List<PedidoEntity> listaPedido;
             //DETERINAR QUE LISTADO SE VA A MOSTRAR
+
             if(GlobalValues.getINSTANCIA().getESTADO_ID_SELECCIONADO() == GlobalValues.getINSTANCIA().consPedidoEstadoEnviado) {
-                c = dbHelper.abrir().findByEstadoId(GlobalValues.getINSTANCIA().consPedidoEstadoEnviado);
+                listaPedido = FactoryRepositories.getInstancia().getPedidoRepository().abrir().findByEstadoId(GlobalValues.getINSTANCIA().consPedidoEstadoEnviado);
             }else if(GlobalValues.getINSTANCIA().getESTADO_ID_SELECCIONADO() == GlobalValues.getINSTANCIA().consPedidoEstadoNuevo){
-                c = dbHelper.abrir().findByEstadoId(GlobalValues.getINSTANCIA().consPedidoEstadoNuevo);
+                listaPedido = FactoryRepositories.getInstancia().getPedidoRepository().abrir().findByEstadoId(GlobalValues.getINSTANCIA().consPedidoEstadoNuevo);
             }else{
-                c= dbHelper.abrir().obtenerTodos();
+                listaPedido = FactoryRepositories.getInstancia().getPedidoRepository().abrir().obtenerTodos();
             }
+
             GlobalValues.getINSTANCIA().setESTADO_ID_SELECCIONADO(GlobalValues.getINSTANCIA().consPedidoEstadoTodos);
 
+            ArrayList<PedidoEntity> arrayOfPedidos = new ArrayList<PedidoEntity>();
             String datos = "";
-            Pedido registro;
+            PedidoEntity registro;
 
-            //Cliente
-            Cliente cliente;
-            ClienteController dbCliente = new ClienteController(vista.getContext());
-            if (c!= null){
-                if(c.getCount() > 0 ){
-                    for(c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
-                        registro = new Pedido();
-                        registro.setId(c.getInt(c.getColumnIndex(PedidoDataBaseHelper.CAMPO_ID)));
-                        registro.setCreated(c.getString(c.getColumnIndex(PedidoDataBaseHelper.CAMPO_CREATED)));
-                        registro.setSubtotal(c.getDouble(c.getColumnIndex(PedidoDataBaseHelper.CAMPO_SUBTOTAL)));
-                        registro.setIva(c.getDouble(c.getColumnIndex(PedidoDataBaseHelper.CAMPO_IVA)));
-                        registro.setMonto(c.getDouble(c.getColumnIndex(PedidoDataBaseHelper.CAMPO_MONTO)));
-                        //registro.setCliente_id(c.getInt(c.getColumnIndex(PedidoDataBaseHelper.CAMPO_CLIENTE_ID)));
-                        registro.setEstadoId(c.getInt(c.getColumnIndex(PedidoDataBaseHelper.CAMPO_ESTADO_ID)));
-                        cliente = dbCliente.abrir().buscar(registro.getCliente_id());
-                        registro.setCliente(cliente);
-                        registro.setBonificacion(c.getDouble(c.getColumnIndex(PedidoDataBaseHelper.CAMPO_BONIFICACION)));
-                        registro.setIdTmp(c.getInt(c.getColumnIndex(PedidoDataBaseHelper.CAMPO_ID_TMP)));
-                        arrayOfPedidos.add(registro);
-                        registro = null;
-                    }
-                }
-            }
             //Con RECYCLEVIEW
             rvPedidos = (RecyclerView)vista.findViewById(R.id.rvPedidos);
             LinearLayoutManager llm = new LinearLayoutManager(vista.getContext());

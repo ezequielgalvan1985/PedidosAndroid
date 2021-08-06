@@ -12,7 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import adaptivex.pedidoscloud.Config.GlobalValues;
-import adaptivex.pedidoscloud.Model.Pedido;
+import adaptivex.pedidoscloud.Entity.PedidoEntity;
 import adaptivex.pedidoscloud.R;
 import adaptivex.pedidoscloud.Servicios.Helpers.HelperPedidos;
 
@@ -22,7 +22,7 @@ import java.util.ArrayList;
  * Created by ezequiel on 22/06/2016.
  */
 public class RVAdapterPedido extends RecyclerView.Adapter<RVAdapterPedido.PedidoViewHolder>{
-    private ArrayList<Pedido> pedidos;
+    private ArrayList<PedidoEntity> pedidos;
     private ContextWrapper cw;
     private Context ctx;
 
@@ -32,13 +32,13 @@ public class RVAdapterPedido extends RecyclerView.Adapter<RVAdapterPedido.Pedido
     public void setCtx(Context ctx) {
         this.ctx = ctx;
     }
-    public ArrayList<Pedido> getPedidos() {
+    public ArrayList<PedidoEntity> getPedidos() {
         return pedidos;
     }
 
 
 
-    public void RVAdapterPedido(ArrayList<Pedido> pedidos){
+    public void RVAdapterPedido(ArrayList<PedidoEntity> pedidos){
         this.setPedidos(pedidos);
     }
 
@@ -64,10 +64,10 @@ public class RVAdapterPedido extends RecyclerView.Adapter<RVAdapterPedido.Pedido
         pedidoViewHolder.tvCreated.setText(pedidos.get(i).getCreated());
         pedidoViewHolder.tvMonto.setText(String.valueOf(pedidos.get(i).getMonto()));
         pedidoViewHolder.tvIpfEstadoDesc.setText(GlobalValues.ESTADOS[pedidos.get(i).getEstadoId()]);
-        pedidoViewHolder.tvIpfIdTmp.setText(String.valueOf( pedidos.get(i).getIdTmp()));
-        pedidoViewHolder.tvIpfClienteDesc.setText(pedidos.get(i).getCliente().getContacto());
+        pedidoViewHolder.tvIpfIdTmp.setText(String.valueOf( pedidos.get(i).getAndroid_id()));
+        pedidoViewHolder.tvIpfClienteDesc.setText(pedidos.get(i).getCliente().getUsername());
 
-        GlobalValues.getINSTANCIA().setVgPedidoSeleccionado(pedidos.get(i).getIdTmp());
+        GlobalValues.getINSTANCIA().setVgPedidoSeleccionado(pedidos.get(i).getAndroid_id());
 
 
 
@@ -78,7 +78,7 @@ public class RVAdapterPedido extends RecyclerView.Adapter<RVAdapterPedido.Pedido
         super.onAttachedToRecyclerView(recyclerView);
     }
 
-    public void setPedidos(ArrayList<Pedido> pedidos) {
+    public void setPedidos(ArrayList<PedidoEntity> pedidos) {
         this.pedidos = pedidos;
     }
 
@@ -87,7 +87,7 @@ public class RVAdapterPedido extends RecyclerView.Adapter<RVAdapterPedido.Pedido
 
 
     public static class PedidoViewHolder extends RecyclerView.ViewHolder implements  View.OnClickListener{
-        ArrayList<Pedido> pedidos = new ArrayList<Pedido>();
+        ArrayList<PedidoEntity> pedidos = new ArrayList<PedidoEntity>();
         Context ctx;
         OnHeadlineSelectedListener mCallback;
 
@@ -98,7 +98,7 @@ public class RVAdapterPedido extends RecyclerView.Adapter<RVAdapterPedido.Pedido
         Button btnEnviar;
 
 
-        public PedidoViewHolder(View itemView, Context ctx, ArrayList<Pedido> pedidos) {
+        public PedidoViewHolder(View itemView, Context ctx, ArrayList<PedidoEntity> pedidos) {
             super(itemView);
 
             mCallback = (OnHeadlineSelectedListener) ctx;
@@ -126,7 +126,7 @@ public class RVAdapterPedido extends RecyclerView.Adapter<RVAdapterPedido.Pedido
         @Override
         public void onClick(View v) {
             int position  = getAdapterPosition();
-            Pedido pedido = this.pedidos.get(position);
+            PedidoEntity pedido = this.pedidos.get(position);
              if (v.getId()== R.id.btnEnviarPedido) {
                 /* Enviar el pedido
                 * Obtener el idTmp
@@ -136,10 +136,10 @@ public class RVAdapterPedido extends RecyclerView.Adapter<RVAdapterPedido.Pedido
                 */
                 try{
 
-                    HelperPedidos hp = new HelperPedidos(v.getContext(), pedido.getIdTmp(), GlobalValues.getINSTANCIA().OPTION_HELPER_ENVIO_PEDIDO );
+                    HelperPedidos hp = new HelperPedidos(v.getContext(), pedido.getAndroid_id(), GlobalValues.getINSTANCIA().OPTION_HELPER_ENVIO_PEDIDO );
                     hp.execute();
                     if (hp.getRespuesta()==GlobalValues.getINSTANCIA().RETURN_OK){
-                        //Toast.makeText(v.getContext(), "Pedido "+ String.valueOf(pedido.getIdTmp())+ " Sincronizado OK ", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(v.getContext(), "Pedido "+ String.valueOf(pedido.getAndroid_id())+ " Sincronizado OK ", Toast.LENGTH_SHORT).show();
                     }
                 }catch (Exception e){
                     Toast.makeText(v.getContext(),"Error RVAdapterPedido: "+ e.getMessage(), Toast.LENGTH_LONG);
@@ -157,7 +157,7 @@ public class RVAdapterPedido extends RecyclerView.Adapter<RVAdapterPedido.Pedido
     }
     // La actividad contenedora debe implementar esta interfaz
     public interface OnHeadlineSelectedListener {
-        public void onPedidoSelected(int position, Pedido pedido);
+        public void onPedidoSelected(int position, PedidoEntity pedido);
     }
 
 

@@ -16,10 +16,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import adaptivex.pedidoscloud.Config.GlobalValues;
+import adaptivex.pedidoscloud.Core.FactoryRepositories;
 import adaptivex.pedidoscloud.Core.Interfaces.OnTaskCompleted;
 import adaptivex.pedidoscloud.Core.WorkDate;
 import adaptivex.pedidoscloud.Core.WorkNumber;
-import adaptivex.pedidoscloud.Model.Pedido;
+import adaptivex.pedidoscloud.Entity.PedidoEntity;
 import adaptivex.pedidoscloud.R;
 import adaptivex.pedidoscloud.Servicios.Helpers.HelperPedidos;
 
@@ -103,31 +104,31 @@ public class ResumenPedidoFragment extends Fragment implements View.OnClickListe
     public void refreshTextViews(){
         try{
             //Actualizar valor de los textview, formatear valores pesos a #.##
-            txt_direccion.setText(GlobalValues.getINSTANCIA().PEDIDO_TEMPORAL.getStringDireccion());
-            lbl_cantidad_kilos.setText(GlobalValues.getINSTANCIA().PEDIDO_TEMPORAL.getCantidadKilosFormatString());
-            txt_cucuruchos.setText(GlobalValues.getINSTANCIA().PEDIDO_TEMPORAL.getCucuruchos().toString());
-            lbl_cucuruchos_monto.setText(GlobalValues.getINSTANCIA().PEDIDO_TEMPORAL.getMontoCucuruchosFormatMoney());
-            txt_cucharitas.setText(GlobalValues.getINSTANCIA().PEDIDO_TEMPORAL.getCucharitas().toString());
-            txtEnvio.setText(GlobalValues.getINSTANCIA().PEDIDO_TEMPORAL.getEnvioDomicilio());
+            txt_direccion.setText(FactoryRepositories.getInstancia().PEDIDO_TEMPORAL.getStringDireccion());
+            lbl_cantidad_kilos.setText(FactoryRepositories.getInstancia().PEDIDO_TEMPORAL.getCantidadKilosFormatString());
+            txt_cucuruchos.setText(FactoryRepositories.getInstancia().PEDIDO_TEMPORAL.getCucuruchos().toString());
+            lbl_cucuruchos_monto.setText(FactoryRepositories.getInstancia().PEDIDO_TEMPORAL.getMontoCucuruchosFormatMoney());
+            txt_cucharitas.setText(FactoryRepositories.getInstancia().PEDIDO_TEMPORAL.getCucharitas().toString());
+            txtEnvio.setText(FactoryRepositories.getInstancia().PEDIDO_TEMPORAL.getEnvioDomicilio());
 
-            txt_pedido_id.setText(WorkNumber.getValue(GlobalValues.getINSTANCIA().PEDIDO_TEMPORAL.getId()).toString());
-            String estado = GlobalValues.getINSTANCIA().ESTADOS[WorkNumber.getValue(GlobalValues.getINSTANCIA().PEDIDO_TEMPORAL.getEstadoId())];
+            txt_pedido_id.setText(WorkNumber.getValue(FactoryRepositories.getInstancia().PEDIDO_TEMPORAL.getId()).toString());
+            String estado = GlobalValues.getINSTANCIA().ESTADOS[WorkNumber.getValue(FactoryRepositories.getInstancia().PEDIDO_TEMPORAL.getEstadoId())];
             txt_estado.setText(estado);
 
-            txt_hora_entrega.setText(WorkDate.parseDateToStringFormatHHmmss(GlobalValues.getINSTANCIA().PEDIDO_TEMPORAL.getHoraentrega()));
+            txt_hora_entrega.setText(WorkDate.parseDateToStringFormatHHmmss(FactoryRepositories.getInstancia().PEDIDO_TEMPORAL.getHoraentrega()));
 
-            txt_tiempo_demora.setText(WorkDate.calculateDiffereceDatesFormatMM(GlobalValues.getINSTANCIA().PEDIDO_TEMPORAL.getHoraentrega(),WorkDate.getNowDate() ));
+            txt_tiempo_demora.setText(WorkDate.calculateDiffereceDatesFormatMM(FactoryRepositories.getInstancia().PEDIDO_TEMPORAL.getHoraentrega(),WorkDate.getNowDate() ));
 
-            //txt_cantidad_descuento.setText(GlobalValues.getINSTANCIA().PEDIDO_TEMPORAL.getCantidadDescuento().toString());
-            txt_monto_descuento.setText(GlobalValues.getINSTANCIA().PEDIDO_TEMPORAL.getMontoDescuentoFormatMoney());
-            txt_monto_total.setText(GlobalValues.getINSTANCIA().PEDIDO_TEMPORAL.getMontoFormatMoney());
-            lbl_kilos_monto.setText(GlobalValues.getINSTANCIA().PEDIDO_TEMPORAL.getMontoHeladoFormatMoney());
+            //txt_cantidad_descuento.setText(FactoryRepositories.getInstancia().PEDIDO_TEMPORAL.getCantidadDescuento().toString());
+            txt_monto_descuento.setText(FactoryRepositories.getInstancia().PEDIDO_TEMPORAL.getMontoDescuentoFormatMoney());
+            txt_monto_total.setText(FactoryRepositories.getInstancia().PEDIDO_TEMPORAL.getMontoFormatMoney());
+            lbl_kilos_monto.setText(FactoryRepositories.getInstancia().PEDIDO_TEMPORAL.getMontoHeladoFormatMoney());
 
-            txt_monto_abona.setText(GlobalValues.getINSTANCIA().PEDIDO_TEMPORAL.getMontoAbonaFormatMoney());
+            txt_monto_abona.setText(FactoryRepositories.getInstancia().PEDIDO_TEMPORAL.getMontoAbonaFormatMoney());
 
             btnEnviarPedido.setEnabled(true);
-            if (GlobalValues.getINSTANCIA().PEDIDO_TEMPORAL.getId()!=null){
-                if (GlobalValues.getINSTANCIA().PEDIDO_TEMPORAL.getId()> 0 ){
+            if (FactoryRepositories.getInstancia().PEDIDO_TEMPORAL.getId()!=null){
+                if (FactoryRepositories.getInstancia().PEDIDO_TEMPORAL.getId()> 0 ){
                     btnEnviarPedido.setEnabled(false);
                 }
             }
@@ -139,7 +140,7 @@ public class ResumenPedidoFragment extends Fragment implements View.OnClickListe
 
     public void checkStatusPedido(){
         try{
-            Pedido p = GlobalValues.getINSTANCIA().PEDIDO_TEMPORAL;
+            PedidoEntity p = FactoryRepositories.getInstancia().PEDIDO_TEMPORAL;
             if(p.getId()!=null){
                 if (p.getId() > 0 ){
 
@@ -198,7 +199,7 @@ public class ResumenPedidoFragment extends Fragment implements View.OnClickListe
 
 
     public void enviarPedido(){
-        hp = new HelperPedidos(getContext(),  GlobalValues.getINSTANCIA().OPTION_HELPER_ENVIO_PEDIDO, GlobalValues.getINSTANCIA().PEDIDO_TEMPORAL);
+        hp = new HelperPedidos(getContext(),  GlobalValues.getINSTANCIA().OPTION_HELPER_ENVIO_PEDIDO, FactoryRepositories.getInstancia().PEDIDO_TEMPORAL);
         hp.setListener(this);
         hp.execute();
 
@@ -213,7 +214,7 @@ public class ResumenPedidoFragment extends Fragment implements View.OnClickListe
         if (hp.getOpcion() != HelperPedidos.OPTION_CHECK_STATUS){
             Toast.makeText(getContext(),"Enviado OK" ,Toast.LENGTH_LONG).show();
             btnEnviarPedido.setEnabled(false);
-            sendSMS(GlobalValues.getINSTANCIA().PEDIDO_TEMPORAL.getTelefono(),  GlobalValues.getINSTANCIA().PEDIDO_TEMPORAL.getHoraEntregaForSMS());
+            sendSMS(FactoryRepositories.getInstancia().PEDIDO_TEMPORAL.getTelefono(),  FactoryRepositories.getInstancia().PEDIDO_TEMPORAL.getHoraEntregaForSMS());
         }
     }
 

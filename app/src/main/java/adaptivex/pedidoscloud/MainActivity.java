@@ -1,7 +1,6 @@
 package adaptivex.pedidoscloud;
 
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -19,9 +18,9 @@ import android.widget.Toast;
 
 import adaptivex.pedidoscloud.Config.Constants;
 import adaptivex.pedidoscloud.Config.GlobalValues;
-import adaptivex.pedidoscloud.Controller.PedidoController;
+import adaptivex.pedidoscloud.Core.FactoryRepositories;
 import adaptivex.pedidoscloud.Core.IniciarApp;
-import adaptivex.pedidoscloud.Model.Pedido;
+import adaptivex.pedidoscloud.Entity.PedidoEntity;
 import adaptivex.pedidoscloud.Servicios.Helpers.HelperPedidos;
 import adaptivex.pedidoscloud.View.Categorias.ListadoCategoriasFragment;
 import adaptivex.pedidoscloud.View.Consulting.ConfigFragment;
@@ -131,7 +130,13 @@ public class MainActivity extends AppCompatActivity
 
         }else if (id == R.id.mnu_ver_pedido_actual) {
             fragment = new ResumenPedidoFragment();
-            if (GlobalValues.getINSTANCIA().FL_VerPedidoActual(this)){
+
+            if (FactoryRepositories.getInstancia()
+                    .getPedidoRepository()
+                    .abrir()
+                    .findByPedidoActual()
+                    .getAndroid_id()>0)
+            {
                 fragmentTransaction = true;
             }else{
                 Toast.makeText(this, "No Hay Pedidos EN PREPARACIÓN", Toast.LENGTH_LONG).show();
@@ -140,13 +145,10 @@ public class MainActivity extends AppCompatActivity
 
         }else if (id==R.id.mnu_continuar_pedido_actual){
 
-            PedidoController pdba = new PedidoController(this);
-            long nroPedido = pdba.findByLastAndroidId();
+            long nroPedido = FactoryRepositories.getInstancia().getPedidoRepository().findByLastAndroidId();
             if (nroPedido > 0) {
-                Cursor c = pdba.abrir().findByIdAndroid(nroPedido);
-                Pedido p = pdba.abrir().parseCursorToPedido(c);
-                GlobalValues.getINSTANCIA().PEDIDO_TEMPORAL = p;
-                GlobalValues.getINSTANCIA().PEDIDO_ID_ACTUAL = p.getIdTmp();
+                PedidoEntity p = FactoryRepositories.getInstancia().getPedidoRepository().findByAndroidId(nroPedido);
+                FactoryRepositories.getInstancia().PEDIDO_TEMPORAL = p;
                 fragment = new CargarDireccionFragment();
             } else {
                 Toast.makeText(this, "MainActivity: No Hay Pedidos Generados", Toast.LENGTH_LONG);
@@ -154,7 +156,6 @@ public class MainActivity extends AppCompatActivity
             }
 
             GlobalValues.getINSTANCIA().setVgFlagMenuNuevoPedido(true);
-
             fragmentTransaction = true;
             fragment.setArguments(args);
 
@@ -284,7 +285,7 @@ public class MainActivity extends AppCompatActivity
                     }
                     break;
                 case R.id.nav_logout:
-                    GlobalValues.getINSTANCIA().setUserlogued(null);
+                    GlobalValues.getINSTANCIA().setUsuariologueado(null);
                     // Borrar parametro de Base de datos
                     IniciarApp ia = new IniciarApp(getBaseContext());
                     ia.logout();

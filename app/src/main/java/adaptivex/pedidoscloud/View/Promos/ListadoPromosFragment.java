@@ -1,7 +1,6 @@
 package adaptivex.pedidoscloud.View.Promos;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -14,8 +13,8 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
-import adaptivex.pedidoscloud.Controller.PromoController;
-import adaptivex.pedidoscloud.Model.Promo;
+import adaptivex.pedidoscloud.Repositories.PromoRepository;
+import adaptivex.pedidoscloud.Entity.Promo;
 import adaptivex.pedidoscloud.R;
 import adaptivex.pedidoscloud.View.RVAdapters.RVAdapterPromo;
 
@@ -56,7 +55,7 @@ public class ListadoPromosFragment extends Fragment {
         rvPromos.setLayoutManager(llm);
 
         //2 - ArrayList Promos
-        PromoController pc = new PromoController(getContext());
+        PromoRepository pc = new PromoRepository(getContext());
         listaPromos = pc.abrir().findByEnabledToArrayList();
 
         //3 - SET ADAPTER

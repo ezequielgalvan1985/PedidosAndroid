@@ -21,16 +21,18 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 import adaptivex.pedidoscloud.Config.Configurador;
 import adaptivex.pedidoscloud.Config.Constants;
 import adaptivex.pedidoscloud.Config.GlobalValues;
-import adaptivex.pedidoscloud.Controller.PedidoController;
-import adaptivex.pedidoscloud.Controller.PedidodetalleController;
+import adaptivex.pedidoscloud.Core.FactoryRepositories;
+import adaptivex.pedidoscloud.Repositories.PedidoRepository;
+import adaptivex.pedidoscloud.Repositories.PedidodetalleRepository;
 import adaptivex.pedidoscloud.Core.Interfaces.OnTaskCompleted;
 import adaptivex.pedidoscloud.Core.parserJSONtoModel.PedidoParser;
-import adaptivex.pedidoscloud.Model.Pedido;
-import adaptivex.pedidoscloud.Model.Pedidodetalle;
+import adaptivex.pedidoscloud.Entity.PedidoEntity;
+import adaptivex.pedidoscloud.Entity.PedidodetalleEntity;
 import adaptivex.pedidoscloud.Servicios.WebRequest;
 
 
@@ -42,14 +44,14 @@ public class HelperPedidos extends AsyncTask<Void, Void, Void> {
     private Context ctx;
     private ProgressDialog pDialog;
     private HashMap<String,String> registro;
-    private Pedido pedido;
-    private PedidoController pedidoCtr;
+    private PedidoEntity pedido;
+    private PedidoRepository pedidoCtr;
     private long nroPeddo;
     private int respuesta; //1=ok, 200=error
     private int opcion; //1 enviar Post Pedido, 2 ENVIAR TODOS LOS PEDIDOS PENDIENTES
 
     private OnTaskCompleted listener;
-    private ArrayList<Pedido> pedidos;
+    private ArrayList<PedidoEntity> pedidos;
     private String TEXT_RESPONSE;
     private int CURRENT_OPTION = 0; //1 enviar Post Parameter
 
@@ -75,20 +77,20 @@ public class HelperPedidos extends AsyncTask<Void, Void, Void> {
 
     public HelperPedidos(Context pCtx, long pNroPedidoTmp, int opcion){
         this.setCtx(pCtx);
-        this.pedidoCtr = new PedidoController(this.getCtx());
+        this.pedidoCtr = new PedidoRepository(this.getCtx());
         //this.setPedido(pedidoCtr.abrir().buscar(pNroPedidoTmp, true));
         this.opcion = opcion;
     }
 
     public HelperPedidos(Context pCtx, int opcion){
         this.setCtx(pCtx);
-        this.pedidoCtr = new PedidoController(this.getCtx());
+        this.pedidoCtr = new PedidoRepository(this.getCtx());
         this.opcion = opcion;
     }
 
-    public HelperPedidos(Context pCtx, int opcion, Pedido pedido){
+    public HelperPedidos(Context pCtx, int opcion, PedidoEntity pedido){
         this.setCtx(pCtx);
-        this.pedidoCtr = new PedidoController(this.getCtx());
+        this.pedidoCtr = new PedidoRepository(this.getCtx());
         this.opcion = opcion;
         this.pedido = pedido;
     }
@@ -147,10 +149,10 @@ public class HelperPedidos extends AsyncTask<Void, Void, Void> {
 
         switch(getOpcion()){
             case OPTION_CHECK_STATUS:
-                GlobalValues.getINSTANCIA().PEDIDO_TEMPORAL.setEstadoId(getPedido().getEstadoId());
-                GlobalValues.getINSTANCIA().PEDIDO_TEMPORAL.setHoraentrega(getPedido().getHoraentrega());
-                GlobalValues.getINSTANCIA().PEDIDO_TEMPORAL.setHoraRecepcion(getPedido().getHoraRecepcion());
-                GlobalValues.getINSTANCIA().PEDIDO_TEMPORAL.setTiempoDemora(getPedido().getTiempoDemora());
+                FactoryRepositories.getInstancia().PEDIDO_TEMPORAL.setEstadoId(getPedido().getEstadoId());
+                FactoryRepositories.getInstancia().PEDIDO_TEMPORAL.setHoraentrega(getPedido().getHoraentrega());
+                FactoryRepositories.getInstancia().PEDIDO_TEMPORAL.setHoraRecepcion(getPedido().getHoraRecepcion());
+                FactoryRepositories.getInstancia().PEDIDO_TEMPORAL.setTiempoDemora(getPedido().getTiempoDemora());
                 break;
 
             case OPTION_FIND_ESTADO_ENCAMINO:
@@ -191,11 +193,11 @@ public class HelperPedidos extends AsyncTask<Void, Void, Void> {
         this.opcion = opcion;
     }
 
-    public Pedido getPedido() {
+    public PedidoEntity getPedido() {
         return pedido;
     }
 
-    public void setPedido(Pedido pedido) {
+    public void setPedido(PedidoEntity pedido) {
         this.pedido = pedido;
     }
 
@@ -226,7 +228,7 @@ public class HelperPedidos extends AsyncTask<Void, Void, Void> {
     }
 
 
-    public JSONObject parseObjectToJson(Pedido paramPedido){
+    public JSONObject parseObjectToJson(PedidoEntity paramPedido){
         try{
             JSONObject pedido = new JSONObject();
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -236,8 +238,8 @@ public class HelperPedidos extends AsyncTask<Void, Void, Void> {
 
             pedido.put("id", String.valueOf(paramPedido.getId()));
             //pedido.put("fecha", String.valueOf(fechahoystr));
-            pedido.put("user_id", String.valueOf(GlobalValues.getINSTANCIA().getUserlogued().getId()));
-            pedido.put("android_id", String.valueOf(paramPedido.getIdTmp()));
+            pedido.put("user_id", String.valueOf(GlobalValues.getINSTANCIA().getUsuariologueado().getId()));
+            pedido.put("android_id", String.valueOf(paramPedido.getAndroid_id()));
             pedido.put("subtotal", String.valueOf(paramPedido.getSubtotal()));
             pedido.put("monto", String.valueOf(paramPedido.getMonto())); //Precio total del helado
             pedido.put("iva", String.valueOf(paramPedido.getIva()));
@@ -267,11 +269,11 @@ public class HelperPedidos extends AsyncTask<Void, Void, Void> {
 
             for(int x = 0; x< paramPedido.getDetalles().size(); x++) {
                 JSONObject item = new JSONObject();
-                Pedidodetalle pd = (Pedidodetalle) paramPedido.getDetalles().get(x);
+                PedidodetalleEntity pd = (PedidodetalleEntity) paramPedido.getDetalles().get(x);
                 item.put("producto_id", pd.getProductoId().toString());
                 item.put("cantidad",  String.valueOf(pd.getCantidad())); //Proporcion
                 item.put("medidapote",  String.valueOf(pd.getMedidaPote())); //Proporcion
-                item.put("android_id",  String.valueOf(pd.getIdTmp()));
+                item.put("android_id",  String.valueOf(pd.getAndroidId()));
                 item.put("nropote",  String.valueOf(pd.getNroPote()));
                 pedidodetalles.put(item);
             }
@@ -289,7 +291,7 @@ public class HelperPedidos extends AsyncTask<Void, Void, Void> {
     }
 
 
-    public Pedido requestPost(Pedido paramPedido, String pUrl){
+    public PedidoEntity requestPost(PedidoEntity paramPedido, String pUrl){
         try {
             URL url;
             URLConnection urlConn;
@@ -333,7 +335,7 @@ public class HelperPedidos extends AsyncTask<Void, Void, Void> {
 
             //Procesa respuesta y almacena en una variable pedido
             PedidoParser pp = new PedidoParser(sb.toString());
-            Pedido pedidoresponse = pp.parseJsonToObject();
+            PedidoEntity pedidoresponse = pp.parseJsonToObject();
             return pedidoresponse;
         }catch(Exception e){
             if (pDialog.isShowing())
@@ -344,22 +346,22 @@ public class HelperPedidos extends AsyncTask<Void, Void, Void> {
         }
     }
 
-    public void checkStatusPedido(Pedido pedido){
-        Pedido pedidoresponse = requestPost(pedido, Configurador.urlPedidoFindById);
+    public void checkStatusPedido(PedidoEntity pedido){
+        PedidoEntity pedidoresponse = requestPost(pedido, Configurador.urlPedidoFindById);
 
         //actualizar el estado y horas
         pedido.setEstadoId(pedidoresponse.getEstadoId());
         pedido.setHoraentrega(pedidoresponse.getHoraentrega());
         pedido.setHoraRecepcion(pedidoresponse.getHoraRecepcion());
         pedido.setTiempoDemora(pedidoresponse.getTiempoDemora());
-        PedidoController pc = new PedidoController(getCtx());
+        PedidoRepository pc = new PedidoRepository(getCtx());
         pc.abrir().edit(pedido);
         setPedido(pedido);
 
     }
 
 
-    public boolean enviarPedido2(Pedido paramPedido){
+    public boolean enviarPedido2(PedidoEntity paramPedido){
         try{
             setPedido(paramPedido);
             URL url;
@@ -379,7 +381,7 @@ public class HelperPedidos extends AsyncTask<Void, Void, Void> {
 
             //Create JSONObject here
             JSONObject objectjson = new JSONObject();
-            PedidodetalleController pdc = new PedidodetalleController(getCtx());
+            PedidodetalleRepository pdc = new PedidodetalleRepository(getCtx());
             objectjson.put("pedido", parseObjectToJson(paramPedido));
 
             //Enviar Json
@@ -411,7 +413,7 @@ public class HelperPedidos extends AsyncTask<Void, Void, Void> {
             //Procesa post
             //Procesa respuesta y almacena en una variable pedido
             PedidoParser pp = new PedidoParser(sb.toString());
-            Pedido pedidopostsave = pp.parseJsonToObject();
+            PedidoEntity pedidopostsave = pp.parseJsonToObject();
 
 
             paramPedido.setId(pedidopostsave.getId());
@@ -438,8 +440,8 @@ public class HelperPedidos extends AsyncTask<Void, Void, Void> {
 
     public boolean enviarPedidosPendientes(){
         try {
-            ArrayList<Pedido> listaPedidos = pedidoCtr.abrir().findByEstadoId_ArrayList(GlobalValues.getINSTANCIA().ESTADO_NUEVO);
-            for (Pedido pedido : listaPedidos)
+            List<PedidoEntity> listaPedidos = FactoryRepositories.getInstancia().getPedidoRepository().abrir().findByEstadoId(GlobalValues.getINSTANCIA().ESTADO_NUEVO);
+            for (PedidoEntity pedido : listaPedidos)
             {
                 enviarPedido2(pedido);
             }
@@ -453,11 +455,11 @@ public class HelperPedidos extends AsyncTask<Void, Void, Void> {
         }
     }
 
-    public ArrayList<Pedido> getPedidos() {
+    public ArrayList<PedidoEntity> getPedidos() {
         return pedidos;
     }
 
-    public void setPedidos(ArrayList<Pedido> pedidos) {
+    public void setPedidos(ArrayList<PedidoEntity> pedidos) {
         this.pedidos = pedidos;
     }
 

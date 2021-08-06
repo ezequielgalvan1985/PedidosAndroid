@@ -14,11 +14,12 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import adaptivex.pedidoscloud.Config.GlobalValues;
-import adaptivex.pedidoscloud.Controller.PedidodetalleController;
-import adaptivex.pedidoscloud.Controller.ProductoController;
-import adaptivex.pedidoscloud.Model.ItemHelado;
-import adaptivex.pedidoscloud.Model.Pedidodetalle;
-import adaptivex.pedidoscloud.Model.Producto;
+import adaptivex.pedidoscloud.Core.FactoryRepositories;
+import adaptivex.pedidoscloud.Repositories.PedidodetalleRepository;
+import adaptivex.pedidoscloud.Repositories.ProductoRepository;
+import adaptivex.pedidoscloud.Entity.ItemHelado;
+import adaptivex.pedidoscloud.Entity.PedidodetalleEntity;
+import adaptivex.pedidoscloud.Entity.Producto;
 import adaptivex.pedidoscloud.R;
 
 /**
@@ -29,7 +30,7 @@ public class RVAdapterHelado extends RecyclerView.Adapter<RVAdapterHelado.Helado
     private ArrayList<Object> productos;
     private ContextWrapper cw;
     private Context ctx;
-    private ArrayList<Pedidodetalle> listaHeladosSelected = new ArrayList<Pedidodetalle>();
+    private ArrayList<PedidodetalleEntity> listaHeladosSelected = new ArrayList<PedidodetalleEntity>();
     private ArrayList<ItemHelado> listaItemsHelados = new ArrayList<ItemHelado>();
     private ArrayList<Object> listaHelados = new ArrayList<Object>();
     private long pedido_android_id ;
@@ -75,13 +76,13 @@ public class RVAdapterHelado extends RecyclerView.Adapter<RVAdapterHelado.Helado
         ArrayList<ItemHelado> arrayListItemHelado = new ArrayList<ItemHelado>();
 
 
-        PedidodetalleController pdc = new PedidodetalleController(getCtx());
+        PedidodetalleRepository pdc = new PedidodetalleRepository(getCtx());
         Cursor c = pdc.abrir().findByPedidoAndroidIdAndNroPote(getPedido_android_id(), getPedido_nro_pote());
         pdc.cerrar();
-        ArrayList<Pedidodetalle> listaHeladosSelected = new ArrayList<Pedidodetalle>();
+        ArrayList<PedidodetalleEntity> listaHeladosSelected = new ArrayList<PedidodetalleEntity>();
         listaHeladosSelected = pdc.abrir().parseCursorToArrayList(c);
 
-        ProductoController dbHelper = new ProductoController(getCtx());
+        ProductoRepository dbHelper = new ProductoRepository(getCtx());
         listaHelados = dbHelper.abrir().findAllToArrayList();
         setProductos(listaHelados);
 
@@ -90,7 +91,7 @@ public class RVAdapterHelado extends RecyclerView.Adapter<RVAdapterHelado.Helado
 
         for(Object o: listaHelados){
             Producto p       = (Producto) o;
-            Pedidodetalle pd = checkHelado(p,listaHeladosSelected);
+            PedidodetalleEntity pd = checkHelado(p,listaHeladosSelected);
             ItemHelado ih = new ItemHelado(p, false,75);
 
             if (pd!=null){
@@ -104,15 +105,15 @@ public class RVAdapterHelado extends RecyclerView.Adapter<RVAdapterHelado.Helado
     }
 
 
-    public Pedidodetalle checkHelado(Producto p, ArrayList<Pedidodetalle> listaHeladosSelected ){
+    public PedidodetalleEntity checkHelado(Producto p, ArrayList<PedidodetalleEntity> listaHeladosSelected ){
         //devuelve el pedidodetalle que coincide con el Producto,
         // y devuelve el pedido detalle para el producto
         //Pregunta si el producto esta dentro de los seleccionados y devuelve el pedidodetalle asociado
         try{
-            Pedidodetalle pdSelected = null;
+            PedidodetalleEntity pdSelected = null;
             if (listaHeladosSelected != null){
                 if (listaHeladosSelected.size()> 0 ){
-                    for(Pedidodetalle pd: listaHeladosSelected){
+                    for(PedidodetalleEntity pd: listaHeladosSelected){
                         if (pd.getProducto().getId()==p.getId()) {
                             // El Item fue seleccionado
                             pdSelected =  pd;
@@ -164,7 +165,7 @@ public class RVAdapterHelado extends RecyclerView.Adapter<RVAdapterHelado.Helado
         if (item.isChecked()){
             holder.chkHelado.setChecked(true);
             holder.seekProporcionHelado.setProgress(item.getProporcion());
-            holder.tvProporcionDescripcion.setText(GlobalValues.getINSTANCIA().PEDIDO_TEMPORAL.getProporcionDesc(item.getPedidodetalle().getProporcionHelado()));
+            holder.tvProporcionDescripcion.setText(FactoryRepositories.getInstancia().PEDIDO_TEMPORAL.getProporcionDesc(item.getPedidodetalle().getProporcionHelado()));
             holder.seekProporcionHelado.refreshDrawableState();
             holder.seekProporcionHelado.setVisibility(View.VISIBLE);
             holder.tvProporcionDescripcion.setVisibility(View.VISIBLE);
@@ -186,11 +187,11 @@ public class RVAdapterHelado extends RecyclerView.Adapter<RVAdapterHelado.Helado
         super.onAttachedToRecyclerView(recyclerView);
     }
 
-    public ArrayList<Pedidodetalle> getListaHeladosSelected() {
+    public ArrayList<PedidodetalleEntity> getListaHeladosSelected() {
         return listaHeladosSelected;
     }
 
-    public void setListaHeladosSelected(ArrayList<Pedidodetalle> listaHeladosSelected) {
+    public void setListaHeladosSelected(ArrayList<PedidodetalleEntity> listaHeladosSelected) {
         this.listaHeladosSelected = listaHeladosSelected;
     }
 

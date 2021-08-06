@@ -1,17 +1,14 @@
 package adaptivex.pedidoscloud.Config;
 
-import adaptivex.pedidoscloud.Model.User;
-
 /**
  * Created by ezequiel on 23/05/2016.
  * VARIABLES Y CONFIGURACION DE LA APP EN GENERAL, ORIGNENES DE DATOS, SON TODAS ESTATICAS
  */
 public class Configurador {
 
-    public static final int DBVersion = 3;
-    public static final String DBName = "DB_ROMA6";
+    public static final int DBVersion = 1;
+    public static final String DBName = "DB_ROMA7";
     private static Configurador INSTANCIA;
-    public static  User userlogin;
     public static final String urlImgClientes = "http://www.ellechero.com.ar/files/producto/imagen/";
 
     //RED CELU

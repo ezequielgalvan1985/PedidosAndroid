@@ -2,7 +2,6 @@ package adaptivex.pedidoscloud.View.RVAdapters;
 
 import android.content.Context;
 import android.content.ContextWrapper;
-import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -14,10 +13,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,17 +21,14 @@ import java.util.ArrayList;
 
 import adaptivex.pedidoscloud.Config.Constants;
 import adaptivex.pedidoscloud.Config.GlobalValues;
-import adaptivex.pedidoscloud.Controller.PedidoController;
-import adaptivex.pedidoscloud.Controller.PedidodetalleController;
-import adaptivex.pedidoscloud.Core.Components.ListAdapterHelados;
-import adaptivex.pedidoscloud.Model.Pedidodetalle;
-import adaptivex.pedidoscloud.Model.Pote;
-import adaptivex.pedidoscloud.Model.PoteItem;
-import adaptivex.pedidoscloud.Model.Producto;
+import adaptivex.pedidoscloud.Core.FactoryRepositories;
+import adaptivex.pedidoscloud.Repositories.PedidoRepository;
+import adaptivex.pedidoscloud.Repositories.PedidodetalleRepository;
+import adaptivex.pedidoscloud.Entity.PedidodetalleEntity;
+import adaptivex.pedidoscloud.Entity.Pote;
 import adaptivex.pedidoscloud.R;
 import adaptivex.pedidoscloud.View.Pedidos.CargarCantidadFragment;
 import adaptivex.pedidoscloud.View.Pedidos.CargarHeladosFragment;
-import adaptivex.pedidoscloud.View.Productos.ListadoHeladosFragment;
 
 /**
  * Created by egalvan on 11/3/2018.
@@ -120,7 +113,7 @@ public class RVAdapterPote extends RecyclerView.Adapter<RVAdapterPote.PoteViewHo
     public void openEditarHelados(Pote p){
         try{
             Bundle args =new Bundle();
-            args.putLong(Constants.PARAM_PEDIDO_ANDROID_ID, p.getPedido().getIdTmp());
+            args.putLong(Constants.PARAM_PEDIDO_ANDROID_ID, p.getPedido().getAndroid_id());
             args.putInt(Constants.PARAM_PEDIDO_NRO_POTE, p.getNroPote());
 
             //Estas variables se usan cuando se da de alta un nuevo pedidodetalle
@@ -144,14 +137,15 @@ public class RVAdapterPote extends RecyclerView.Adapter<RVAdapterPote.PoteViewHo
 
     public void openEliminarHelados(Pote pote){
         try{
-            PedidoController pc = new PedidoController(getCtx());
-            PedidodetalleController pdc = new PedidodetalleController(getCtx());
+            PedidoRepository pc = new PedidoRepository(getCtx());
+            PedidodetalleRepository pdc = new PedidodetalleRepository(getCtx());
 
-            GlobalValues.getINSTANCIA().PEDIDO_TEMPORAL.quitarPote(pote);
+            FactoryRepositories.getInstancia().PEDIDO_TEMPORAL.quitarPote(pote);
             pdc.abrir().deleteByPote(pote);
-            pc.abrir().edit(GlobalValues.getINSTANCIA().PEDIDO_TEMPORAL);
-            ArrayList<Pedidodetalle> lista = pdc.abrir().findByPedido_android_idToArrayList(GlobalValues.getINSTANCIA().PEDIDO_TEMPORAL.getIdTmp());
-            GlobalValues.getINSTANCIA().PEDIDO_TEMPORAL.setDetalles(lista);
+            pc.abrir().edit(FactoryRepositories.getInstancia().PEDIDO_TEMPORAL);
+
+            ArrayList<PedidodetalleEntity> lista = FactoryRepositories.getInstancia().getPedidoRepository().findByAndroidId(FactoryRepositories.getInstancia().PEDIDO_TEMPORAL.getAndroid_id()).getDetalles();
+            FactoryRepositories.getInstancia().PEDIDO_TEMPORAL.setDetalles(lista);
 
 
 

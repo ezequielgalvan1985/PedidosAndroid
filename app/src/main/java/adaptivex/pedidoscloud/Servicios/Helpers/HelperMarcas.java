@@ -3,13 +3,12 @@ package adaptivex.pedidoscloud.Servicios.Helpers;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
 
 import adaptivex.pedidoscloud.Config.Configurador;
 import adaptivex.pedidoscloud.Config.GlobalValues;
-import adaptivex.pedidoscloud.Controller.MarcaController;
+import adaptivex.pedidoscloud.Repositories.MarcaRepository;
 import adaptivex.pedidoscloud.Core.parserJSONtoModel.MarcaParser;
-import adaptivex.pedidoscloud.Model.Marca;
+import adaptivex.pedidoscloud.Entity.MarcaEntity;
 import adaptivex.pedidoscloud.Servicios.WebRequest;
 
 import java.util.HashMap;
@@ -21,14 +20,14 @@ import java.util.HashMap;
 public class HelperMarcas extends AsyncTask<Void, Void, Void> {
     private Context ctx;
     private HashMap<String,String> registro;
-    private Marca marcas;
-    private MarcaController marcasCtr;
+    private MarcaEntity marcas;
+    private MarcaRepository marcasCtr;
     private int respuesta; //1=ok, 200=error
     private int opcion; //1 enviar Post Marca
 
     public HelperMarcas(Context pCtx){
         this.setCtx(pCtx);
-        this.marcasCtr = new MarcaController(this.getCtx());
+        this.marcasCtr = new MarcaRepository(this.getCtx());
     }
 
 

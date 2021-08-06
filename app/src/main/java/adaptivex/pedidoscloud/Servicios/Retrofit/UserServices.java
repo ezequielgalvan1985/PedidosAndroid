@@ -13,10 +13,10 @@ import java.util.HashMap;
 import java.util.List;
 
 import adaptivex.pedidoscloud.Config.Configurador;
-import adaptivex.pedidoscloud.Controller.UserController;
-import adaptivex.pedidoscloud.Model.LoginData;
-import adaptivex.pedidoscloud.Model.LoginResult;
-import adaptivex.pedidoscloud.Model.User;
+import adaptivex.pedidoscloud.Repositories.UserRepository;
+import adaptivex.pedidoscloud.Entity.LoginData;
+import adaptivex.pedidoscloud.Entity.LoginResult;
+import adaptivex.pedidoscloud.Entity.User;
 import adaptivex.pedidoscloud.Servicios.Retrofit.Interface.IUserRetrofit;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -30,14 +30,14 @@ public  class UserServices {
 
     private Context ctx;
     private HashMap<String, String> registro;
-    private UserController usersCtr;
+    private UserRepository usersCtr;
 
     public UserServices() {
     }
 
     public UserServices(Context pCtx){
         this.setCtx(pCtx);
-        this.usersCtr = new UserController(this.getCtx());
+        this.usersCtr = new UserRepository(this.getCtx());
     }
 
     private void setCtx(Context pCtx) {

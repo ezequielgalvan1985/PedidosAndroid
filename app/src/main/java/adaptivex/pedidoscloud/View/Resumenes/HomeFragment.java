@@ -16,6 +16,7 @@ import android.widget.Toast;
 import adaptivex.pedidoscloud.Config.Constants;
 import adaptivex.pedidoscloud.Config.GlobalValues;
 import adaptivex.pedidoscloud.Config.InsertRowsTest;
+import adaptivex.pedidoscloud.Core.FactoryRepositories;
 import adaptivex.pedidoscloud.R;
 import adaptivex.pedidoscloud.View.Pedidos.CargarDireccionFragment;
 import adaptivex.pedidoscloud.View.Pedidos.ResumenPedidoFragment;
@@ -140,7 +141,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
             case R.id.home_btn_mi_pedido:
                 Fragment fragment5 = new ResumenPedidoFragment();
-                if (GlobalValues.getINSTANCIA().FL_VerPedidoActual(getContext())){
+                if (FactoryRepositories.getInstancia().getPedidoRepository().findByPedidoActual().getAndroid_id()>0 ){
                     openFragment(fragment5);
                 }else{
                     Toast.makeText(getContext(), "No Hay Pedidos Generados", Toast.LENGTH_LONG);

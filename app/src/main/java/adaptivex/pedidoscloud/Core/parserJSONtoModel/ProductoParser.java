@@ -2,8 +2,8 @@ package adaptivex.pedidoscloud.Core.parserJSONtoModel;
 
 import android.util.Log;
 
-import adaptivex.pedidoscloud.Model.Producto;
-import adaptivex.pedidoscloud.Model.DatabaseHelper.ProductoDataBaseHelper;
+import adaptivex.pedidoscloud.Entity.Producto;
+import adaptivex.pedidoscloud.Entity.DatabaseHelper.ProductoDataBaseHelper;
 
 import org.json.JSONArray;
 import org.json.JSONObject;

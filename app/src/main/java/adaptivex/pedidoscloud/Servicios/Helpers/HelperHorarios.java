@@ -8,10 +8,9 @@ import java.util.HashMap;
 
 import adaptivex.pedidoscloud.Config.Configurador;
 import adaptivex.pedidoscloud.Config.GlobalValues;
-import adaptivex.pedidoscloud.Controller.HorarioController;
+import adaptivex.pedidoscloud.Repositories.HorarioRepository;
 
 import adaptivex.pedidoscloud.Core.parserJSONtoModel.HorarioParser;
-import adaptivex.pedidoscloud.Model.Horario;
 import adaptivex.pedidoscloud.Servicios.WebRequest;
 
 
@@ -23,7 +22,7 @@ public class HelperHorarios extends AsyncTask<Void, Void, Void> {
     private Context                 ctx;
     private ProgressDialog          pDialog;
     private HashMap<String,String>  registro;
-    private HorarioController       controller ;
+    private HorarioRepository controller ;
     private int respuesta; //1=ok, 200=error
     private int opcion; //1 enviar Post Pedido, 2 ENVIAR TODOS LOS PEDIDOS PENDIENTES
     private String TEXT_RESPONSE;
@@ -40,12 +39,12 @@ public class HelperHorarios extends AsyncTask<Void, Void, Void> {
 
     public HelperHorarios(Context pCtx){
         this.setCtx(pCtx);
-        this.controller = new HorarioController(this.getCtx());
+        this.controller = new HorarioRepository(this.getCtx());
     }
 
     public HelperHorarios(Context pCtx, int opcion){
         this.setCtx(pCtx);
-        this.controller = new HorarioController(this.getCtx());
+        this.controller = new HorarioRepository(this.getCtx());
         this.opcion = opcion;
     }
 

@@ -2,10 +2,6 @@ package adaptivex.pedidoscloud.Config;
 
 import android.content.Context;
 
-import adaptivex.pedidoscloud.Controller.PromoController;
-import adaptivex.pedidoscloud.Core.WorkDate;
-import adaptivex.pedidoscloud.Model.Promo;
-
 /**
  * Created by egalvan on 21/3/2018.
  */

@@ -12,10 +12,10 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import adaptivex.pedidoscloud.Controller.AdaptersListView.CategoriaAdapter;
-import adaptivex.pedidoscloud.Controller.CategoriaController;
-import adaptivex.pedidoscloud.Model.Categoria;
-import adaptivex.pedidoscloud.Model.DatabaseHelper.CategoriaDataBaseHelper;
+import adaptivex.pedidoscloud.Repositories.AdaptersListView.CategoriaAdapter;
+import adaptivex.pedidoscloud.Repositories.CategoriaRepository;
+import adaptivex.pedidoscloud.Entity.CategoriaEntity;
+import adaptivex.pedidoscloud.Entity.DatabaseHelper.CategoriaDataBaseHelper;
 import adaptivex.pedidoscloud.R;
 
 import java.util.ArrayList;
@@ -78,10 +78,10 @@ public class ListadoCategoriasFragment extends Fragment {
         View vista = inflater.inflate(R.layout.fragment_listado_categorias, container, false);
 
         //Obtener listview de categoria
-        CategoriaController dbHelper = new CategoriaController(vista.getContext());
+        CategoriaRepository dbHelper = new CategoriaRepository(vista.getContext());
 
         // Construct the data source
-        ArrayList<Categoria> arrayOfCategorias = new ArrayList<Categoria>();
+        ArrayList<CategoriaEntity> arrayOfCategorias = new ArrayList<CategoriaEntity>();
         // Create the adapter to convert the array to views
         CategoriaAdapter adapter = new CategoriaAdapter(vista.getContext(), arrayOfCategorias);
         // Attach the adapter to a ListView
@@ -91,10 +91,10 @@ public class ListadoCategoriasFragment extends Fragment {
 
         Cursor c = dbHelper.abrir().obtenerTodos();
         String datos = "";
-        Categoria p2;
+        CategoriaEntity p2;
 
         for(c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
-            p2 = new Categoria();
+            p2 = new CategoriaEntity();
             //p2.setNombre(c.getString(c.getColumnIndex(CategoriaDataBaseHelper.CAMPO_NOMBRE)));
             p2.setDescripcion(c.getString(c.getColumnIndex(CategoriaDataBaseHelper.CAMPO_DESCRIPCION)));
 

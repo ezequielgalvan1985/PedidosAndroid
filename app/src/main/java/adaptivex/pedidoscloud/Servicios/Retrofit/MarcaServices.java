@@ -6,15 +6,14 @@ package adaptivex.pedidoscloud.Servicios.Retrofit;
  * descargar todos los registros de categoria y gudardarlos en la base local
  */
 
-import android.content.Context;
 import android.util.Log;
 
-import java.util.HashMap;
 import java.util.List;
 
 import adaptivex.pedidoscloud.Config.Configurador;
-import adaptivex.pedidoscloud.Controller.MarcaController;
-import adaptivex.pedidoscloud.Model.Marca;
+import adaptivex.pedidoscloud.Config.GlobalValues;
+import adaptivex.pedidoscloud.Core.FactoryRepositories;
+import adaptivex.pedidoscloud.Entity.MarcaEntity;
 import adaptivex.pedidoscloud.Servicios.Retrofit.Interface.IMarcaRetrofit;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -23,38 +22,16 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public  class MarcaServices {
-    public List<Marca> marcasList;
-    public Marca marca;
+    public List<MarcaEntity> marcasList;
+    public MarcaEntity marcaEntity;
+;
 
-    private Context ctx;
-    private HashMap<String, String> registro;
-
-    public MarcaController getMarcasCtr() {
-        return marcasCtr;
-    }
-
-    public void setMarcasCtr(MarcaController marcasCtr) {
-        this.marcasCtr = marcasCtr;
-    }
-
-    private MarcaController marcasCtr;
 
     public MarcaServices() {
     }
 
-    public MarcaServices(Context pCtx){
-        this.setCtx(pCtx);
-        this.setMarcasCtr(new MarcaController(pCtx));
-    }
 
-    private void setCtx(Context pCtx) {
-    }
-
-    public Context getCtx() {
-        return ctx;
-    }
-
-    public List<Marca> getMarcas(){
+    public List<MarcaEntity> getMarcas(){
         try{
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl(Configurador.urlBase)
@@ -62,28 +39,27 @@ public  class MarcaServices {
                     .build();
 
             IMarcaRetrofit service = retrofit.create(IMarcaRetrofit.class);
-            //UserSessionLogin.getINSTANCIA().getUser().setToken("5d3b54d7422aa18506d26656bd93a0db5e4fcc6c");
-            Call<List<Marca>> call = service.getMarcas("Basic YWRtaW4yOjEyMzQ=");
-            call.enqueue(new Callback<List<Marca>>() {
+            Call<List<MarcaEntity>> call = service.getMarcas(GlobalValues.getINSTANCIA().getAuthorization());
+            call.enqueue(new Callback<List<MarcaEntity>>() {
                 @Override
-                public void onResponse(Call<List<Marca>> call, Response<List<Marca>> response) {
+                public void onResponse(Call<List<MarcaEntity>> call, Response<List<MarcaEntity>> response) {
                     if(!response.isSuccessful()){
                         Log.println(Log.INFO,"Marca: Error",String.valueOf(response.code()));
                         return;
                     }
-                    getMarcasCtr().abrir().limpiar();
+                    FactoryRepositories.getInstancia().getMarcaRepository().abrir().limpiar();
                     marcasList = response.body();
                     String content = "";
-                    for (Marca marca: marcasList){
+                    for (MarcaEntity marcaEntity : marcasList){
                         //Recorrer Lista
-                        getMarcasCtr().abrir().agregar(marca);
-                        content = marca.getId() + " " +marca.getNombre() + " " + marca.getDescripcion();
+                        FactoryRepositories.getInstancia().getMarcaRepository().agregar(marcaEntity);
+                        content = marcaEntity.getId() + " " + marcaEntity.getNombre() + " " + marcaEntity.getDescripcion();
                         Log.println(Log.INFO,"Marca: ",content);
                     }
                 }
 
                 @Override
-                public void onFailure(Call<List<Marca>> call, Throwable t) {
+                public void onFailure(Call<List<MarcaEntity>> call, Throwable t) {
                     Log.println(Log.ERROR,"Codigo: ",t.getMessage());
                 }
             });

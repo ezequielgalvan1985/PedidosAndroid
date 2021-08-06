@@ -11,13 +11,10 @@ import android.widget.Toast;
 import adaptivex.pedidoscloud.Config.Configurador;
 import adaptivex.pedidoscloud.Config.GlobalValues;
 import adaptivex.pedidoscloud.Core.IniciarApp;
-import adaptivex.pedidoscloud.Core.ParameterHelper;
 import adaptivex.pedidoscloud.Core.parserJSONtoModel.UserParser;
 import adaptivex.pedidoscloud.MainActivity;
-import adaptivex.pedidoscloud.Model.User;
+import adaptivex.pedidoscloud.Entity.User;
 import adaptivex.pedidoscloud.Servicios.WebRequest;
-
-import org.json.JSONObject;
 
 import java.util.HashMap;
 
@@ -161,7 +158,7 @@ public class HelperUser extends AsyncTask<Void, Void, Void> {
             RESPONSE_MESSAGE = parser.getMessage();
 
             if (RESPONSE_CODE == RETURN_OK){
-                GlobalValues.getINSTANCIA().setUserlogued(parser.getUser());
+                //GlobalValues.getINSTANCIA().getUsuariologueado(parser.getUser());
 
                 switch (this.getOpcion()){
                     case OPTION_LOGIN:

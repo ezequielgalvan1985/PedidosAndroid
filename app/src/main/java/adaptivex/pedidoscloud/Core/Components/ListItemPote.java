@@ -1,6 +1,6 @@
 package adaptivex.pedidoscloud.Core.Components;
 
-import adaptivex.pedidoscloud.Model.Pedidodetalle;
+import adaptivex.pedidoscloud.Entity.PedidodetalleEntity;
 
 /**
  * Created by egalvan on 10/3/2018.
@@ -8,20 +8,20 @@ import adaptivex.pedidoscloud.Model.Pedidodetalle;
 
 public class ListItemPote {
 
-    private Pedidodetalle pedidodetalle;
+    private PedidodetalleEntity pedidodetalleEntity;
 
 
     //constructor initializing values
-    public ListItemPote(Pedidodetalle pd) {
+    public ListItemPote(PedidodetalleEntity pd) {
         this.setPedidodetalle(pd);
     }
 
 
-    public Pedidodetalle getPedidodetalle() {
-        return pedidodetalle;
+    public PedidodetalleEntity getPedidodetalle() {
+        return pedidodetalleEntity;
     }
 
-    public void setPedidodetalle(Pedidodetalle pedidodetalle) {
-        this.pedidodetalle = pedidodetalle;
+    public void setPedidodetalle(PedidodetalleEntity pedidodetalleEntity) {
+        this.pedidodetalleEntity = pedidodetalleEntity;
     }
 }

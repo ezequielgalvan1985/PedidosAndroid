@@ -18,9 +18,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import adaptivex.pedidoscloud.Controller.ProductoController;
-import adaptivex.pedidoscloud.Model.Producto;
-import adaptivex.pedidoscloud.Model.DatabaseHelper.ProductoDataBaseHelper;
+import adaptivex.pedidoscloud.Repositories.ProductoRepository;
+import adaptivex.pedidoscloud.Entity.Producto;
+import adaptivex.pedidoscloud.Entity.DatabaseHelper.ProductoDataBaseHelper;
 import adaptivex.pedidoscloud.R;
 
 import java.io.File;
@@ -92,7 +92,7 @@ public class DescargaImagenActivity extends AppCompatActivity {
                 Toast.makeText(getBaseContext(), "Comienza Descarga de Imagenes, por favor esperar...", Toast.LENGTH_LONG).show();
                 Log.i("Debug 1:", "Comienza Descarga de Imagenes, por favor esperar...");
 
-                ProductoController dbHelper = new ProductoController(getApplicationContext());
+                ProductoRepository dbHelper = new ProductoRepository(getApplicationContext());
                 Cursor resultSet = dbHelper.abrir().findAll();
                 Producto producto;
 

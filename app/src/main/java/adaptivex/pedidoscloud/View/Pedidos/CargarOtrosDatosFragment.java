@@ -15,11 +15,9 @@ import android.widget.Toast;
 
 import adaptivex.pedidoscloud.Config.Constants;
 import adaptivex.pedidoscloud.Config.GlobalValues;
-import adaptivex.pedidoscloud.Controller.ParameterController;
-import adaptivex.pedidoscloud.Controller.PedidoController;
+import adaptivex.pedidoscloud.Core.FactoryRepositories;
+import adaptivex.pedidoscloud.Repositories.PedidoRepository;
 import adaptivex.pedidoscloud.Core.WorkNumber;
-import adaptivex.pedidoscloud.Core.WorkString;
-import adaptivex.pedidoscloud.Model.Parameter;
 import adaptivex.pedidoscloud.R;
 
 public class CargarOtrosDatosFragment extends Fragment implements View.OnClickListener {
@@ -32,12 +30,10 @@ public class CargarOtrosDatosFragment extends Fragment implements View.OnClickLi
 
 
     private void getDataForm(){
-        if (txtCucuruchos.getText()!= null) GlobalValues.getINSTANCIA().PEDIDO_TEMPORAL.setCucuruchos(WorkNumber.parseInteger(txtCucuruchos.getText().toString()));
-        if (txtCucharitas.getText()!= null) GlobalValues.getINSTANCIA().PEDIDO_TEMPORAL.setCucharitas(WorkNumber.parseInteger(txtCucharitas.getText().toString()));
-        if (txtMontoAbona.getText()!= null) GlobalValues.getINSTANCIA().PEDIDO_TEMPORAL.setMontoabona(WorkNumber.parseDouble(txtMontoAbona.getText().toString()));
-        GlobalValues.getINSTANCIA().PEDIDO_TEMPORAL.setEnvioDomicilio(chkEnvio.isChecked());
-
-
+        if (txtCucuruchos.getText()!= null) FactoryRepositories.getInstancia().PEDIDO_TEMPORAL.setCucuruchos(WorkNumber.parseInteger(txtCucuruchos.getText().toString()));
+        if (txtCucharitas.getText()!= null) FactoryRepositories.getInstancia().PEDIDO_TEMPORAL.setCucharitas(WorkNumber.parseInteger(txtCucharitas.getText().toString()));
+        if (txtMontoAbona.getText()!= null) FactoryRepositories.getInstancia().PEDIDO_TEMPORAL.setMontoabona(WorkNumber.parseDouble(txtMontoAbona.getText().toString()));
+        FactoryRepositories.getInstancia().PEDIDO_TEMPORAL.setEnvioDomicilio(chkEnvio.isChecked());
 
     }
 
@@ -77,7 +73,7 @@ public class CargarOtrosDatosFragment extends Fragment implements View.OnClickLi
             btnListo.setOnClickListener(this);
 
             txtCucuruchoPrecio.setText("Cucurucho ("+GlobalValues.getINSTANCIA().PRECIO_CUCURUCHO_MONEY+" c/u):");
-            txt_monto_total_helados.setText("Monto a Pagar: "+ GlobalValues.getINSTANCIA().PEDIDO_TEMPORAL.getMontoHeladoFormatMoney());
+            txt_monto_total_helados.setText("Monto a Pagar: "+ FactoryRepositories.getInstancia().PEDIDO_TEMPORAL.getMontoHeladoFormatMoney());
 
 
             return v;
@@ -122,7 +118,7 @@ public class CargarOtrosDatosFragment extends Fragment implements View.OnClickLi
         boolean validate = true;
         String message = "";
         Double monto = WorkNumber.parseDouble(txtMontoAbona.getText().toString());
-        if (monto > 0.00 && monto < GlobalValues.getINSTANCIA().PEDIDO_TEMPORAL.getMontoHelados() )
+        if (monto > 0.00 && monto < FactoryRepositories.getInstancia().PEDIDO_TEMPORAL.getMontoHelados() )
         {
             validate  = false;
             message ="* Monto ABONADO debe ser mayor a Monto a PAGAR \n";
@@ -141,8 +137,8 @@ public class CargarOtrosDatosFragment extends Fragment implements View.OnClickLi
         try{
             getDataForm();
 
-            PedidoController pc = new PedidoController(getContext());
-            pc.abrir().edit(GlobalValues.getINSTANCIA().PEDIDO_TEMPORAL);
+            PedidoRepository pc = new PedidoRepository(getContext());
+            pc.abrir().edit(FactoryRepositories.getInstancia().PEDIDO_TEMPORAL);
             return true;
         }catch (Exception e){
             Toast.makeText(getContext(),"Error: " + e.getMessage(),Toast.LENGTH_LONG).show();

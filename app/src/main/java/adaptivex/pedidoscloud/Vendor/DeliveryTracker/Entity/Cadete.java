@@ -1,6 +1,6 @@
 package adaptivex.pedidoscloud.Vendor.DeliveryTracker.Entity;
 
-import adaptivex.pedidoscloud.Model.User;
+import adaptivex.pedidoscloud.Entity.User;
 
 /**
  * Created by egalvan on 17/5/2018.

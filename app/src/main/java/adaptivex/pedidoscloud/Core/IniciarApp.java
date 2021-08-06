@@ -6,51 +6,34 @@ package adaptivex.pedidoscloud.Core;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
-import android.provider.ContactsContract;
 import android.util.Log;
 import android.widget.Toast;
 
 import adaptivex.pedidoscloud.Config.GlobalValues;
-import adaptivex.pedidoscloud.Controller.ParameterController;
-import adaptivex.pedidoscloud.Controller.UserController;
-import adaptivex.pedidoscloud.Model.DatabaseHelper.CategoriaDataBaseHelper;
-import adaptivex.pedidoscloud.Model.DatabaseHelper.ClienteDataBaseHelper;
-import adaptivex.pedidoscloud.Model.DatabaseHelper.DatabaseHelper;
-import adaptivex.pedidoscloud.Model.DatabaseHelper.EstadoDataBaseHelper;
-import adaptivex.pedidoscloud.Model.DatabaseHelper.HorarioDataBaseHelper;
-import adaptivex.pedidoscloud.Model.DatabaseHelper.MarcaDataBaseHelper;
-import adaptivex.pedidoscloud.Model.DatabaseHelper.UnidadmedidaDataBaseHelper;
-import adaptivex.pedidoscloud.Model.DatabaseHelper.UserProfileDataBaseHelper;
-import adaptivex.pedidoscloud.Model.IModelMethods;
-import adaptivex.pedidoscloud.Model.Parameter;
-import adaptivex.pedidoscloud.Model.DatabaseHelper.ParameterDataBaseHelper;
-import adaptivex.pedidoscloud.Model.DatabaseHelper.PedidoDataBaseHelper;
-import adaptivex.pedidoscloud.Model.DatabaseHelper.PedidodetalleDataBaseHelper;
-import adaptivex.pedidoscloud.Model.DatabaseHelper.ProductoDataBaseHelper;
-import adaptivex.pedidoscloud.Model.DatabaseHelper.PromoDataBaseHelper;
-import adaptivex.pedidoscloud.Model.Unidadmedida;
-import adaptivex.pedidoscloud.Model.User;
-import adaptivex.pedidoscloud.Model.DatabaseHelper.UserDataBaseHelper;
-import adaptivex.pedidoscloud.Model.UserProfile;
+import adaptivex.pedidoscloud.Repositories.ParameterRepository;
+import adaptivex.pedidoscloud.Repositories.UserRepository;
+import adaptivex.pedidoscloud.Entity.DatabaseHelper.CategoriaDataBaseHelper;
+import adaptivex.pedidoscloud.Entity.DatabaseHelper.ClienteDataBaseHelper;
+import adaptivex.pedidoscloud.Entity.DatabaseHelper.EstadoDataBaseHelper;
+import adaptivex.pedidoscloud.Entity.DatabaseHelper.HorarioDataBaseHelper;
+import adaptivex.pedidoscloud.Entity.DatabaseHelper.MarcaDataBaseHelper;
+import adaptivex.pedidoscloud.Entity.DatabaseHelper.UnidadmedidaDataBaseHelper;
+import adaptivex.pedidoscloud.Entity.DatabaseHelper.UserProfileDataBaseHelper;
+import adaptivex.pedidoscloud.Entity.ParameterEntity;
+import adaptivex.pedidoscloud.Entity.DatabaseHelper.ParameterDataBaseHelper;
+import adaptivex.pedidoscloud.Entity.DatabaseHelper.PedidoDataBaseHelper;
+import adaptivex.pedidoscloud.Entity.DatabaseHelper.PedidodetalleDataBaseHelper;
+import adaptivex.pedidoscloud.Entity.DatabaseHelper.ProductoDataBaseHelper;
+import adaptivex.pedidoscloud.Entity.DatabaseHelper.PromoDataBaseHelper;
+import adaptivex.pedidoscloud.Entity.User;
+import adaptivex.pedidoscloud.Entity.DatabaseHelper.UserDataBaseHelper;
+import adaptivex.pedidoscloud.Servicios.FactoryServices;
 import adaptivex.pedidoscloud.Servicios.Helpers.HelperHorarios;
 import adaptivex.pedidoscloud.Servicios.Helpers.HelperParameters;
 import adaptivex.pedidoscloud.Servicios.Helpers.HelperProductos;
 import adaptivex.pedidoscloud.Servicios.Helpers.HelperPromos;
-import adaptivex.pedidoscloud.Servicios.Retrofit.CategoriaServices;
-import adaptivex.pedidoscloud.Servicios.Retrofit.EstadoServices;
-import adaptivex.pedidoscloud.Servicios.Retrofit.HorarioServices;
-import adaptivex.pedidoscloud.Servicios.Retrofit.MarcaServices;
-import adaptivex.pedidoscloud.Servicios.Retrofit.ParameterServices;
-import adaptivex.pedidoscloud.Servicios.Retrofit.ProductoServices;
-import adaptivex.pedidoscloud.Servicios.Retrofit.MarcaServices;
-import adaptivex.pedidoscloud.Servicios.Retrofit.PromoServices;
-import adaptivex.pedidoscloud.Servicios.Retrofit.UnidadmedidaServices;
-import adaptivex.pedidoscloud.Servicios.Retrofit.UserServices;
 
 import static java.lang.Thread.sleep;
-
-import java.util.List;
 
 public  class IniciarApp  {
     private Context context;
@@ -59,6 +42,8 @@ public  class IniciarApp  {
     public IniciarApp(Context c ){
         //leer valor de parametro
         setContext(c);
+        iniciarFactories();
+
     }
 
 
@@ -195,7 +180,7 @@ public  class IniciarApp  {
         try{
             /* Lee parametros, y los setea con el valor del usuario. Si no existen, los crea */
             boolean respuesta = true;
-            UserController uc = new UserController(this.getContext());
+            UserRepository uc = new UserRepository(this.getContext());
             User u = uc.abrir().findUser(user.getId());
 
             user.setLogued("Y");
@@ -217,7 +202,7 @@ public  class IniciarApp  {
     public boolean isLoginRemember(){
         try{
             boolean respuesta = false;
-            UserController uc = new UserController(this.getContext());
+            UserRepository uc = new UserRepository(this.getContext());
             User u = uc.abrir().findUser(1);
 
             if (u!=null){
@@ -235,7 +220,7 @@ public  class IniciarApp  {
 
     public void logout(){
         try{
-            UserController uc = new UserController(this.getContext());
+            UserRepository uc = new UserRepository(this.getContext());
             User u = uc.abrir().findUser(GlobalValues.getINSTANCIA().getUsuariologueado().getId());
             if (u != null){
                 u.setLogued("N");
@@ -251,65 +236,19 @@ public  class IniciarApp  {
 
     public boolean downloadDatabase(){
         try {
-            MarcaServices m = new MarcaServices(getContext());
-            m.getMarcas();
-
-            CategoriaServices cat = new CategoriaServices(getContext());
-            cat.getCategorias();
-
-            ProductoServices ps = new ProductoServices(getContext());
-            ps.getProductos();
-
-            ParameterServices par = new ParameterServices(getContext());
-            par.getParameters();
-
-            //PromoServices ph = new PromoServices(getContext());
-            //ph.getPromos();
-
-            HorarioServices hs = new HorarioServices(getContext());
-            hs.getHorarios();
-
-            EstadoServices es = new EstadoServices(getContext());
-            es.getEstados();
-
-            UnidadmedidaServices um = new UnidadmedidaServices(getContext());
-            um.getUnidadmedidas();
-
-            UserProfile datos = new UserProfile((getContext());
-            datos.getUser();
-
-            /*
-            * se reemplaza por implementacion de Retrofit2
-            *
-            HelperMarcas m = new HelperMarcas(getContext());
-            m.execute();
-
-            HelperCategorias ca = new HelperCategorias(getContext());
-            ca.execute();
-
-            HelperClientes c = new HelperClientes(getContext());
-            c.execute();
-
-            HelperProductos p = new HelperProductos(getContext());
-            p.execute();
-
-            HelperParameters hp = new HelperParameters(getContext());
-            hp.setCURRENT_OPTION(HelperParameters.OPTION_ALL);
-            hp.execute();
-
-            HelperPromos ph = new HelperPromos(getContext());
-            ph.execute();
-
-            HelperHorarios hh = new HelperHorarios(getContext());
-            hh.setOpcion(HelperHorarios.OPTION_FIND_ALL);
-            hh.execute();
-
-            return true;
-            */
+            FactoryServices.getInstancia().getMarcaServices().getMarcas();
+            FactoryServices.getInstancia().getCategoriaServices().getCategorias();
+            FactoryServices.getInstancia().getProductoServices().getProductos();
+            FactoryServices.getInstancia().getUserProfileServices().getUserProfiles();
+            FactoryServices.getInstancia().getParameterServices().getParameters();
+            FactoryServices.getInstancia().getPromoServices().getPromos();
+            FactoryServices.getInstancia().getHorarioServices().getHorarios();
+            FactoryServices.getInstancia().getEstadoServices().getEstados();
+            FactoryServices.getInstancia().getUnidadmedidaServices().getUnidadmedidas();
+            FactoryServices.getInstancia().getPedidoServices().getPedidos();
             return true;
         }catch (Exception e ){
-          Log.d("IniciarAPP", e.getMessage());
-            Toast.makeText(context, "Error " + e.getMessage().toString(), Toast.LENGTH_SHORT).show();
+          Log.e("IniciarAPP", e.getMessage());
             return false;
         }
     }
@@ -362,10 +301,11 @@ public  class IniciarApp  {
 
     public boolean instalarApp(){
         try {
-            this.iniciarBD();
-            this.downloadDatabase();
-            this.createUserSystem();
-            this.setInstalledDatabase();
+
+            iniciarBD();
+            downloadDatabase();
+            createUserSystem();
+            setInstalledDatabase();
             return true;
         }catch (Exception e){
             Log.d("IniciarApp", e.getMessage());
@@ -373,11 +313,21 @@ public  class IniciarApp  {
         }
     }
 
+    public void iniciarFactories(){
+        try{
+            FactoryRepositories.getInstancia(getContext());
+            FactoryServices.getInstancia();
+        }catch (Exception e ){
+            Log.e("IniciarApp:", e.getMessage());
+        }
+
+    }
+
     public boolean createUserSystem() {
         try {
             User u = new User();
             u.setId(GlobalValues.getINSTANCIA().ID_ANDROID);
-            UserController uc = new UserController(this.getContext());
+            UserRepository uc = new UserRepository(this.getContext());
             uc.abrir().addDB(u);
             return true;
         } catch (Exception e) {
@@ -391,8 +341,8 @@ public  class IniciarApp  {
         //Leer Archivo de sistema el parametro INSTALLED
         try {
             boolean respuesta = false;
-            ParameterController pc = new ParameterController(getContext());
-            Parameter p = new Parameter();
+            ParameterRepository pc = new ParameterRepository(getContext());
+            ParameterEntity p = new ParameterEntity();
             p = pc.abrir().findByNombre(GlobalValues.getINSTANCIA().PARAM_INSTALLED);
             if (p != null) {
                 if (p.getValor_texto().equals("Y")) {
@@ -410,8 +360,8 @@ public  class IniciarApp  {
         //Leer Archivo de sistema el parametro INSTALLED
         try {
             boolean respuesta = false;
-            ParameterController pc = new ParameterController(getContext());
-            Parameter p = new Parameter();
+            ParameterRepository pc = new ParameterRepository(getContext());
+            ParameterEntity p = new ParameterEntity();
             p = pc.abrir().findByNombre(GlobalValues.getINSTANCIA().PARAM_INSTALLED);
             if (p != null) {
                 p.setValor_texto("Y");

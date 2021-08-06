@@ -6,15 +6,14 @@ package adaptivex.pedidoscloud.Servicios.Retrofit;
  * descargar todos los registros de horario y gudardarlos en la base local
  */
 
-import android.content.Context;
 import android.util.Log;
 
-import java.util.HashMap;
 import java.util.List;
 
 import adaptivex.pedidoscloud.Config.Configurador;
-import adaptivex.pedidoscloud.Controller.HorarioController;
-import adaptivex.pedidoscloud.Model.Horario;
+import adaptivex.pedidoscloud.Config.GlobalValues;
+import adaptivex.pedidoscloud.Core.FactoryRepositories;
+import adaptivex.pedidoscloud.Entity.HorarioEntity;
 import adaptivex.pedidoscloud.Servicios.Retrofit.Interface.IHorarioRetrofit;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -23,66 +22,43 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public  class HorarioServices {
-    public List<Horario> horariosList;
-    public Horario horario;
-
-    private Context ctx;
-    private HashMap<String, String> registro;
-
-    public HorarioController getHorariosCtr() {
-        return horariosCtr;
-    }
-
-    public void setHorariosCtr(HorarioController horariosCtr) {
-        this.horariosCtr = horariosCtr;
-    }
-
-    private HorarioController horariosCtr;
+    public List<HorarioEntity> horariosList;
 
     public HorarioServices() {
     }
 
-    public HorarioServices(Context pCtx){
-        this.setCtx(pCtx);
-        this.setHorariosCtr(new HorarioController(pCtx));
-    }
 
-    private void setCtx(Context pCtx) {
-    }
-
-    public Context getCtx() {
-        return ctx;
-    }
-
-    public List<Horario> getHorarios(){
+    public List<HorarioEntity> getHorarios(){
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(Configurador.urlBase)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
         IHorarioRetrofit service = retrofit.create(IHorarioRetrofit.class);
-        //UserSessionLogin.getINSTANCIA().getUser().setToken("5d3b54d7422aa18506d26656bd93a0db5e4fcc6c");
-        Call<List<Horario>> call = service.getHorarios("Basic YWRtaW4yOjEyMzQ=");
-        call.enqueue(new Callback<List<Horario>>() {
+        Call<List<HorarioEntity>> call = service.getHorarios(GlobalValues.getINSTANCIA().getAuthorization());
+        call.enqueue(new Callback<List<HorarioEntity>>() {
             @Override
-            public void onResponse(Call<List<Horario>> call, Response<List<Horario>> response) {
-                if(!response.isSuccessful()){
-                    Log.println(Log.INFO,"Horario: Error",String.valueOf(response.code()));
-                    return;
+            public void onResponse(Call<List<HorarioEntity>> call, Response<List<HorarioEntity>> response) {
+                try{
+                    if(!response.isSuccessful()){
+                        Log.println(Log.INFO,"Horario: Error",String.valueOf(response.code()));
+                        return;
+                    }
+                    FactoryRepositories.getInstancia().getHorarioRepository().abrir().limpiar();
+                    horariosList = response.body();
+                    String content = "";
+                    for (HorarioEntity horarioEntity : horariosList){
+                        FactoryRepositories.getInstancia().getHorarioRepository().abrir().agregar(horarioEntity);
+                        content = horarioEntity.getDia().toString() +" - " + horarioEntity.getObservaciones();
+                        Log.println(Log.INFO,"Horario: ",content );
+                    }
+                }catch (Exception e){
+                    Log.println(Log.ERROR,"Horario: ",e.getMessage());
                 }
-                getHorariosCtr().abrir().limpiar();
-                horariosList = response.body();
-                String content = "";
-                for (Horario horario: horariosList){
-                    horariosCtr.abrir().agregar(horario);
-                    content = horario.getDia().toString() +" - " + horario.getObservaciones();
-                    Log.println(Log.INFO,"Horario: ",content );
-                }
-
             }
 
             @Override
-            public void onFailure(Call<List<Horario>> call, Throwable t) {
+            public void onFailure(Call<List<HorarioEntity>> call, Throwable t) {
                 Log.println(Log.ERROR,"Codigo: ",t.getMessage());
             }
         });

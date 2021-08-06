@@ -2,8 +2,8 @@ package adaptivex.pedidoscloud.Core.parserJSONtoModel;
 
 import android.util.Log;
 
-import adaptivex.pedidoscloud.Model.Cliente;
-import adaptivex.pedidoscloud.Model.DatabaseHelper.ClienteDataBaseHelper;
+import adaptivex.pedidoscloud.Entity.ClienteEntity;
+import adaptivex.pedidoscloud.Entity.DatabaseHelper.ClienteDataBaseHelper;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -22,8 +22,8 @@ public class ClienteParser {
     private String message;
     private JSONArray data;
     private JSONObject clientejson;
-    private Cliente cliente;
-    private ArrayList<Cliente> listadoClientes;
+    private ClienteEntity clienteEntity;
+    private ArrayList<ClienteEntity> listadoClienteEntities;
     /* Solamente parsea los datos de un String Json, al Objeto ClienteParser */
     public ClienteParser(){
     }
@@ -32,11 +32,11 @@ public class ClienteParser {
         setJsonstr(jsonstr);
     }
 
-    public Cliente parseJsonToObject(){
+    public ClienteEntity parseJsonToObject(){
         /* Completa datos del objeto  */
         try{
             //leer raiz
-            listadoClientes  = new ArrayList<Cliente>();
+            listadoClienteEntities = new ArrayList<ClienteEntity>();
             setJsonobj(new JSONObject(getJsonstr()));
 
             setStatus(getJsonobj().getString("code"));
@@ -46,18 +46,18 @@ public class ClienteParser {
             if (Integer.parseInt(getStatus())== 200){
                 //parser Usuario
                 JSONArray clientes = getData();
-                Cliente cliente = new Cliente();
+                ClienteEntity clienteEntity = new ClienteEntity();
                 for (int i = 0; i < clientes.length(); i++) {
                     JSONObject registro = clientes.getJSONObject(i);
-                    cliente.setId(registro.getInt("id"));
-                    if (registro.has(ClienteDataBaseHelper.CAMPO_RAZONSOCIAL)) cliente.setRazonsocial(registro.getString(ClienteDataBaseHelper.CAMPO_RAZONSOCIAL)); else cliente.setRazonsocial("");
-                    if (registro.has(ClienteDataBaseHelper.CAMPO_CONTACTO)) cliente.setContacto(registro.getString(ClienteDataBaseHelper.CAMPO_CONTACTO)); else cliente.setContacto("");
-                    if (registro.has(ClienteDataBaseHelper.CAMPO_NDOC)) cliente.setNdoc(registro.getString(ClienteDataBaseHelper.CAMPO_NDOC)); else cliente.setNdoc("");
-                    if (registro.has(ClienteDataBaseHelper.CAMPO_DIRECCION)) cliente.setDireccion(registro.getString(ClienteDataBaseHelper.CAMPO_DIRECCION)); else cliente.setDireccion("");
-                    if (registro.has(ClienteDataBaseHelper.CAMPO_TELEFONO)) cliente.setTelefono(registro.getString(ClienteDataBaseHelper.CAMPO_TELEFONO)); else cliente.setTelefono("");
-                    if (registro.has(ClienteDataBaseHelper.CAMPO_EMAIL)) cliente.setEmail(registro.getString(ClienteDataBaseHelper.CAMPO_EMAIL)); else cliente.setEmail("");
-                    listadoClientes.add(cliente);
-                    cliente = new Cliente();
+                    clienteEntity.setId(registro.getInt("id"));
+                    if (registro.has(ClienteDataBaseHelper.CAMPO_RAZONSOCIAL)) clienteEntity.setRazonsocial(registro.getString(ClienteDataBaseHelper.CAMPO_RAZONSOCIAL)); else clienteEntity.setRazonsocial("");
+                    if (registro.has(ClienteDataBaseHelper.CAMPO_CONTACTO)) clienteEntity.setContacto(registro.getString(ClienteDataBaseHelper.CAMPO_CONTACTO)); else clienteEntity.setContacto("");
+                    if (registro.has(ClienteDataBaseHelper.CAMPO_NDOC)) clienteEntity.setNdoc(registro.getString(ClienteDataBaseHelper.CAMPO_NDOC)); else clienteEntity.setNdoc("");
+                    if (registro.has(ClienteDataBaseHelper.CAMPO_DIRECCION)) clienteEntity.setDireccion(registro.getString(ClienteDataBaseHelper.CAMPO_DIRECCION)); else clienteEntity.setDireccion("");
+                    if (registro.has(ClienteDataBaseHelper.CAMPO_TELEFONO)) clienteEntity.setTelefono(registro.getString(ClienteDataBaseHelper.CAMPO_TELEFONO)); else clienteEntity.setTelefono("");
+                    if (registro.has(ClienteDataBaseHelper.CAMPO_EMAIL)) clienteEntity.setEmail(registro.getString(ClienteDataBaseHelper.CAMPO_EMAIL)); else clienteEntity.setEmail("");
+                    listadoClienteEntities.add(clienteEntity);
+                    clienteEntity = new ClienteEntity();
                 }//endfor
 
             }else {
@@ -93,12 +93,12 @@ public class ClienteParser {
         this.data = data;
     }
 
-    public Cliente getCliente() {
-        return cliente;
+    public ClienteEntity getCliente() {
+        return clienteEntity;
     }
 
-    public void setCliente(Cliente cliente) {
-        this.cliente = cliente;
+    public void setCliente(ClienteEntity clienteEntity) {
+        this.clienteEntity = clienteEntity;
     }
 
     public String getMessage() {
@@ -133,11 +133,11 @@ public class ClienteParser {
         this.clientejson = clientejson;
     }
 
-    public ArrayList<Cliente> getListadoClientes() {
-        return listadoClientes;
+    public ArrayList<ClienteEntity> getListadoClientes() {
+        return listadoClienteEntities;
     }
 
-    public void setListadoClientes(ArrayList<Cliente> listadoClientes) {
-        this.listadoClientes = listadoClientes;
+    public void setListadoClientes(ArrayList<ClienteEntity> listadoClienteEntities) {
+        this.listadoClienteEntities = listadoClienteEntities;
     }
 }

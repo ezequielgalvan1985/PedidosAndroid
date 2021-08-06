@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import adaptivex.pedidoscloud.Model.Pedidodetalle;
+import adaptivex.pedidoscloud.Entity.PedidodetalleEntity;
 import adaptivex.pedidoscloud.R;
 
 import java.util.List;
@@ -18,7 +18,7 @@ import java.util.List;
  * Created by ezequiel on 22/06/2016.
  */
 public class RVAdapterPedidodetalle extends RecyclerView.Adapter<RVAdapterPedidodetalle.PedidodetalleViewHolder>{
-    private List<Pedidodetalle> pedidodetalles;
+    private List<PedidodetalleEntity> pedidodetalleEntities;
     private ContextWrapper cw;
     private Context ctx;
 
@@ -32,13 +32,13 @@ public class RVAdapterPedidodetalle extends RecyclerView.Adapter<RVAdapterPedido
     }
 
 
-    public void RVAdapterPedidodetalle(List<Pedidodetalle> pedidodetalles){
-        this.setPedidodetalles(pedidodetalles);
+    public void RVAdapterPedidodetalle(List<PedidodetalleEntity> pedidodetalleEntities){
+        this.setPedidodetalles(pedidodetalleEntities);
     }
 
     @Override
     public int getItemCount() {
-        return pedidodetalles.size();
+        return pedidodetalleEntities.size();
     }
 
 
@@ -53,14 +53,14 @@ public class RVAdapterPedidodetalle extends RecyclerView.Adapter<RVAdapterPedido
 
     @Override
     public void onBindViewHolder(PedidodetalleViewHolder pedidodetalleViewHolder, int i) {
-        pedidodetalleViewHolder.tvPedidoId.setText(String.valueOf(pedidodetalles.get(i).getPedidoId()));
-        pedidodetalleViewHolder.tvPedidoIdTmp.setText(String.valueOf(pedidodetalles.get(i).getPedidoTmpId()));
+        pedidodetalleViewHolder.tvPedidoId.setText(String.valueOf(pedidodetalleEntities.get(i).getPedidoId()));
+        pedidodetalleViewHolder.tvPedidoIdTmp.setText(String.valueOf(pedidodetalleEntities.get(i).getPedidoAndroidId()));
 
-        pedidodetalleViewHolder.tvIpdProductoId.setText(String.valueOf(pedidodetalles.get(i).getProductoId()));
-        pedidodetalleViewHolder.tvIpdProductoNombre.setText(pedidodetalles.get(i).getProducto().getNombre());
-        pedidodetalleViewHolder.tvCantidad.setText(String.valueOf(pedidodetalles.get(i).getCantidad()));
-        pedidodetalleViewHolder.tvPreciounitario.setText(String.valueOf(pedidodetalles.get(i).getPreciounitario()));
-        pedidodetalleViewHolder.tvMonto.setText(String.valueOf(pedidodetalles.get(i).getMonto()));
+        pedidodetalleViewHolder.tvIpdProductoId.setText(String.valueOf(pedidodetalleEntities.get(i).getProductoId()));
+        pedidodetalleViewHolder.tvIpdProductoNombre.setText(pedidodetalleEntities.get(i).getProducto().getNombre());
+        pedidodetalleViewHolder.tvCantidad.setText(String.valueOf(pedidodetalleEntities.get(i).getCantidad()));
+        pedidodetalleViewHolder.tvPreciounitario.setText(String.valueOf(pedidodetalleEntities.get(i).getPreciounitario()));
+        pedidodetalleViewHolder.tvMonto.setText(String.valueOf(pedidodetalleEntities.get(i).getMonto()));
 
 
         //pedidodetalleViewHolder.tvStock.setText(String.valueOf(pedidodetalles.get(i).getStock()));
@@ -73,8 +73,8 @@ public class RVAdapterPedidodetalle extends RecyclerView.Adapter<RVAdapterPedido
         super.onAttachedToRecyclerView(recyclerView);
     }
 
-    public void setPedidodetalles(List<Pedidodetalle> pedidodetalles) {
-        this.pedidodetalles = pedidodetalles;
+    public void setPedidodetalles(List<PedidodetalleEntity> pedidodetalleEntities) {
+        this.pedidodetalleEntities = pedidodetalleEntities;
     }
 
 

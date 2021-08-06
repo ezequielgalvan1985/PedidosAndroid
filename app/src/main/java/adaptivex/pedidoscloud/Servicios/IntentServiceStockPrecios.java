@@ -10,10 +10,10 @@ import java.util.HashMap;
 
 import adaptivex.pedidoscloud.Config.Configurador;
 import adaptivex.pedidoscloud.Config.GlobalValues;
-import adaptivex.pedidoscloud.Controller.ProductoController;
+import adaptivex.pedidoscloud.Repositories.ProductoRepository;
 import adaptivex.pedidoscloud.Core.ParameterHelper;
 import adaptivex.pedidoscloud.Core.parserJSONtoModel.ProductoParser;
-import adaptivex.pedidoscloud.Model.Producto;
+import adaptivex.pedidoscloud.Entity.Producto;
 
 /**
  * An {@link IntentService} subclass for handling asynchronous task requests in
@@ -36,7 +36,7 @@ public class IntentServiceStockPrecios extends IntentService {
     private Context ctx;
     private HashMap<String,String> registro;
     private Producto producto;
-    private ProductoController productoCtr;
+    private ProductoRepository productoCtr;
     private int respuesta; //1=ok, 200=error
     private int opcion; //1 enviar Post Producto
     private ProgressDialog pDialog;
@@ -75,7 +75,7 @@ public class IntentServiceStockPrecios extends IntentService {
 
             }
 */
-            this.productoCtr = new ProductoController(getBaseContext());
+            this.productoCtr = new ProductoRepository(getBaseContext());
             Toast.makeText(this.getBaseContext(), "Comienzo Actualizacion de Productos ", Toast.LENGTH_SHORT).show();
             try {
                 WebRequest webreq = new WebRequest();

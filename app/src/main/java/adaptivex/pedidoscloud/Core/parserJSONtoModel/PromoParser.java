@@ -7,8 +7,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import adaptivex.pedidoscloud.Model.Promo;
-import adaptivex.pedidoscloud.Model.DatabaseHelper.PromoDataBaseHelper;
+import adaptivex.pedidoscloud.Entity.Promo;
+import adaptivex.pedidoscloud.Entity.DatabaseHelper.PromoDataBaseHelper;
 
 /**
  * Created by ezequiel on 16/8/2017.

@@ -4,7 +4,7 @@ import android.util.Log;
 
 import java.util.ArrayList;
 
-import adaptivex.pedidoscloud.Model.Pedido;
+import adaptivex.pedidoscloud.Entity.PedidoEntity;
 import adaptivex.pedidoscloud.Vendor.DeliveryTracker.Entity.RouteLine;
 
 /**
@@ -16,7 +16,7 @@ public class RouteLineController {
 
 
 
-    public ArrayList<RouteLine> getListRouteLine(ArrayList<Pedido> listaPedidos ){
+    public ArrayList<RouteLine> getListRouteLine(ArrayList<PedidoEntity> listaPedidos ){
         try{
             //Parametros: Lista de pedidos
             //Devuelve: una lista de lineas de rutas que seran diagramadas en el mapa
@@ -25,8 +25,8 @@ public class RouteLineController {
 
             ArrayList<RouteLine> listRouteLine = new ArrayList<RouteLine>();
             RouteLine routeline = new RouteLine();
-            Pedido pedidoanterior = null;
-            for (Pedido p :listaPedidos){
+            PedidoEntity pedidoanterior = null;
+            for (PedidoEntity p :listaPedidos){
                 point = point +1;
 
                 if (point==1){

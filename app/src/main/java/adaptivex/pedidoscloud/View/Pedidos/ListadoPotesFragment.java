@@ -1,7 +1,5 @@
 package adaptivex.pedidoscloud.View.Pedidos;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,9 +12,8 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 
 import adaptivex.pedidoscloud.Config.Constants;
-import adaptivex.pedidoscloud.Config.GlobalValues;
-import adaptivex.pedidoscloud.Controller.PedidoController;
-import adaptivex.pedidoscloud.Model.Pote;
+import adaptivex.pedidoscloud.Repositories.PedidoRepository;
+import adaptivex.pedidoscloud.Entity.Pote;
 import adaptivex.pedidoscloud.R;
 import adaptivex.pedidoscloud.View.RVAdapters.RVAdapterPote;
 
@@ -51,7 +48,7 @@ public class ListadoPotesFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_listado_potes, container, false);
 
-        PedidoController pc = new PedidoController(v.getContext());
+        PedidoRepository pc = new PedidoRepository(v.getContext());
 
         ArrayList<Pote> listaPotes = pc.abrir().getPotesArrayList2(androidId);
 

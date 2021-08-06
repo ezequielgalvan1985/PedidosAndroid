@@ -1,9 +1,6 @@
 package adaptivex.pedidoscloud.Config;
 
 import android.content.Context;
-import android.database.Cursor;
-import android.os.SystemClock;
-import android.provider.Settings;
 import android.widget.Toast;
 
 import java.text.DateFormat;
@@ -12,17 +9,19 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import adaptivex.pedidoscloud.Controller.ParameterController;
-import adaptivex.pedidoscloud.Controller.PedidoController;
+import adaptivex.pedidoscloud.Core.FactoryRepositories;
+import adaptivex.pedidoscloud.Repositories.ParameterRepository;
+import adaptivex.pedidoscloud.Repositories.PedidoRepository;
 
 import adaptivex.pedidoscloud.Core.BusinessRules;
 import adaptivex.pedidoscloud.Core.IniciarApp;
 import adaptivex.pedidoscloud.Core.WorkNumber;
-import adaptivex.pedidoscloud.Model.ItemHelado;
-import adaptivex.pedidoscloud.Model.Parameter;
-import adaptivex.pedidoscloud.Model.Pedido;
-import adaptivex.pedidoscloud.Model.Pote;
-import adaptivex.pedidoscloud.Model.User;
+import adaptivex.pedidoscloud.Entity.ItemHelado;
+import adaptivex.pedidoscloud.Entity.LoginResult;
+import adaptivex.pedidoscloud.Entity.ParameterEntity;
+import adaptivex.pedidoscloud.Entity.PedidoEntity;
+import adaptivex.pedidoscloud.Entity.Pote;
+import adaptivex.pedidoscloud.Entity.User;
 
 /**
  * Created by ezequiel on 26/06/2016.
@@ -34,7 +33,7 @@ public class GlobalValues {
     public  static final String ACTION_GET_STOCK_PRECIOS = "1";
 
     //DATOS PARA EL PEDIDO
-    public Pedido PEDIDO_TEMPORAL;
+    public PedidoEntity PEDIDO_TEMPORAL;
     public Integer CURRENT_FRAGMENT_NUEVO_PEDIDO;
     public String PRECIO_CUCURUCHO_MONEY;
     public Double PRECIO_CUCURUCHO_DOUBLE;
@@ -48,7 +47,18 @@ public class GlobalValues {
     // NULL = NO ESTA LOGUEADO
     // SI TIENE VALOR, ENTONCES ESTA LOGUEADO
     private User usuariologueado;
+    private LoginResult token;
 
+    public LoginResult getToken() {
+        return token;
+    }
+
+    public void setToken(LoginResult token) {
+        this.token = token;
+    }
+    public String getAuthorization (){
+        return "Token " + this.getToken().getToken();
+    }
     public User getUsuariologueado() {
         return usuariologueado;
     }
@@ -284,21 +294,21 @@ public class GlobalValues {
                 ia.refreshPriceFromServer();
                 ia.refreshHeladosDisponiblesFromServer();
 
-                PedidoController gestdb = new PedidoController(ctx);
+                PedidoRepository gestdb = new PedidoRepository(ctx);
                 DateFormat df1  = new SimpleDateFormat("yyyy-MM-dd");
                 String fechaDMY = df1.format(fecha);
 
                 //Nuevo Pedido
-                Pedido pedido = new Pedido();
+                PedidoEntity pedido = new PedidoEntity();
                 pedido.setEstadoId(Constants.ESTADO_NUEVO);
                 pedido.setCliente_id(GlobalValues.getINSTANCIA().getUsuariologueado().getId());
                 pedido.setCreated(fechaDMY);
 
                 id = gestdb.abrir().agregar(pedido);
-                pedido.setIdTmp(id);
+                pedido.setAndroid_id(id);
                 gestdb.cerrar();
-                GlobalValues.getINSTANCIA().PEDIDO_TEMPORAL = new Pedido();
-                GlobalValues.getINSTANCIA().PEDIDO_TEMPORAL = pedido;
+                FactoryRepositories.getInstancia().PEDIDO_TEMPORAL = new PedidoEntity();
+                FactoryRepositories.getInstancia().PEDIDO_TEMPORAL = pedido;
 
                 gestdb.cerrar();
                 Toast.makeText(ctx, "Generando Nuevo Pedido  "+ String.valueOf(id) , Toast.LENGTH_SHORT).show();
@@ -306,8 +316,8 @@ public class GlobalValues {
                 //Refrescar los paramteros
                 User u = GlobalValues.getINSTANCIA().getUsuariologueado();
 
-                ParameterController pc = new ParameterController(ctx);
-                Parameter p = pc.abrir().findByNombre(Constants.PARAM_PRECIO_CUCURUCHO);
+                ParameterRepository pc = new ParameterRepository(ctx);
+                ParameterEntity p = pc.abrir().findByNombre(Constants.PARAM_PRECIO_CUCURUCHO);
                 this.PRECIO_CUCURUCHO_MONEY =  WorkNumber.moneyFormat(p.getValor_decimal());
                 this.PRECIO_CUCURUCHO_DOUBLE =  WorkNumber.getValue(p.getValor_decimal());
             }
@@ -320,24 +330,6 @@ public class GlobalValues {
 
 
 
-    public boolean FL_VerPedidoActual(Context ctx){
-        try {
-            //BUSCAR ULTIMO PEDIDO GENERADO EN EL DISPOSITIVO
-            PedidoController pdba = new PedidoController(ctx);
-            long nroPedido = pdba.findByLastAndroidId();
-            if (nroPedido > 0) {
-                Cursor c = pdba.abrir().findByIdAndroid(nroPedido);
-                Pedido p = pdba.abrir().parseCursorToPedido(c);
-                GlobalValues.getINSTANCIA().PEDIDO_TEMPORAL = p;
-                return true;
-            }else{
-                return false;
-            }
-
-        }catch(Exception e ){
-            return false;
-        }
-    }
 
 
 

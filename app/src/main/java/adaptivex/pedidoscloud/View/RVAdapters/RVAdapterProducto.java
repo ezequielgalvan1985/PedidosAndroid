@@ -2,16 +2,13 @@ package adaptivex.pedidoscloud.View.RVAdapters;
 
 import android.content.Context;
 import android.content.ContextWrapper;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import adaptivex.pedidoscloud.Model.Producto;
+import adaptivex.pedidoscloud.Entity.Producto;
 import adaptivex.pedidoscloud.R;
 
 import java.util.ArrayList;

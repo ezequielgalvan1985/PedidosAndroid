@@ -17,9 +17,9 @@ import android.widget.Toast;
 import adaptivex.pedidoscloud.Config.Configurador;
 import adaptivex.pedidoscloud.Config.GlobalValues;
 import adaptivex.pedidoscloud.MainActivity;
-import adaptivex.pedidoscloud.Model.LoginData;
-import adaptivex.pedidoscloud.Model.LoginResult;
-import adaptivex.pedidoscloud.Model.Marca;
+import adaptivex.pedidoscloud.Entity.LoginData;
+import adaptivex.pedidoscloud.Entity.LoginResult;
+import adaptivex.pedidoscloud.Entity.MarcaEntity;
 import adaptivex.pedidoscloud.Servicios.Retrofit.Interface.IUserRetrofit;
 import adaptivex.pedidoscloud.Servicios.Retrofit.UserServices;
 import retrofit2.Call;
@@ -27,7 +27,7 @@ import retrofit2.Callback;
 
 import java.util.List;
 
-import adaptivex.pedidoscloud.Model.User;
+import adaptivex.pedidoscloud.Entity.User;
 import adaptivex.pedidoscloud.R;
 import retrofit2.Response;
 import retrofit2.Retrofit;
@@ -43,7 +43,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
 
     private User usertmp;
 
-    private List<Marca>marcasList;
+    private List<MarcaEntity>marcasList;
 
     public LoginFragment() {
 
@@ -122,7 +122,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
                     .build();
 
             IUserRetrofit service = retrofit.create(IUserRetrofit.class);
-
             Call<LoginResult> call=service.getLoginToken(new LoginData(usertmp.getUsername(),usertmp.getPassword()));
             call.enqueue(new Callback<LoginResult>() {
                 @Override
@@ -132,16 +131,12 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
                         return;
                     }
                     Log.println(Log.INFO,"Login: ","Login Exitoso");
-                    //Guardar info del usuario en la base local
-                    List<LoginResult> loginresultList = null;
-                    getEstadosCtr().abrir().limpiar();
+                    //se recibe el token
+                    //guardamos el token
+                    LoginResult token = response.body();
+                    GlobalValues.getINSTANCIA().setToken(token);
 
-                    loginresultList= response.body();
-                    for (LoginResult loginresult: loginresultList)
-                    {
-
-                    }
-                    GlobalValues.getINSTANCIA().getUsuariologueado().setToken(call);
+                    Log.println(Log.INFO,"Login: ",GlobalValues.getINSTANCIA().getAuthorization()  );
                     Intent i = new Intent(getActivity(), MainActivity.class);
                     startActivity(i);
                     getActivity().finish();

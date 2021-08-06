@@ -3,13 +3,12 @@ package adaptivex.pedidoscloud.Servicios.Helpers;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
 
 import adaptivex.pedidoscloud.Config.Configurador;
 import adaptivex.pedidoscloud.Config.GlobalValues;
-import adaptivex.pedidoscloud.Controller.CategoriaController;
+import adaptivex.pedidoscloud.Repositories.CategoriaRepository;
 import adaptivex.pedidoscloud.Core.parserJSONtoModel.CategoriaParser;
-import adaptivex.pedidoscloud.Model.Categoria;
+import adaptivex.pedidoscloud.Entity.CategoriaEntity;
 import adaptivex.pedidoscloud.Servicios.WebRequest;
 
 import java.util.HashMap;
@@ -23,14 +22,14 @@ import java.util.HashMap;
 public class HelperCategorias extends AsyncTask<Void, Void, Void> {
     private Context ctx;
     private HashMap<String,String> registro;
-    private Categoria categoria;
-    private CategoriaController categoriaCtr;
+    private CategoriaEntity categoria;
+    private CategoriaRepository categoriaCtr;
     private int respuesta; //1=ok, 200=error
     private int opcion; //1 enviar Post Categoria
     private String jsonStr ="";
     public HelperCategorias(Context pCtx){
         this.setCtx(pCtx);
-        this.categoriaCtr = new CategoriaController(this.getCtx());
+        this.categoriaCtr = new CategoriaRepository(this.getCtx());
     }
 
 

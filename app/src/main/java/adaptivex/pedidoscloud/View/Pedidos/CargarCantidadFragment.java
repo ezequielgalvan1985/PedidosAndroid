@@ -24,8 +24,9 @@ import java.util.List;
 
 import adaptivex.pedidoscloud.Config.Constants;
 import adaptivex.pedidoscloud.Config.GlobalValues;
-import adaptivex.pedidoscloud.Controller.PedidoController;
-import adaptivex.pedidoscloud.Model.Pote;
+import adaptivex.pedidoscloud.Core.FactoryRepositories;
+import adaptivex.pedidoscloud.Repositories.PedidoRepository;
+import adaptivex.pedidoscloud.Entity.Pote;
 import adaptivex.pedidoscloud.R;
 import adaptivex.pedidoscloud.View.Promos.ListadoPromosFragment;
 import adaptivex.pedidoscloud.View.RVAdapters.RVAdapterPote;
@@ -49,7 +50,7 @@ public class CargarCantidadFragment extends Fragment implements View.OnClickList
         boolean validate = false;
 
         //Cantidad Cargada tiene que ser mayor a 0
-        if (GlobalValues.getINSTANCIA().PEDIDO_TEMPORAL.getCantidadKilos() > 0  ){
+        if (FactoryRepositories.getInstancia().PEDIDO_TEMPORAL.getCantidadKilos() > 0  ){
             return true;
         }
 
@@ -104,11 +105,15 @@ public class CargarCantidadFragment extends Fragment implements View.OnClickList
         btnListo.setOnClickListener(this);
         btnPromos.setOnClickListener(this);
 
+        ArrayList<Pote> listaPotes =  FactoryRepositories
+                .getInstancia()
+                .getPedidoRepository()
+                .abrir()
+                .getPotesArrayList2(FactoryRepositories
+                        .getInstancia()
+                        .PEDIDO_TEMPORAL
+                        .getAndroid_id());
 
-        //Se agrega Recycle view de Potes Cargados
-        PedidoController pc = new PedidoController(v.getContext());
-        ArrayList<Pote> listaPotes = new ArrayList<Pote>();
-        listaPotes = pc.abrir().getPotesArrayList2(GlobalValues.getINSTANCIA().PEDIDO_TEMPORAL.getIdTmp());
         rvPotes = (RecyclerView)v.findViewById(R.id.cargar_cantidad_rvPotes);
         rvPotes.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         LinearLayoutManager llm = new LinearLayoutManager(v.getContext());
@@ -165,21 +170,21 @@ public class CargarCantidadFragment extends Fragment implements View.OnClickList
 
 
     public void clickAgregar(){
-        GlobalValues.getINSTANCIA().PEDIDO_TEMPORAL.agregarPote(getSpinnerSelection());
-        GlobalValues.getINSTANCIA().PEDIDO_ACTUAL_NRO_POTE    = GlobalValues.getINSTANCIA().PEDIDO_TEMPORAL.getCantidadPotes();
+        FactoryRepositories.getInstancia().PEDIDO_TEMPORAL.agregarPote(getSpinnerSelection());
+        GlobalValues.getINSTANCIA().PEDIDO_ACTUAL_NRO_POTE    = FactoryRepositories.getInstancia().PEDIDO_TEMPORAL.getCantidadPotes();
         GlobalValues.getINSTANCIA().PEDIDO_ACTUAL_MEDIDA_POTE = getSpinnerSelection();
 
 
-        PedidoController pc = new PedidoController(getContext());
-        pc.abrir().edit(GlobalValues.getINSTANCIA().PEDIDO_TEMPORAL);
+        PedidoRepository pc = new PedidoRepository(getContext());
+        pc.abrir().edit(FactoryRepositories.getInstancia().PEDIDO_TEMPORAL);
         openCargarHelados();
     }
 
     public boolean savePedido(){
         //Obtiene valores del formulario, y luego lo guarda en la base de datos
         try{
-            PedidoController pc = new PedidoController(getContext());
-            pc.abrir().calculatePromoBeforeEdit2(GlobalValues.getINSTANCIA().PEDIDO_TEMPORAL);
+            PedidoRepository pc = new PedidoRepository(getContext());
+            pc.abrir().calculatePromoBeforeEdit2(FactoryRepositories.getInstancia().PEDIDO_TEMPORAL);
             return true;
         }catch (Exception e){
             Toast.makeText(getContext(),"Error: " + e.getMessage(),Toast.LENGTH_LONG).show();

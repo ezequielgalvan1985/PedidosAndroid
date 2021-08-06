@@ -2,13 +2,12 @@ package adaptivex.pedidoscloud.Servicios.Helpers;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
 
 import adaptivex.pedidoscloud.Config.Configurador;
 import adaptivex.pedidoscloud.Config.GlobalValues;
-import adaptivex.pedidoscloud.Controller.ClienteController;
+import adaptivex.pedidoscloud.Repositories.ClienteRepository;
 import adaptivex.pedidoscloud.Core.parserJSONtoModel.ClienteParser;
-import adaptivex.pedidoscloud.Model.Cliente;
+import adaptivex.pedidoscloud.Entity.ClienteEntity;
 import adaptivex.pedidoscloud.Servicios.WebRequest;
 
 import java.util.HashMap;
@@ -20,15 +19,15 @@ import java.util.HashMap;
 public class HelperClientes extends AsyncTask<Void, Void, Void> {
     private Context ctx;
     private HashMap<String,String> registro;
-    private Cliente cliente;
-    private ClienteController clienteCtr;
+    private ClienteEntity clienteEntity;
+    private ClienteRepository clienteCtr;
     private int respuesta; //1=ok, 200=error
     private int opcion; //1 enviar Post Cliente
     private ClienteParser cp;
 
     public HelperClientes(Context pCtx){
         this.setCtx(pCtx);
-        this.clienteCtr = new ClienteController(this.getCtx());
+        this.clienteCtr = new ClienteRepository(this.getCtx());
     }
 
 
