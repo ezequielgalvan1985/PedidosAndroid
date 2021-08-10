@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 
 import adaptivex.pedidoscloud.Entity.DatabaseHelper.UnidadmedidaDataBaseHelper;
-import adaptivex.pedidoscloud.Entity.Unidadmedida;
+import adaptivex.pedidoscloud.Entity.UnidadmedidaEntity;
 
 /**
  * Created by ezequiel on 08/2021.
@@ -37,7 +37,7 @@ public class UnidadmedidaRepository
         }
     }
 
-    public long agregar(Unidadmedida item)
+    public long agregar(UnidadmedidaEntity item)
     {
         ContentValues valores = new ContentValues();
         valores.put(UnidadmedidaDataBaseHelper.CAMPO_ID, item.getId());
@@ -49,7 +49,7 @@ public class UnidadmedidaRepository
     }
 
 
-    public void modificar(Unidadmedida item)
+    public void modificar(UnidadmedidaEntity item)
     {
         String[] argumentos = new String[]
                 {String.valueOf(item.getId())};
@@ -61,7 +61,7 @@ public class UnidadmedidaRepository
         db.update(UnidadmedidaDataBaseHelper.TABLE_NAME, valores,
                 UnidadmedidaDataBaseHelper.CAMPO_ID + " = ?", argumentos);
     }
-    public void eliminar(Unidadmedida persona)
+    public void eliminar(UnidadmedidaEntity persona)
     {
         String[] argumentos = new String[]
                 {String.valueOf(persona.getId())};
@@ -85,9 +85,9 @@ public class UnidadmedidaRepository
         return resultado;
     }
 
-    public Unidadmedida buscar(int id)
+    public UnidadmedidaEntity buscar(int id)
     {
-        Unidadmedida registro = null;
+        UnidadmedidaEntity registro = null;
         String[] campos = {UnidadmedidaDataBaseHelper.CAMPO_ID,
                 UnidadmedidaDataBaseHelper.CAMPO_NOMBRE,
                 UnidadmedidaDataBaseHelper.CAMPO_DESCRIPCION,
@@ -99,7 +99,7 @@ public class UnidadmedidaRepository
         if (resultado != null)
         {
             resultado.moveToFirst();
-            registro = new Unidadmedida();
+            registro = new UnidadmedidaEntity();
             registro.setId(resultado.getInt(resultado.getColumnIndex(UnidadmedidaDataBaseHelper.CAMPO_ID)));
             registro.setNombre(resultado.getString(resultado.getColumnIndex(UnidadmedidaDataBaseHelper.CAMPO_NOMBRE)));
             registro.setDescripcion(resultado.getString(resultado.getColumnIndex(UnidadmedidaDataBaseHelper.CAMPO_DESCRIPCION)));

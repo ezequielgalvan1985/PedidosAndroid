@@ -138,10 +138,10 @@ public class ConfigFragment extends Fragment {
 
                 ParameterRepository pc = new ParameterRepository(getContext());
                 ParameterEntity p = new ParameterEntity();
-                p = pc.abrir().findByNombre(GlobalValues.getINSTANCIA().PARAM_SERVICE_STOCK_PRECIOS_ACTIVATE);
+                p = pc.abrir().findByNombre(GlobalValues.getInstancia().PARAM_SERVICE_STOCK_PRECIOS_ACTIVATE);
 
                 ParameterEntity pEnvioPedidos = new ParameterEntity();
-                pEnvioPedidos = pc.abrir().findByNombre(GlobalValues.getINSTANCIA().PARAM_SERVICE_ENVIO_PEDIDOS_ACTIVATE);
+                pEnvioPedidos = pc.abrir().findByNombre(GlobalValues.getInstancia().PARAM_SERVICE_ENVIO_PEDIDOS_ACTIVATE);
 
                 switch (v.getId()) {
                     //StockPrecios

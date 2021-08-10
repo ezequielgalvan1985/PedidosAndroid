@@ -13,7 +13,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.Toast;
 
-import adaptivex.pedidoscloud.Entity.User;
+import adaptivex.pedidoscloud.Entity.UserEntity;
 import adaptivex.pedidoscloud.R;
 import adaptivex.pedidoscloud.Servicios.Helpers.HelperUser;
 
@@ -33,7 +33,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
     private AutoCompleteTextView txtPiso;
     private AutoCompleteTextView txtNro;
     private AutoCompleteTextView txtContacto;
-    private User user;
+    private UserEntity user;
     private Button register_btn_register, register_btn_login;
 
     public RegisterFragment() {
@@ -158,7 +158,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
                 message = "La Contraseña debe tener Minimo 4 Caracteres";
                 //object = txtpassword;
             }
-            user = new User();
+            user = new UserEntity();
             user.setUsername(txtusername.getText().toString());
             user.setPassword(txtpassword.getText().toString());
             user.setEmail(txtEmail.getText().toString());

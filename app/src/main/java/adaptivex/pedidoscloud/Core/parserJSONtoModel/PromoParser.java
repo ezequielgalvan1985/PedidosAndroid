@@ -7,7 +7,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import adaptivex.pedidoscloud.Entity.Promo;
+import adaptivex.pedidoscloud.Entity.PromoEntity;
 import adaptivex.pedidoscloud.Entity.DatabaseHelper.PromoDataBaseHelper;
 
 /**
@@ -22,9 +22,9 @@ public class PromoParser {
     private String       message;
     private JSONArray    data;
     private JSONObject   promojson;
-    private Promo        promo;
+    private PromoEntity promo;
     
-    private ArrayList<Promo> listadoPromos;
+    private ArrayList<PromoEntity> listadoPromos;
     /* Solamente parsea los datos de un String Json, al Objeto PromoParser */
     public PromoParser(){
     }
@@ -33,11 +33,11 @@ public class PromoParser {
         setJsonstr(jsonstr);
     }
 
-    public Promo parseJsonToObject(){
+    public PromoEntity parseJsonToObject(){
         /* Completa datos del objeto  */
         try{
             //leer raiz
-            listadoPromos  = new ArrayList<Promo>();
+            listadoPromos  = new ArrayList<PromoEntity>();
             setJsonobj(new JSONObject(getJsonstr()));
 
             setStatus(getJsonobj().getString("code"));
@@ -47,7 +47,7 @@ public class PromoParser {
             if (Integer.parseInt(getStatus())== 200){
                 //parser Usuario
                 JSONArray promos = getData();
-                Promo promo = new Promo();
+                PromoEntity promo = new PromoEntity();
                 for (int i = 0; i < promos.length(); i++) {
                     JSONObject registro = promos.getJSONObject(i);
                     promo.setId(registro.getInt("id"));
@@ -68,7 +68,7 @@ public class PromoParser {
                     if (registro.has(PromoDataBaseHelper.CAMPO_CANTIDAD_POTE_KILO))         promo.setCantPoteKilo(registro.getInt(PromoDataBaseHelper.CAMPO_CANTIDAD_POTE_KILO)); else promo.setCantPoteKilo(0);
 
                     listadoPromos.add(promo);
-                    promo = new Promo();
+                    promo = new PromoEntity();
                 }//endfor
 
             }else {
@@ -104,11 +104,11 @@ public class PromoParser {
         this.data = data;
     }
 
-    public Promo getPromo() {
+    public PromoEntity getPromo() {
         return promo;
     }
 
-    public void setPromo(Promo promo) {
+    public void setPromo(PromoEntity promo) {
         this.promo = promo;
     }
 
@@ -144,11 +144,11 @@ public class PromoParser {
         this.promojson = promojson;
     }
 
-    public ArrayList<Promo> getListadoPromos() {
+    public ArrayList<PromoEntity> getListadoPromos() {
         return listadoPromos;
     }
 
-    public void setListadoPromos(ArrayList<Promo> listadoPromos) {
+    public void setListadoPromos(ArrayList<PromoEntity> listadoPromos) {
         this.listadoPromos = listadoPromos;
     }
 }

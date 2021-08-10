@@ -23,7 +23,7 @@ import adaptivex.pedidoscloud.Entity.MarcaEntity;
 import adaptivex.pedidoscloud.Entity.DatabaseHelper.MarcaDataBaseHelper;
 import adaptivex.pedidoscloud.Entity.PedidoEntity;
 import adaptivex.pedidoscloud.Entity.DatabaseHelper.PedidoDataBaseHelper;
-import adaptivex.pedidoscloud.Entity.Producto;
+import adaptivex.pedidoscloud.Entity.ProductoEntity;
 import adaptivex.pedidoscloud.Entity.DatabaseHelper.ProductoDataBaseHelper;
 import adaptivex.pedidoscloud.R;
 import adaptivex.pedidoscloud.Servicios.Helpers.HelperCategorias;
@@ -166,7 +166,7 @@ public class SyncDatosActivity extends AppCompatActivity implements View.OnClick
             Log.d("Debug: ", "> " + this.getEntidad());
             this.setEntidad(entidad);
             registro = new HashMap<String, String>();
-            //registro.put("empresa_id", String.valueOf(GlobalValues.getINSTANCIA().getUserlogued().getEntidad_id()));
+            //registro.put("empresa_id", String.valueOf(GlobalValues.getInstancia().getUserlogued().getEntidad_id()));
             this.setvMensaje("Registros Agregados correctamente");
         }
 
@@ -318,7 +318,7 @@ public class SyncDatosActivity extends AppCompatActivity implements View.OnClick
                    // pedido.setId(registro.getInt("id"));
                     pedido.setId(registro.getInt(PedidoDataBaseHelper.CAMPO_ID));
                     pedido.setCreated(registro.getString(PedidoDataBaseHelper.CAMPO_CREATED));
-                    pedido.setCliente_id(registro.getInt(PedidoDataBaseHelper.CAMPO_CLIENTE_ID));
+                    //pedido.setCliente_id(registro.getInt(PedidoDataBaseHelper.CAMPO_CLIENTE_ID));
 
                     pedido.setMonto(registro.getDouble(PedidoDataBaseHelper.CAMPO_MONTO));
                     pedido.setIva(registro.getDouble(PedidoDataBaseHelper.CAMPO_IVA));
@@ -359,7 +359,7 @@ public class SyncDatosActivity extends AppCompatActivity implements View.OnClick
 
                 JSONArray productos = jsonObj.getJSONArray("data");
 
-                Producto producto = new Producto();
+                ProductoEntity producto = new ProductoEntity();
 
                 dbHelper.abrir().limpiar();
 

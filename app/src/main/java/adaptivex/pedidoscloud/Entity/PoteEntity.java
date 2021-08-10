@@ -8,21 +8,21 @@ import adaptivex.pedidoscloud.Core.WorkNumber;
  * Created by egalvan on 9/3/2018.
  */
 
-public class Pote {
+public class PoteEntity {
     private PedidoEntity pedido;
     private Integer nroPote;
     private Integer kilos;
     private Double  heladomonto;
-    private ArrayList <PoteItem> itemsPote; // es el helado que va a estar en el pote
+    private ArrayList <PoteItemEntity> itemsPote; // es el helado que va a estar en el pote
 
-    public Pote(){
+    public PoteEntity(){
         nroPote     = 0;
         kilos       = 0;
         heladomonto = 0.0;
-        itemsPote   = new ArrayList <PoteItem>();
+        itemsPote   = new ArrayList <PoteItemEntity>();
     }
 
-    public void addItemPote(PoteItem it){
+    public void addItemPote(PoteItemEntity it){
         this.itemsPote.add(it);
     }
 
@@ -62,11 +62,11 @@ public class Pote {
         this.heladomonto = heladomonto;
     }
 
-    public ArrayList<PoteItem> getItemsPote() {
+    public ArrayList<PoteItemEntity> getItemsPote() {
         return itemsPote;
     }
 
-    public void setItemsPote(ArrayList<PoteItem> itemsPote) {
+    public void setItemsPote(ArrayList<PoteItemEntity> itemsPote) {
         this.itemsPote = itemsPote;
     }
 

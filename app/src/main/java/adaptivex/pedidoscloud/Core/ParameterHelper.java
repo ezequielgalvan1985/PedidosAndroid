@@ -28,11 +28,11 @@ public class ParameterHelper {
         try {
             ParameterRepository pc = new ParameterRepository(ctx);
 
-            ParameterEntity p= pc.abrir().findByNombre(GlobalValues.getINSTANCIA().PARAM_DOWNLOAD_DATABASE);
+            ParameterEntity p= pc.abrir().findByNombre(GlobalValues.getInstancia().PARAM_DOWNLOAD_DATABASE);
 
             if (p==null){
                 p = new ParameterEntity();
-                p.setNombre(GlobalValues.getINSTANCIA().PARAM_DOWNLOAD_DATABASE);
+                p.setNombre(GlobalValues.getInstancia().PARAM_DOWNLOAD_DATABASE);
                 p.setValor_texto("N");
                 pc.abrir().agregar(p);
             }
@@ -52,10 +52,10 @@ public class ParameterHelper {
         try{
             //Leer de la tabla parametros cada servicio
             ParameterRepository pc = new ParameterRepository(ctx);
-            ParameterEntity p = pc.abrir().findByNombre(GlobalValues.getINSTANCIA().PARAM_SERVICE_STOCK_PRECIOS_ACTIVATE);
+            ParameterEntity p = pc.abrir().findByNombre(GlobalValues.getInstancia().PARAM_SERVICE_STOCK_PRECIOS_ACTIVATE);
             if (p==null){
                 p = new ParameterEntity();
-                p.setNombre(GlobalValues.getINSTANCIA().PARAM_SERVICE_STOCK_PRECIOS_ACTIVATE);
+                p.setNombre(GlobalValues.getInstancia().PARAM_SERVICE_STOCK_PRECIOS_ACTIVATE);
                 p.setValor_texto("N");
                 pc.abrir().agregar(p);
                 pc.cerrar();
@@ -79,10 +79,10 @@ public class ParameterHelper {
         try{
             //Leer de la tabla parametros cada servicio
             ParameterRepository pc = new ParameterRepository(ctx);
-            ParameterEntity p = pc.abrir().findByNombre(GlobalValues.getINSTANCIA().PARAM_SERVICE_ENVIO_PEDIDOS_ACTIVATE);
+            ParameterEntity p = pc.abrir().findByNombre(GlobalValues.getInstancia().PARAM_SERVICE_ENVIO_PEDIDOS_ACTIVATE);
             if (p==null){
                 p = new ParameterEntity();
-                p.setNombre(GlobalValues.getINSTANCIA().PARAM_SERVICE_ENVIO_PEDIDOS_ACTIVATE);
+                p.setNombre(GlobalValues.getInstancia().PARAM_SERVICE_ENVIO_PEDIDOS_ACTIVATE);
                 p.setValor_texto("N");
                 pc.abrir().agregar(p);
                 pc.cerrar();
@@ -105,7 +105,7 @@ public class ParameterHelper {
         //Leer de la tabla parametros cada servicio
         ParameterRepository pc = new ParameterRepository(ctx);
         ParameterEntity p = new ParameterEntity();
-        p = pc.abrir().findByNombre(GlobalValues.getINSTANCIA().PARAM_SERVICE_STOCK_PRECIOS_ACTIVATE);
+        p = pc.abrir().findByNombre(GlobalValues.getInstancia().PARAM_SERVICE_STOCK_PRECIOS_ACTIVATE);
         if (p!=null){
             //Si parametro es Y, se debe activar el servicio
             if (p.getValor_texto().equals("Y")){
@@ -120,7 +120,7 @@ public class ParameterHelper {
         //Leer de la tabla parametros cada servicio
         ParameterRepository pc = new ParameterRepository(ctx);
         ParameterEntity p = new ParameterEntity();
-        p = pc.abrir().findByNombre(GlobalValues.getINSTANCIA().PARAM_SERVICE_STOCK_PRECIOS_WORKING);
+        p = pc.abrir().findByNombre(GlobalValues.getInstancia().PARAM_SERVICE_STOCK_PRECIOS_WORKING);
         pc.cerrar();
         if (p!=null){
             //Si parametro es Y, se debe activar el servicio
@@ -137,7 +137,7 @@ public class ParameterHelper {
         //Leer de la tabla parametros cada servicio
         ParameterRepository pc = new ParameterRepository(ctx);
         ParameterEntity p = new ParameterEntity();
-        p = pc.abrir().findByNombre(GlobalValues.getINSTANCIA().PARAM_SERVICE_STOCK_PRECIOS_WORKING);
+        p = pc.abrir().findByNombre(GlobalValues.getInstancia().PARAM_SERVICE_STOCK_PRECIOS_WORKING);
         if (p!=null){
             p.setValor_texto(working);
             pc.modificar(p);

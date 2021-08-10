@@ -12,8 +12,8 @@ import java.util.List;
 
 import adaptivex.pedidoscloud.Config.Configurador;
 import adaptivex.pedidoscloud.Config.GlobalValues;
-import adaptivex.pedidoscloud.Core.FactoryRepositories;
-import adaptivex.pedidoscloud.Entity.UserProfile;
+import adaptivex.pedidoscloud.Repositories.FactoryRepositories;
+import adaptivex.pedidoscloud.Entity.UserProfileEntity;
 import adaptivex.pedidoscloud.Servicios.Retrofit.Interface.IUserProfileRetrofit;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -22,7 +22,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public  class UserProfileServices {
-    public List<UserProfile> userprofilesList;
+    public List<UserProfileEntity> userprofilesList;
 
 
 
@@ -30,7 +30,7 @@ public  class UserProfileServices {
     }
 
 
-    public List<UserProfile> getUserProfiles(){
+    public List<UserProfileEntity> getUserProfiles(){
         try{
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl(Configurador.urlBase)
@@ -38,10 +38,10 @@ public  class UserProfileServices {
                     .build();
 
             IUserProfileRetrofit service = retrofit.create(IUserProfileRetrofit.class);
-            Call<List<UserProfile>> call = service.getUserProfiles(GlobalValues.getINSTANCIA().getAuthorization());
-            call.enqueue(new Callback<List<UserProfile>>() {
+            Call<List<UserProfileEntity>> call = service.getUserProfiles(GlobalValues.getInstancia().getAuthorization());
+            call.enqueue(new Callback<List<UserProfileEntity>>() {
                 @Override
-                public void onResponse(Call<List<UserProfile>> call, Response<List<UserProfile>> response) {
+                public void onResponse(Call<List<UserProfileEntity>> call, Response<List<UserProfileEntity>> response) {
                     try{
                         if(!response.isSuccessful()){
                             Log.println(Log.INFO,"UserProfile: Error",String.valueOf(response.code()));
@@ -50,11 +50,12 @@ public  class UserProfileServices {
                         FactoryRepositories.getInstancia().getUserProfileRepository().abrir().limpiar();
                         userprofilesList = response.body();
                         String content = "";
-                        for (UserProfile userprofile: userprofilesList){
+                        for (UserProfileEntity userprofile: userprofilesList){
                             //Recorrer Lista
                             FactoryRepositories.getInstancia().getUserProfileRepository().abrir().agregar(userprofile);
                             content = userprofile.getId() + " " +userprofile.getNombre() + " " + userprofile.getUser().getUsername();
                             Log.println(Log.INFO,"UserProfile: ",content);
+                            GlobalValues.getInstancia().setUsuariologueado(userprofile);
                         }
                     }catch (Exception e){
                         Log.println(Log.ERROR,"UserProfile: ",e.getMessage());
@@ -62,7 +63,7 @@ public  class UserProfileServices {
                 }
 
                 @Override
-                public void onFailure(Call<List<UserProfile>> call, Throwable t) {
+                public void onFailure(Call<List<UserProfileEntity>> call, Throwable t) {
                     Log.println(Log.ERROR,"Codigo: ",t.getMessage());
                 }
             });

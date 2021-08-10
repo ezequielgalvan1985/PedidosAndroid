@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 import adaptivex.pedidoscloud.Config.Constants;
 import adaptivex.pedidoscloud.Repositories.PedidoRepository;
-import adaptivex.pedidoscloud.Entity.Pote;
+import adaptivex.pedidoscloud.Entity.PoteEntity;
 import adaptivex.pedidoscloud.R;
 import adaptivex.pedidoscloud.View.RVAdapters.RVAdapterPote;
 
@@ -50,7 +50,7 @@ public class ListadoPotesFragment extends Fragment {
 
         PedidoRepository pc = new PedidoRepository(v.getContext());
 
-        ArrayList<Pote> listaPotes = pc.abrir().getPotesArrayList2(androidId);
+        ArrayList<PoteEntity> listaPotes = pc.abrir().getPotesArrayList2(androidId);
 
         rvPotes = (RecyclerView)v.findViewById(R.id.rvPotes);
         rvPotes.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));

@@ -24,9 +24,9 @@ import java.util.List;
 
 import adaptivex.pedidoscloud.Config.Constants;
 import adaptivex.pedidoscloud.Config.GlobalValues;
-import adaptivex.pedidoscloud.Core.FactoryRepositories;
+import adaptivex.pedidoscloud.Repositories.FactoryRepositories;
 import adaptivex.pedidoscloud.Repositories.PedidoRepository;
-import adaptivex.pedidoscloud.Entity.Pote;
+import adaptivex.pedidoscloud.Entity.PoteEntity;
 import adaptivex.pedidoscloud.R;
 import adaptivex.pedidoscloud.View.Promos.ListadoPromosFragment;
 import adaptivex.pedidoscloud.View.RVAdapters.RVAdapterPote;
@@ -79,7 +79,7 @@ public class CargarCantidadFragment extends Fragment implements View.OnClickList
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v =inflater.inflate(R.layout.fragment_cargar_cantidad, container, false);
 
-        GlobalValues.getINSTANCIA().CURRENT_FRAGMENT_NUEVO_PEDIDO = GlobalValues.getINSTANCIA().NP_CARGAR_CANTIDAD;
+        GlobalValues.getInstancia().CURRENT_FRAGMENT_NUEVO_PEDIDO = GlobalValues.getInstancia().NP_CARGAR_CANTIDAD;
 
         btnAgregar      = (Button)   v.findViewById(R.id.cantidad_btn_agregar);
         btnListo        = (Button)   v.findViewById(R.id.cargar_cantidad_btn_listo);
@@ -105,7 +105,7 @@ public class CargarCantidadFragment extends Fragment implements View.OnClickList
         btnListo.setOnClickListener(this);
         btnPromos.setOnClickListener(this);
 
-        ArrayList<Pote> listaPotes =  FactoryRepositories
+        ArrayList<PoteEntity> listaPotes =  FactoryRepositories
                 .getInstancia()
                 .getPedidoRepository()
                 .abrir()
@@ -171,8 +171,8 @@ public class CargarCantidadFragment extends Fragment implements View.OnClickList
 
     public void clickAgregar(){
         FactoryRepositories.getInstancia().PEDIDO_TEMPORAL.agregarPote(getSpinnerSelection());
-        GlobalValues.getINSTANCIA().PEDIDO_ACTUAL_NRO_POTE    = FactoryRepositories.getInstancia().PEDIDO_TEMPORAL.getCantidadPotes();
-        GlobalValues.getINSTANCIA().PEDIDO_ACTUAL_MEDIDA_POTE = getSpinnerSelection();
+        GlobalValues.getInstancia().PEDIDO_ACTUAL_NRO_POTE    = FactoryRepositories.getInstancia().PEDIDO_TEMPORAL.getCantidadPotes();
+        GlobalValues.getInstancia().PEDIDO_ACTUAL_MEDIDA_POTE = getSpinnerSelection();
 
 
         PedidoRepository pc = new PedidoRepository(getContext());

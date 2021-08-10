@@ -14,7 +14,7 @@ public class PedidodetalleEntity {
     private Double    preciounitario;
     private Double    monto;
     private Integer   estadoId;
-    private Producto  producto;
+    private ProductoEntity producto;
     private Integer nroPote;
     private Integer proporcionHelado;
     private Integer medidaPote;
@@ -96,11 +96,11 @@ public class PedidodetalleEntity {
     }
 
 
-    public Producto getProducto() {
+    public ProductoEntity getProducto() {
         return producto;
     }
 
-    public void setProducto(Producto producto) {
+    public void setProducto(ProductoEntity producto) {
 
         this.producto = producto;
         this.productoId = producto.getId();

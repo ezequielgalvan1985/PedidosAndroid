@@ -3,7 +3,7 @@ package adaptivex.pedidoscloud.Entity;
 /**
  * Created by ezequiel on 23/05/2016.
  */
-public class User {
+public class UserEntity {
     private Integer id;
     private String username;
     private String password;

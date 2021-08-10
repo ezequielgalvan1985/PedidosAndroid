@@ -12,7 +12,7 @@ import java.util.List;
 
 import adaptivex.pedidoscloud.Config.Configurador;
 import adaptivex.pedidoscloud.Config.GlobalValues;
-import adaptivex.pedidoscloud.Core.FactoryRepositories;
+import adaptivex.pedidoscloud.Repositories.FactoryRepositories;
 import adaptivex.pedidoscloud.Entity.ParameterEntity;
 import adaptivex.pedidoscloud.Servicios.Retrofit.Interface.IParameterRetrofit;
 import retrofit2.Call;
@@ -30,13 +30,16 @@ public  class ParameterServices {
 
 
     public List<ParameterEntity> getParameters(){
+
+        FactoryRepositories.getInstancia().getParameterRepository().abrir().limpiar();
+
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(Configurador.urlBase)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
         IParameterRetrofit service = retrofit.create(IParameterRetrofit.class);
-        Call<List<ParameterEntity>> call = service.getParameters(GlobalValues.getINSTANCIA().getAuthorization());
+        Call<List<ParameterEntity>> call = service.getParameters(GlobalValues.getInstancia().getAuthorization());
         call.enqueue(new Callback<List<ParameterEntity>>() {
             @Override
             public void onResponse(Call<List<ParameterEntity>> call, Response<List<ParameterEntity>> response) {
@@ -45,7 +48,6 @@ public  class ParameterServices {
                         Log.println(Log.INFO,"Parameter: Error",String.valueOf(response.code()));
                         return;
                     }
-                    FactoryRepositories.getInstancia().getParameterRepository().abrir().limpiar();
                     parametersList = response.body();
                     String content = "";
                     for (ParameterEntity parameterEntity : parametersList){

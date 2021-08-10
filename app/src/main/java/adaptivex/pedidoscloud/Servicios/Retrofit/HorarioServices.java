@@ -12,7 +12,7 @@ import java.util.List;
 
 import adaptivex.pedidoscloud.Config.Configurador;
 import adaptivex.pedidoscloud.Config.GlobalValues;
-import adaptivex.pedidoscloud.Core.FactoryRepositories;
+import adaptivex.pedidoscloud.Repositories.FactoryRepositories;
 import adaptivex.pedidoscloud.Entity.HorarioEntity;
 import adaptivex.pedidoscloud.Servicios.Retrofit.Interface.IHorarioRetrofit;
 import retrofit2.Call;
@@ -35,7 +35,7 @@ public  class HorarioServices {
                 .build();
 
         IHorarioRetrofit service = retrofit.create(IHorarioRetrofit.class);
-        Call<List<HorarioEntity>> call = service.getHorarios(GlobalValues.getINSTANCIA().getAuthorization());
+        Call<List<HorarioEntity>> call = service.getHorarios(GlobalValues.getInstancia().getAuthorization());
         call.enqueue(new Callback<List<HorarioEntity>>() {
             @Override
             public void onResponse(Call<List<HorarioEntity>> call, Response<List<HorarioEntity>> response) {

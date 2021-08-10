@@ -36,7 +36,7 @@ public class HelperMarcas extends AsyncTask<Void, Void, Void> {
         try{
             WebRequest webreq = new WebRequest();
             registro = new HashMap<String, String>();
-            //registro.put("empresa_id", String.valueOf(GlobalValues.getINSTANCIA().getUserlogued().getEntidad_id()));
+            //registro.put("empresa_id", String.valueOf(GlobalValues.getInstancia().getUserlogued().getEntidad_id()));
             String jsonStr = webreq.makeWebServiceCall(Configurador.urlMarcas, WebRequest.POST,registro);
             MarcaParser cp = new MarcaParser(jsonStr);
             cp.parseJsonToObject();
@@ -45,9 +45,9 @@ public class HelperMarcas extends AsyncTask<Void, Void, Void> {
             for (int i = 0; i < cp.getListadoMarcas().size(); i++) {
                 marcasCtr.abrir().agregar(cp.getListadoMarcas().get(i));
             }
-            setRespuesta(GlobalValues.getINSTANCIA().RETURN_OK);
+            setRespuesta(GlobalValues.getInstancia().RETURN_OK);
         }catch (Exception e){
-                setRespuesta(GlobalValues.getINSTANCIA().RETURN_ERROR);
+                setRespuesta(GlobalValues.getInstancia().RETURN_ERROR);
                 Log.println(Log.ERROR,"ErrorHelper:",e.getMessage());
 
         }
@@ -66,7 +66,7 @@ public class HelperMarcas extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPostExecute(Void result) {
         super.onPostExecute(result);
-        if (getRespuesta()== GlobalValues.getINSTANCIA().RETURN_OK){
+        if (getRespuesta()== GlobalValues.getInstancia().RETURN_OK){
 
         }
     }

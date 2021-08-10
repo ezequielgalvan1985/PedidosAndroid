@@ -14,9 +14,9 @@ import java.util.List;
 
 import adaptivex.pedidoscloud.Config.Configurador;
 import adaptivex.pedidoscloud.Config.GlobalValues;
-import adaptivex.pedidoscloud.Core.FactoryRepositories;
+import adaptivex.pedidoscloud.Repositories.FactoryRepositories;
 import adaptivex.pedidoscloud.Repositories.UnidadmedidaRepository;
-import adaptivex.pedidoscloud.Entity.Unidadmedida;
+import adaptivex.pedidoscloud.Entity.UnidadmedidaEntity;
 import adaptivex.pedidoscloud.Servicios.Retrofit.Interface.IUnidadmedidaRetrofit;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -25,8 +25,8 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public  class UnidadmedidaServices {
-    public List<Unidadmedida> unidadmedidasList;
-    public Unidadmedida unidadmedida;
+    public List<UnidadmedidaEntity> unidadmedidasList;
+    public UnidadmedidaEntity unidadmedida;
 
     private Context ctx;
     private HashMap<String, String> registro;
@@ -55,7 +55,7 @@ public  class UnidadmedidaServices {
         return ctx;
     }
 
-    public List<Unidadmedida> getUnidadmedidas(){
+    public List<UnidadmedidaEntity> getUnidadmedidas(){
         try{
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl(Configurador.urlBase)
@@ -63,10 +63,10 @@ public  class UnidadmedidaServices {
                     .build();
 
             IUnidadmedidaRetrofit service = retrofit.create(IUnidadmedidaRetrofit.class);
-            Call<List<Unidadmedida>> call = service.getUnidadmedidas(GlobalValues.getINSTANCIA().getAuthorization());
-            call.enqueue(new Callback<List<Unidadmedida>>() {
+            Call<List<UnidadmedidaEntity>> call = service.getUnidadmedidas(GlobalValues.getInstancia().getAuthorization());
+            call.enqueue(new Callback<List<UnidadmedidaEntity>>() {
                 @Override
-                public void onResponse(Call<List<Unidadmedida>> call, Response<List<Unidadmedida>> response) {
+                public void onResponse(Call<List<UnidadmedidaEntity>> call, Response<List<UnidadmedidaEntity>> response) {
                     try{
 
 
@@ -77,7 +77,7 @@ public  class UnidadmedidaServices {
                         FactoryRepositories.getInstancia().getUnidadmedidaRepository().abrir().limpiar();
                         unidadmedidasList = response.body();
                         String content = "";
-                        for (Unidadmedida unidadmedida: unidadmedidasList){
+                        for (UnidadmedidaEntity unidadmedida: unidadmedidasList){
                             //Recorrer Lista
                             FactoryRepositories.getInstancia().getUnidadmedidaRepository().abrir().agregar(unidadmedida);
                             content = unidadmedida.getId() + " " +unidadmedida.getNombre() + " " + unidadmedida.getDescripcion();
@@ -89,7 +89,7 @@ public  class UnidadmedidaServices {
                 }
 
                 @Override
-                public void onFailure(Call<List<Unidadmedida>> call, Throwable t) {
+                public void onFailure(Call<List<UnidadmedidaEntity>> call, Throwable t) {
                     Log.println(Log.ERROR,"Codigo: ",t.getMessage());
                 }
             });

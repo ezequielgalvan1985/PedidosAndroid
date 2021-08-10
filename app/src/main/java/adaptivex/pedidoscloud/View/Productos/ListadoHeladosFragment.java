@@ -10,11 +10,12 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import adaptivex.pedidoscloud.Config.Constants;
-import adaptivex.pedidoscloud.Core.FactoryRepositories;
+import adaptivex.pedidoscloud.Entity.ProductoEntity;
+import adaptivex.pedidoscloud.Repositories.FactoryRepositories;
 import adaptivex.pedidoscloud.Repositories.ProductoRepository;
-import adaptivex.pedidoscloud.Core.Sql.SqlManager;
 import adaptivex.pedidoscloud.Entity.DatabaseHelper.ProductoDataBaseHelper;
 import adaptivex.pedidoscloud.R;
 import adaptivex.pedidoscloud.View.RVAdapters.RVAdapterProducto;
@@ -22,7 +23,7 @@ import adaptivex.pedidoscloud.View.RVAdapters.RVAdapterProducto;
 public class ListadoHeladosFragment extends Fragment {
 
     private RecyclerView rvHeladosPostres;
-    private ArrayList<Object> listaHelados;
+    private ArrayList<ProductoEntity> listaHelados;
     private Integer tipo_listado;
 
 
@@ -40,7 +41,7 @@ public class ListadoHeladosFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        listaHelados = new ArrayList<Object>();
+        listaHelados = new ArrayList<ProductoEntity>();
         if (getArguments() != null) {
             tipo_listado = getArguments().getInt(Constants.PARAM_TIPO_LISTADO);
         }
@@ -58,21 +59,8 @@ public class ListadoHeladosFragment extends Fragment {
         GridLayoutManager manager = new GridLayoutManager(v.getContext(), 1, GridLayoutManager.VERTICAL, false);
         rvHeladosPostres.setLayoutManager(manager);
 
-
-        //2 - ArrayList Helados
-        ProductoRepository pc = new ProductoRepository(getContext());
-        SqlManager sm = new SqlManager();
-        if (tipo_listado== Constants.VALUE_TIPO_LISTADO_POSTRES){
-            titulo.setText("Listado de Postres");
-            sm.addWhere(ProductoDataBaseHelper.CAMPO_CATEGORIA_ID,Constants.IGUAL, Constants.CATEGORIA_POSTRES.toString());
-        }else{
-            titulo.setText("Listado de Helados");
-            sm.addWhere(ProductoDataBaseHelper.CAMPO_CATEGORIA_ID,Constants.IGUAL, Constants.CATEGORIA_HELADOS.toString());
-        }
-
-        listaHelados = new ArrayList<Object>();
-        listaHelados = pc.abrir().findWhereToArrayList(sm);
-        //listaHelados = FactoryRepositories.getInstancia().getProductoRepository().findAll();
+        //definir si mostrar helados o postres
+        listaHelados = FactoryRepositories.getInstancia().getProductoRepository().findAllToArrayList();
 
         //3 - SET ADAPTER
         RVAdapterProducto adapterProducto = new RVAdapterProducto();

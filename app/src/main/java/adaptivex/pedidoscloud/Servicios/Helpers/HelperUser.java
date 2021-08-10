@@ -13,7 +13,7 @@ import adaptivex.pedidoscloud.Config.GlobalValues;
 import adaptivex.pedidoscloud.Core.IniciarApp;
 import adaptivex.pedidoscloud.Core.parserJSONtoModel.UserParser;
 import adaptivex.pedidoscloud.MainActivity;
-import adaptivex.pedidoscloud.Entity.User;
+import adaptivex.pedidoscloud.Entity.UserEntity;
 import adaptivex.pedidoscloud.Servicios.WebRequest;
 
 import java.util.HashMap;
@@ -26,7 +26,7 @@ public class HelperUser extends AsyncTask<Void, Void, Void> {
     private Context                  ctx;
     private ProgressDialog           pDialog;
     private HashMap<String,String>   registro;
-    private User                     user;
+    private UserEntity user;
     private UserParser               parser;
     private int                      respuesta; //1=ok, 200=error
     private int                      opcion; //1 enviar Post Pedido
@@ -158,7 +158,7 @@ public class HelperUser extends AsyncTask<Void, Void, Void> {
             RESPONSE_MESSAGE = parser.getMessage();
 
             if (RESPONSE_CODE == RETURN_OK){
-                //GlobalValues.getINSTANCIA().getUsuariologueado(parser.getUser());
+                //GlobalValues.getInstancia().getUsuariologueado(parser.getUser());
 
                 switch (this.getOpcion()){
                     case OPTION_LOGIN:
@@ -185,7 +185,7 @@ public class HelperUser extends AsyncTask<Void, Void, Void> {
             Log.e("Error:",e.getMessage());
             if (pDialog.isShowing()){
                 pDialog.dismiss();
-                if (getRespuesta()== GlobalValues.getINSTANCIA().RETURN_OK){
+                if (getRespuesta()== GlobalValues.getInstancia().RETURN_OK){
 
                 }
             }
@@ -218,7 +218,7 @@ public class HelperUser extends AsyncTask<Void, Void, Void> {
                 //Luego de regisrar
                 if (getBEHAVIOR_POST_REGISTER() == BEHAVIOR_POST_REGISTER_INICIAR_APP) {
                         IniciarApp ia = new IniciarApp(getCtx());
-                        ia.iniciarBD();
+                        //ia.iniciarBD();
                         ia.downloadDatabase();
                         ia.loginRemember(user);
                         Intent i = new Intent(this.getCtx(), MainActivity.class);
@@ -264,11 +264,11 @@ public class HelperUser extends AsyncTask<Void, Void, Void> {
     }
 
 
-    public User getUser() {
+    public UserEntity getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(UserEntity user) {
         this.user = user;
     }
 

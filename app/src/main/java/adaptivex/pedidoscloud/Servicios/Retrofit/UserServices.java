@@ -16,7 +16,7 @@ import adaptivex.pedidoscloud.Config.Configurador;
 import adaptivex.pedidoscloud.Repositories.UserRepository;
 import adaptivex.pedidoscloud.Entity.LoginData;
 import adaptivex.pedidoscloud.Entity.LoginResult;
-import adaptivex.pedidoscloud.Entity.User;
+import adaptivex.pedidoscloud.Entity.UserEntity;
 import adaptivex.pedidoscloud.Servicios.Retrofit.Interface.IUserRetrofit;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -25,8 +25,8 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public  class UserServices {
-    public List<User> usersList;
-    public User user;
+    public List<UserEntity> usersList;
+    public UserEntity user;
 
     private Context ctx;
     private HashMap<String, String> registro;

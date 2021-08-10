@@ -40,9 +40,9 @@ public class HelperCategorias extends AsyncTask<Void, Void, Void> {
             registro = new HashMap<String, String>();
             jsonStr = webreq.makeWebServiceCall(Configurador.urlCategorias, WebRequest.POST,registro);
 
-            setRespuesta(GlobalValues.getINSTANCIA().RETURN_OK);
+            setRespuesta(GlobalValues.getInstancia().RETURN_OK);
         }catch (Exception e){
-                setRespuesta(GlobalValues.getINSTANCIA().RETURN_ERROR);
+                setRespuesta(GlobalValues.getInstancia().RETURN_ERROR);
                 Log.println(Log.ERROR,"ErrorHelper:",e.getMessage());
 
         }
@@ -61,7 +61,7 @@ public class HelperCategorias extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPostExecute(Void result) {
         super.onPostExecute(result);
-        if (getRespuesta()== GlobalValues.getINSTANCIA().RETURN_OK){
+        if (getRespuesta()== GlobalValues.getInstancia().RETURN_OK){
             CategoriaParser cp = new CategoriaParser(jsonStr);
             cp.parseJsonToObject();
             categoriaCtr.abrir().limpiar();

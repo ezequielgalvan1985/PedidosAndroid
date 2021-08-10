@@ -6,18 +6,18 @@ package adaptivex.pedidoscloud.Entity;
 
 public class ItemHelado {
     private boolean checked;
-    private Producto helado;
+    private ProductoEntity helado;
     private Integer proporcion;
     private PedidodetalleEntity pedidodetalleEntity;
 
     public ItemHelado(){}
 
-    public ItemHelado(Producto h, boolean c, Integer p){
+    public ItemHelado(ProductoEntity h, boolean c, Integer p){
         setHelado(h);
         setChecked(c);
         setProporcion(p);
     }
-    public ItemHelado(Producto h, boolean c, Integer p, PedidodetalleEntity pd){
+    public ItemHelado(ProductoEntity h, boolean c, Integer p, PedidodetalleEntity pd){
         setHelado(h);
         setChecked(c);
         setProporcion(p);
@@ -32,11 +32,11 @@ public class ItemHelado {
         this.checked = checked;
     }
 
-    public Producto getHelado() {
+    public ProductoEntity getHelado() {
         return helado;
     }
 
-    public void setHelado(Producto helado) {
+    public void setHelado(ProductoEntity helado) {
         this.helado = helado;
     }
 

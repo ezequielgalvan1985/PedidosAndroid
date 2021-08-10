@@ -43,7 +43,7 @@ public class HelperParameters extends AsyncTask<Void, Void, Void> {
             WebRequest webreq = new WebRequest();
             TEXT_RESPONSE = webreq.makeWebServiceCall(Configurador.urlParameters, WebRequest.POST, null);
         }catch (Exception e){
-            setRespuesta(GlobalValues.getINSTANCIA().RETURN_ERROR);
+            setRespuesta(GlobalValues.getInstancia().RETURN_ERROR);
             Log.println(Log.ERROR,"ErrorHelper:",e.getMessage());
         }
     }
@@ -53,7 +53,7 @@ public class HelperParameters extends AsyncTask<Void, Void, Void> {
             WebRequest webreq = new WebRequest();
             TEXT_RESPONSE = webreq.makeWebServiceCall(Configurador.urlParameters, WebRequest.POST, null);
         }catch (Exception e){
-            setRespuesta(GlobalValues.getINSTANCIA().RETURN_ERROR);
+            setRespuesta(GlobalValues.getInstancia().RETURN_ERROR);
             Log.println(Log.ERROR,"ErrorHelper:",e.getMessage());
         }
     }
@@ -63,22 +63,22 @@ public class HelperParameters extends AsyncTask<Void, Void, Void> {
             //Actulizar variables del sistema con los valores de precio
             ParameterRepository parameterCtr = new ParameterRepository(getCtx());
             ParameterEntity p;
-            p = parameterCtr.abrir().findByNombre(GlobalValues.getINSTANCIA().PARAM_PRECIOXKILO);
+            p = parameterCtr.abrir().findByNombre(GlobalValues.getInstancia().PARAM_PRECIOXKILO);
             Constants.PRECIO_HELADO_KILO = p.getValor_decimal();
 
-            p = parameterCtr.abrir().findByNombre(GlobalValues.getINSTANCIA().PARAM_PRECIOXMEDIO);
+            p = parameterCtr.abrir().findByNombre(GlobalValues.getInstancia().PARAM_PRECIOXMEDIO);
             Constants.PRECIO_HELADO_MEDIO = p.getValor_decimal();
 
-            p = parameterCtr.abrir().findByNombre(GlobalValues.getINSTANCIA().PARAM_PRECIOXCUARTO);
+            p = parameterCtr.abrir().findByNombre(GlobalValues.getInstancia().PARAM_PRECIOXCUARTO);
             Constants.PRECIO_HELADO_CUARTO = p.getValor_decimal();
 
-            p = parameterCtr.abrir().findByNombre(GlobalValues.getINSTANCIA().PARAM_PRECIOTRESCUARTOS);
+            p = parameterCtr.abrir().findByNombre(GlobalValues.getInstancia().PARAM_PRECIOTRESCUARTOS);
             Constants.PRECIO_HELADO_TRESCUARTOS = p.getValor_decimal();
 
-            p = parameterCtr.abrir().findByNombre(GlobalValues.getINSTANCIA().PARAM_PRECIOCUCURUCHO);
+            p = parameterCtr.abrir().findByNombre(GlobalValues.getInstancia().PARAM_PRECIOCUCURUCHO);
             Constants.PRECIO_CUCURUCHO = p.getValor_decimal();
         }catch (Exception e){
-            setRespuesta(GlobalValues.getINSTANCIA().RETURN_ERROR);
+            setRespuesta(GlobalValues.getInstancia().RETURN_ERROR);
             Log.println(Log.ERROR,"ErrorHelper:",e.getMessage());
         }
     }
@@ -99,10 +99,10 @@ public class HelperParameters extends AsyncTask<Void, Void, Void> {
                 }
             }
             setPricesGlobalValues();
-            setRespuesta(GlobalValues.getINSTANCIA().RETURN_OK);
+            setRespuesta(GlobalValues.getInstancia().RETURN_OK);
             return true;
         }catch (Exception e){
-            setRespuesta(GlobalValues.getINSTANCIA().RETURN_ERROR);
+            setRespuesta(GlobalValues.getInstancia().RETURN_ERROR);
             Log.println(Log.ERROR,"ErrorHelper:",e.getMessage());
             return false;
         }

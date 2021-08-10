@@ -1,27 +1,15 @@
 package adaptivex.pedidoscloud.Config;
 
 import android.content.Context;
-import android.widget.Toast;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
-import adaptivex.pedidoscloud.Core.FactoryRepositories;
-import adaptivex.pedidoscloud.Repositories.ParameterRepository;
-import adaptivex.pedidoscloud.Repositories.PedidoRepository;
+import adaptivex.pedidoscloud.Entity.UserProfileEntity;
 
-import adaptivex.pedidoscloud.Core.BusinessRules;
-import adaptivex.pedidoscloud.Core.IniciarApp;
-import adaptivex.pedidoscloud.Core.WorkNumber;
 import adaptivex.pedidoscloud.Entity.ItemHelado;
 import adaptivex.pedidoscloud.Entity.LoginResult;
-import adaptivex.pedidoscloud.Entity.ParameterEntity;
 import adaptivex.pedidoscloud.Entity.PedidoEntity;
-import adaptivex.pedidoscloud.Entity.Pote;
-import adaptivex.pedidoscloud.Entity.User;
+import adaptivex.pedidoscloud.Entity.PoteEntity;
 
 /**
  * Created by ezequiel on 26/06/2016.
@@ -46,8 +34,17 @@ public class GlobalValues {
     //UNICA VARIABLE USADA PARA VERIFICAR SI EL USUARIO ESTA LOGUEADO
     // NULL = NO ESTA LOGUEADO
     // SI TIENE VALOR, ENTONCES ESTA LOGUEADO
-    private User usuariologueado;
+    private UserProfileEntity usuariologueado;
     private LoginResult token;
+
+    public UserProfileEntity getUsuariologueado() {
+        return usuariologueado;
+    }
+
+    public void setUsuariologueado(UserProfileEntity usuariologueado) {
+        this.usuariologueado = usuariologueado;
+    }
+
 
     public LoginResult getToken() {
         return token;
@@ -59,13 +56,7 @@ public class GlobalValues {
     public String getAuthorization (){
         return "Token " + this.getToken().getToken();
     }
-    public User getUsuariologueado() {
-        return usuariologueado;
-    }
 
-    public void setUsuariologueado(User usuariologueado) {
-        this.usuariologueado = usuariologueado;
-    }
 
 
 
@@ -131,34 +122,20 @@ public class GlobalValues {
 
 
     //DATOS DE USUARIO
-    public static final String PARAM_USERID         = "PARAM_USERID";
-    public static final String PARAM_EMAIL          = "PARAM_EMAIL";
-    public static final String PARAM_GROUPID        = "PARAM_GROUPID";
-    public static final String PARAM_ENTIDADID      = "PARAM_ENTIDADID";
+    public static final String PARAM_TOKEN     = "PARAM_TOKEN";
+
+    public static final String PARAM_REMEMBERME     = "PARAM_REMEMBERME";
     public static final String PARAM_INSTALLED      = "PARAM_INSTALLED";
-    public static final String PARAM_CONFIGFILE     = "PARAM_CONFIGFILE";
-    public static final String PARAM_REINICIARAPP   = "PARAM_REINICIARAPP";
     public static final String PARAM_SERVICE_STOCK_PRECIOS_ACTIVATE = "PARAM_SERVICE_STOCK_PRECIOS_ACTIVATE";
     public static final String PARAM_SERVICE_STOCK_PRECIOS_WORKING  = "PARAM_SERVICE_STOCK_PRECIOS_WORKING";
-    public static final String PARAM_EMPRESA_ID                     = "PARAM_EMPRESA_ID";
     public static final String PARAM_DOWNLOAD_DATABASE              = "PARAM_DOWNLOAD_DATABASE";
     public static final String PARAM_SERVICE_ENVIO_PEDIDOS_ACTIVATE = "PARAM_SERVICE_ENVIO_PEDIDOS_ACTIVATE";
-    public static final String PARAM_USERNAME                       = "PARAM_USERNAME";
-    public static final String PARAM_LOCALIDAD                      = "PARAM_LOCALIDAD";
-    public static final String PARAM_CALLE                          = "PARAM_CALLE";
-    public static final String PARAM_NRO                            = "PARAM_NRO";
-    public static final String PARAM_PISO                           = "PARAM_PISO";
-    public static final String PARAM_CONTACTO                       = "PARAM_CONTACTO";
-    public static final String PARAM_TELEFONO                       = "PARAM_TELEFONO";
 
     public static final String PARAM_PRECIOXKILO                    = "precioxkilo";
     public static final String PARAM_PRECIOTRESCUARTOS              = "precioxtrescuartos";
     public static final String PARAM_PRECIOXMEDIO                   = "precioxmedio";
     public static final String PARAM_PRECIOXCUARTO                  = "precioxcuarto";
     public static final String PARAM_PRECIOCUCURUCHO                = "preciocucurucho";
-
-    public static final String VALUE_SERVICE_STOCK_PRECIOS_WORKING = "Y";
-    public static final String VALUE_SERVICE_STOCK_PRECIOS_WORKING_NOT = "N";
 
 
     public static  String[] ESTADOS = {"NUEVO","EN PREPARACION","EN CAMINO","ENTREGADO"};
@@ -178,7 +155,7 @@ public class GlobalValues {
     public static final Double consIva = 21.00;
 
 
-    public  static GlobalValues getINSTANCIA() {
+    public  static GlobalValues getInstancia() {
 
         if (INSTANCIA==null) {
 
@@ -273,60 +250,10 @@ public class GlobalValues {
     public List<ItemHelado> listaHeladosSeleccionados;
     public Integer PEDIDO_ACTUAL_NRO_POTE;
     public Integer PEDIDO_ACTUAL_MEDIDA_POTE;
-    public Pote PEDIDO_ACTUAL_POTE;
+    public PoteEntity PEDIDO_ACTUAL_POTE;
 
 
 
-    public long crearNuevoPedido(Context ctx){
-        try{
-            long id = 0;
-            Date fecha      = new Date();
-            Calendar cal    = Calendar.getInstance();
-            fecha           = cal.getTime();
-            IniciarApp ia = new IniciarApp(ctx);
-            ia.refreshHorariosOpenFromServer();
-
-
-            BusinessRules br = new BusinessRules(ctx);
-
-            if (br.checkLocalOpen(fecha)){
-                ia.refreshPromosFromServer();
-                ia.refreshPriceFromServer();
-                ia.refreshHeladosDisponiblesFromServer();
-
-                PedidoRepository gestdb = new PedidoRepository(ctx);
-                DateFormat df1  = new SimpleDateFormat("yyyy-MM-dd");
-                String fechaDMY = df1.format(fecha);
-
-                //Nuevo Pedido
-                PedidoEntity pedido = new PedidoEntity();
-                pedido.setEstadoId(Constants.ESTADO_NUEVO);
-                pedido.setCliente_id(GlobalValues.getINSTANCIA().getUsuariologueado().getId());
-                pedido.setCreated(fechaDMY);
-
-                id = gestdb.abrir().agregar(pedido);
-                pedido.setAndroid_id(id);
-                gestdb.cerrar();
-                FactoryRepositories.getInstancia().PEDIDO_TEMPORAL = new PedidoEntity();
-                FactoryRepositories.getInstancia().PEDIDO_TEMPORAL = pedido;
-
-                gestdb.cerrar();
-                Toast.makeText(ctx, "Generando Nuevo Pedido  "+ String.valueOf(id) , Toast.LENGTH_SHORT).show();
-
-                //Refrescar los paramteros
-                User u = GlobalValues.getINSTANCIA().getUsuariologueado();
-
-                ParameterRepository pc = new ParameterRepository(ctx);
-                ParameterEntity p = pc.abrir().findByNombre(Constants.PARAM_PRECIO_CUCURUCHO);
-                this.PRECIO_CUCURUCHO_MONEY =  WorkNumber.moneyFormat(p.getValor_decimal());
-                this.PRECIO_CUCURUCHO_DOUBLE =  WorkNumber.getValue(p.getValor_decimal());
-            }
-            return id;
-        }catch (Exception e ){
-            Toast.makeText(ctx, "Error: " +e.getMessage(),Toast.LENGTH_LONG).show();
-            return 0;
-        }
-    }
 
 
 

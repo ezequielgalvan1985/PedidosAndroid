@@ -1,20 +1,20 @@
 package adaptivex.pedidoscloud.Config;
 
-import adaptivex.pedidoscloud.Entity.User;
+import adaptivex.pedidoscloud.Entity.UserEntity;
 
 public class UserSessionLogin {
     private static UserSessionLogin INSTANCIA;
-    private User user;
+    private UserEntity user;
 
-    public User getUser() {
+    public UserEntity getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(UserEntity user) {
         this.user = user;
     }
 
-    public static UserSessionLogin getINSTANCIA() {
+    public static UserSessionLogin getInstancia() {
         if (INSTANCIA == null) {
             INSTANCIA = new UserSessionLogin();
         }

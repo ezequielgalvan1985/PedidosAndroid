@@ -67,7 +67,7 @@ public class HelperHorarios extends AsyncTask<Void, Void, Void> {
         }catch (Exception e){
             if (pDialog.isShowing())
                 pDialog.dismiss();
-                setRespuesta(GlobalValues.getINSTANCIA().RETURN_ERROR);
+                setRespuesta(GlobalValues.getInstancia().RETURN_ERROR);
 
 
             Log.println(Log.ERROR,"ErrorHelper:",e.getMessage());
@@ -100,7 +100,7 @@ public class HelperHorarios extends AsyncTask<Void, Void, Void> {
                 for (int i = 0; i < hp.getListadoHorarios().size(); i++) {
                     controller.abrir().agregar(hp.getListadoHorarios().get(i));
                 }
-                setRespuesta(GlobalValues.getINSTANCIA().RETURN_OK);
+                setRespuesta(GlobalValues.getInstancia().RETURN_OK);
 
                 break;
 

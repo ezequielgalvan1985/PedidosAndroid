@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,10 +16,10 @@ import android.widget.Toast;
 
 import adaptivex.pedidoscloud.Config.Constants;
 import adaptivex.pedidoscloud.Config.GlobalValues;
-import adaptivex.pedidoscloud.Core.FactoryRepositories;
+import adaptivex.pedidoscloud.Repositories.FactoryRepositories;
 import adaptivex.pedidoscloud.Repositories.PedidoRepository;
 import adaptivex.pedidoscloud.Repositories.UserRepository;
-import adaptivex.pedidoscloud.Entity.User;
+import adaptivex.pedidoscloud.Entity.UserEntity;
 import adaptivex.pedidoscloud.R;
 import adaptivex.pedidoscloud.Servicios.Helpers.HelperUser;
 
@@ -94,13 +95,16 @@ public class CargarDireccionFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_cargar_direccion, container, false);
-        GlobalValues.getINSTANCIA().CURRENT_FRAGMENT_NUEVO_PEDIDO = GlobalValues.getINSTANCIA().NP_CARGAR_DIRECCION;
-        //Cargar datos del usuario logueado
+        try{
+            View v = inflater.inflate(R.layout.fragment_cargar_direccion, container, false);
+            GlobalValues.getInstancia().CURRENT_FRAGMENT_NUEVO_PEDIDO = GlobalValues.getInstancia().NP_CARGAR_DIRECCION;
+            //Cargar datos del usuario logueado
 
-        UserRepository uc = new UserRepository(v.getContext());
-        User u = uc.abrir().findUser(GlobalValues.getINSTANCIA().getUsuariologueado().getId());
-        if (u!=null){
+
+            if (GlobalValues.getInstancia().getUsuariologueado()==null){
+                Toast.makeText(v.getContext(), "Error: No se pudo obtener los datos de usuario", Toast.LENGTH_SHORT).show();
+                return null;
+            }
             //Asignar los valores a los campos
             txtTelefono   = (AutoCompleteTextView) v.findViewById(R.id.cargar_direccion_telefono);
             txtLocalidad  = (AutoCompleteTextView) v.findViewById(R.id.cargar_direccion_localidad);
@@ -110,6 +114,14 @@ public class CargarDireccionFragment extends Fragment {
             txtContacto   = (AutoCompleteTextView) v.findViewById(R.id.cargar_direccion_contacto);
             lblTitulo = (TextView) v.findViewById(R.id.cargar_direccion_lbl_titulo);
             btnSiguiente = (Button) v.findViewById(R.id.cargar_direccion_btn_siguiente);
+
+            txtTelefono.setText(GlobalValues.getInstancia().getUsuariologueado().getTelefono());
+            txtCalle.setText(GlobalValues.getInstancia().getUsuariologueado().getCalle());
+            txtPiso.setText(GlobalValues.getInstancia().getUsuariologueado().getPiso());
+            txtNro.setText(GlobalValues.getInstancia().getUsuariologueado().getNro());
+            txtContacto.setText(GlobalValues.getInstancia().getUsuariologueado().getContacto());
+
+
 
             btnSiguiente.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -126,19 +138,14 @@ public class CargarDireccionFragment extends Fragment {
                                 openFragmentCargarCantidad();
                             }
                         }
-
-
                     }
                 }
             });
-        }else{
-            Toast.makeText(v.getContext(), "Error: No se pudo obtener los datos de usuario", Toast.LENGTH_SHORT).show();
+            return v;
+        }catch(Exception e){
+            Log.e("CargarDireccion",e.getMessage());
+            return null;
         }
-
-
-
-
-        return v;
     }
     public void setTitle(){
         if (MODE_EDIT_USER){
@@ -159,7 +166,7 @@ public class CargarDireccionFragment extends Fragment {
     public boolean saveDireccionUser() {
         try{
             UserRepository uc = new UserRepository(getContext());
-            User u = uc.abrir().getUserDB(GlobalValues.getINSTANCIA().getUsuariologueado().getId());
+            UserEntity u = uc.abrir().getUserDB(GlobalValues.getInstancia().getUsuariologueado().getId());
             uc.abrir().editDB(u);
 
             //Envia datos al servidor

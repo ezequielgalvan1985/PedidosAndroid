@@ -11,7 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import adaptivex.pedidoscloud.Config.GlobalValues;
-import adaptivex.pedidoscloud.Core.FactoryRepositories;
+import adaptivex.pedidoscloud.Repositories.FactoryRepositories;
 import adaptivex.pedidoscloud.Entity.PedidoEntity;
 import adaptivex.pedidoscloud.R;
 import adaptivex.pedidoscloud.View.RVAdapters.RVAdapterPedido;
@@ -86,15 +86,15 @@ public class ListadoPedidosFragment extends Fragment {
             List<PedidoEntity> listaPedido;
             //DETERINAR QUE LISTADO SE VA A MOSTRAR
 
-            if(GlobalValues.getINSTANCIA().getESTADO_ID_SELECCIONADO() == GlobalValues.getINSTANCIA().consPedidoEstadoEnviado) {
-                listaPedido = FactoryRepositories.getInstancia().getPedidoRepository().abrir().findByEstadoId(GlobalValues.getINSTANCIA().consPedidoEstadoEnviado);
-            }else if(GlobalValues.getINSTANCIA().getESTADO_ID_SELECCIONADO() == GlobalValues.getINSTANCIA().consPedidoEstadoNuevo){
-                listaPedido = FactoryRepositories.getInstancia().getPedidoRepository().abrir().findByEstadoId(GlobalValues.getINSTANCIA().consPedidoEstadoNuevo);
+            if(GlobalValues.getInstancia().getESTADO_ID_SELECCIONADO() == GlobalValues.getInstancia().consPedidoEstadoEnviado) {
+                listaPedido = FactoryRepositories.getInstancia().getPedidoRepository().abrir().findByEstadoId(GlobalValues.getInstancia().consPedidoEstadoEnviado);
+            }else if(GlobalValues.getInstancia().getESTADO_ID_SELECCIONADO() == GlobalValues.getInstancia().consPedidoEstadoNuevo){
+                listaPedido = FactoryRepositories.getInstancia().getPedidoRepository().abrir().findByEstadoId(GlobalValues.getInstancia().consPedidoEstadoNuevo);
             }else{
                 listaPedido = FactoryRepositories.getInstancia().getPedidoRepository().abrir().obtenerTodos();
             }
 
-            GlobalValues.getINSTANCIA().setESTADO_ID_SELECCIONADO(GlobalValues.getINSTANCIA().consPedidoEstadoTodos);
+            GlobalValues.getInstancia().setESTADO_ID_SELECCIONADO(GlobalValues.getInstancia().consPedidoEstadoTodos);
 
             ArrayList<PedidoEntity> arrayOfPedidos = new ArrayList<PedidoEntity>();
             String datos = "";

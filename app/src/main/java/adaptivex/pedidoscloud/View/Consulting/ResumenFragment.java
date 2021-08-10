@@ -15,7 +15,7 @@ import android.widget.Toast;
 import java.util.List;
 
 import adaptivex.pedidoscloud.Config.GlobalValues;
-import adaptivex.pedidoscloud.Core.FactoryRepositories;
+import adaptivex.pedidoscloud.Repositories.FactoryRepositories;
 import adaptivex.pedidoscloud.Repositories.ClienteRepository;
 import adaptivex.pedidoscloud.Repositories.PedidoRepository;
 import adaptivex.pedidoscloud.Repositories.ProductoRepository;
@@ -90,11 +90,11 @@ public class ResumenFragment extends Fragment {
                 btnEliminarPedidosEnviados_resumen = (Button) vista.findViewById(R.id.btnEliminarPedidosEnviados_resumen);
                 btnEliminarPedidosEnviados_resumen.setOnClickListener(new onClickButton());
 
-                //Cursor cursorPedidosPendientes = pedidoCtr.abrir().findByEstadoId(GlobalValues.getINSTANCIA().ESTADO_NUEVO);
-                int pendientes = FactoryRepositories.getInstancia().getPedidoRepository().findByEstadoId(GlobalValues.getINSTANCIA().ESTADO_NUEVO).size();
+                //Cursor cursorPedidosPendientes = pedidoCtr.abrir().findByEstadoId(GlobalValues.getInstancia().ESTADO_NUEVO);
+                int pendientes = FactoryRepositories.getInstancia().getPedidoRepository().findByEstadoId(GlobalValues.getInstancia().ESTADO_NUEVO).size();
                 pedidosPendientes = String.valueOf(pendientes);
 
-                int enviados = FactoryRepositories.getInstancia().getPedidoRepository().findByEstadoId(GlobalValues.getINSTANCIA().ESTADO_ENVIADO).size();
+                int enviados = FactoryRepositories.getInstancia().getPedidoRepository().findByEstadoId(GlobalValues.getInstancia().ESTADO_ENVIADO).size();
                 pedidosEnviados = String.valueOf(enviados);
 
                 //Setear variables
@@ -105,14 +105,16 @@ public class ResumenFragment extends Fragment {
                 tvPedidosEnviados.setText(pedidosEnviados);
 
                 TextView tvUserLogued = (TextView) vista.findViewById(R.id.tvUserLogued);
-                usuarioLogueado = GlobalValues.getINSTANCIA().getUsuariologueado().getUserDescription();
+                usuarioLogueado = GlobalValues.getInstancia().getUsuariologueado().getContacto();
                 tvUserLogued.setText(usuarioLogueado);
 
                 Integer cantidadclientes = clienteCtr.abrir().obtenerTodos().getCount();
                 TextView tvCantidadClientes = (TextView) vista.findViewById(R.id.tvCantidadClientes);
                 tvCantidadClientes.setText(String.valueOf(cantidadclientes));
 
-                Integer cantidadproductos = productoCtr.abrir().findAll().getCount();
+                Integer cantidadproductos =
+                        FactoryRepositories.getInstancia().getProductoRepository().abrir().findAll().size();
+
                 TextView tvCantidadProductos = (TextView) vista.findViewById(R.id.tvCantidadProductos);
                 tvCantidadProductos.setText(String.valueOf(cantidadproductos));
 
@@ -131,7 +133,7 @@ public class ResumenFragment extends Fragment {
                     case R.id.btnEliminarPedidosEnviados_resumen:
                         //Buscar Pedidos Enviados
 
-                        List<PedidoEntity> listadoPedidos= FactoryRepositories.getInstancia().getPedidoRepository().findByEstadoId(GlobalValues.getINSTANCIA().ESTADO_ENVIADO);
+                        List<PedidoEntity> listadoPedidos= FactoryRepositories.getInstancia().getPedidoRepository().findByEstadoId(GlobalValues.getInstancia().ESTADO_ENVIADO);
                             for (PedidoEntity pedido : listadoPedidos)
                             {
                                 FactoryRepositories

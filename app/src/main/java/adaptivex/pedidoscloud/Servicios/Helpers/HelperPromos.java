@@ -12,7 +12,7 @@ import adaptivex.pedidoscloud.Config.Configurador;
 import adaptivex.pedidoscloud.Config.GlobalValues;
 import adaptivex.pedidoscloud.Repositories.PromoRepository;
 import adaptivex.pedidoscloud.Core.parserJSONtoModel.PromoParser;
-import adaptivex.pedidoscloud.Entity.Promo;
+import adaptivex.pedidoscloud.Entity.PromoEntity;
 import adaptivex.pedidoscloud.Servicios.WebRequest;
 
 /**
@@ -22,7 +22,7 @@ import adaptivex.pedidoscloud.Servicios.WebRequest;
 public class HelperPromos extends AsyncTask<Void, Void, Void> {
     private Context ctx;
     private HashMap<String,String> registro;
-    private Promo promo;
+    private PromoEntity promo;
     private PromoRepository promoCtr;
     private int respuesta; //1=ok, 200=error
     private int opcion; //1 enviar Post Promo
@@ -44,7 +44,7 @@ public class HelperPromos extends AsyncTask<Void, Void, Void> {
             jsonStr = webreq.makeWebServiceCall(Configurador.urlPromos, WebRequest.POST,null);
 
         }catch (Exception e){
-                setRespuesta(GlobalValues.getINSTANCIA().RETURN_ERROR);
+                setRespuesta(GlobalValues.getInstancia().RETURN_ERROR);
                 Log.println(Log.ERROR,"ErrorHelper:",e.getMessage());
 
         }
@@ -75,8 +75,8 @@ public class HelperPromos extends AsyncTask<Void, Void, Void> {
             //promoCtr.abrir().limpiar();
             // Recorrer Lista
             for (int i = 0; i < cp.getListadoPromos().size(); i++) {
-                Promo promo_server = cp.getListadoPromos().get(i);
-                Promo promo_local = promoCtr.abrir().findById(promo_server.getId());
+                PromoEntity promo_server = cp.getListadoPromos().get(i);
+                PromoEntity promo_local = promoCtr.abrir().findById(promo_server.getId());
                 if (promo_local==null || promo_local.getId()==null){
 
                         promoCtr.abrir().add(promo_server);
@@ -87,7 +87,7 @@ public class HelperPromos extends AsyncTask<Void, Void, Void> {
 
 
             }
-            setRespuesta(GlobalValues.getINSTANCIA().RETURN_OK);
+            setRespuesta(GlobalValues.getInstancia().RETURN_OK);
 
             if (pDialog.isShowing()) pDialog.dismiss();
 

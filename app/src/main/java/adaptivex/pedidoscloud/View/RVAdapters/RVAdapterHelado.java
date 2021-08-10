@@ -14,12 +14,12 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import adaptivex.pedidoscloud.Config.GlobalValues;
-import adaptivex.pedidoscloud.Core.FactoryRepositories;
+import adaptivex.pedidoscloud.Repositories.FactoryRepositories;
 import adaptivex.pedidoscloud.Repositories.PedidodetalleRepository;
 import adaptivex.pedidoscloud.Repositories.ProductoRepository;
 import adaptivex.pedidoscloud.Entity.ItemHelado;
 import adaptivex.pedidoscloud.Entity.PedidodetalleEntity;
-import adaptivex.pedidoscloud.Entity.Producto;
+import adaptivex.pedidoscloud.Entity.ProductoEntity;
 import adaptivex.pedidoscloud.R;
 
 /**
@@ -27,12 +27,12 @@ import adaptivex.pedidoscloud.R;
  */
 
 public class RVAdapterHelado extends RecyclerView.Adapter<RVAdapterHelado.HeladoViewHolder> {
-    private ArrayList<Object> productos;
+    private ArrayList<ProductoEntity> productos;
     private ContextWrapper cw;
     private Context ctx;
     private ArrayList<PedidodetalleEntity> listaHeladosSelected = new ArrayList<PedidodetalleEntity>();
     private ArrayList<ItemHelado> listaItemsHelados = new ArrayList<ItemHelado>();
-    private ArrayList<Object> listaHelados = new ArrayList<Object>();
+    private ArrayList<ProductoEntity> listaHelados = new ArrayList<ProductoEntity>();
     private long pedido_android_id ;
     private Integer pedido_nro_pote ;
 
@@ -48,7 +48,7 @@ public class RVAdapterHelado extends RecyclerView.Adapter<RVAdapterHelado.Helado
         this.ctx = ctx;
     }
 
-    public ArrayList<Object> getProductos() {
+    public ArrayList<ProductoEntity> getProductos() {
         return productos;
     }
 
@@ -58,7 +58,7 @@ public class RVAdapterHelado extends RecyclerView.Adapter<RVAdapterHelado.Helado
 
     public void init( Context c, long pedido_android_id, Integer pedido_nro_pote){
         /*
-        * 1 GlobalValues.getINSTANCIA().listaHeladosSeleccionados es un arraylist de ItemHelado, con todos los productos, en el evento load, machean con los items seleccionados del pote
+        * 1 GlobalValues.getInstancia().listaHeladosSeleccionados es un arraylist de ItemHelado, con todos los productos, en el evento load, machean con los items seleccionados del pote
         *       este actua de espejo a lo que vemos en el formulario
         *
         * 2 listaItemsHelados es un arraylist de ItemHelado que solo contiene los seleccionados en el pote
@@ -67,7 +67,7 @@ public class RVAdapterHelado extends RecyclerView.Adapter<RVAdapterHelado.Helado
         setCtx(c);
         setPedido_android_id(pedido_android_id);
         setPedido_nro_pote(pedido_nro_pote);
-        GlobalValues.getINSTANCIA().listaHeladosSeleccionados = cargarListaItemsHelados();
+        GlobalValues.getInstancia().listaHeladosSeleccionados = cargarListaItemsHelados();
 
     }
 
@@ -82,15 +82,17 @@ public class RVAdapterHelado extends RecyclerView.Adapter<RVAdapterHelado.Helado
         ArrayList<PedidodetalleEntity> listaHeladosSelected = new ArrayList<PedidodetalleEntity>();
         listaHeladosSelected = pdc.abrir().parseCursorToArrayList(c);
 
-        ProductoRepository dbHelper = new ProductoRepository(getCtx());
-        listaHelados = dbHelper.abrir().findAllToArrayList();
+        listaHelados =
+                FactoryRepositories
+                        .getInstancia()
+                        .getProductoRepository().abrir().findAllToArrayList();
         setProductos(listaHelados);
 
         //crear la lista de Items helado
         //Recorrer lista de productos
 
         for(Object o: listaHelados){
-            Producto p       = (Producto) o;
+            ProductoEntity p       = (ProductoEntity) o;
             PedidodetalleEntity pd = checkHelado(p,listaHeladosSelected);
             ItemHelado ih = new ItemHelado(p, false,75);
 
@@ -105,7 +107,7 @@ public class RVAdapterHelado extends RecyclerView.Adapter<RVAdapterHelado.Helado
     }
 
 
-    public PedidodetalleEntity checkHelado(Producto p, ArrayList<PedidodetalleEntity> listaHeladosSelected ){
+    public PedidodetalleEntity checkHelado(ProductoEntity p, ArrayList<PedidodetalleEntity> listaHeladosSelected ){
         //devuelve el pedidodetalle que coincide con el Producto,
         // y devuelve el pedido detalle para el producto
         //Pregunta si el producto esta dentro de los seleccionados y devuelve el pedidodetalle asociado
@@ -129,7 +131,7 @@ public class RVAdapterHelado extends RecyclerView.Adapter<RVAdapterHelado.Helado
         }
     }
 
-    public void setProductos(ArrayList<Object> productos) {
+    public void setProductos(ArrayList<ProductoEntity> productos) {
         this.productos = productos;
 
     }
@@ -155,9 +157,9 @@ public class RVAdapterHelado extends RecyclerView.Adapter<RVAdapterHelado.Helado
         //Completa el Item Helado dentro del recycle view
 
 
-        ItemHelado item = GlobalValues.getINSTANCIA().listaHeladosSeleccionados.get(i);
+        ItemHelado item = GlobalValues.getInstancia().listaHeladosSeleccionados.get(i);
 
-        Producto p = item.getHelado();
+        ProductoEntity p = item.getHelado();
         holder.tvId.setText(String.valueOf(p.getId()));
         holder.tvNombre.setText(p.getNombre());
 
@@ -223,7 +225,7 @@ public class RVAdapterHelado extends RecyclerView.Adapter<RVAdapterHelado.Helado
     public static class HeladoViewHolder extends RecyclerView.ViewHolder
             implements  View.OnClickListener{
 
-        private ArrayList<Object> productos = new ArrayList<Object>();
+        private ArrayList<ProductoEntity> productos = new ArrayList<ProductoEntity>();
         private Context ctx;
 
         private TextView tvNombre, tvId, tvOptions, tvProporcionDescripcion;
@@ -235,7 +237,7 @@ public class RVAdapterHelado extends RecyclerView.Adapter<RVAdapterHelado.Helado
 
 
 
-        public HeladoViewHolder(View itemView, Context ctx, ArrayList<Object> productos) {
+        public HeladoViewHolder(View itemView, Context ctx, ArrayList<ProductoEntity> productos) {
             super(itemView);
 
             this.productos = productos;
@@ -268,15 +270,15 @@ public class RVAdapterHelado extends RecyclerView.Adapter<RVAdapterHelado.Helado
                 public void onStopTrackingTouch(SeekBar seekBar) {
                     int position  = getAdapterPosition();
                     if (progressChangedValue >= 0 && progressChangedValue <= 50){
-                        GlobalValues.getINSTANCIA().listaHeladosSeleccionados.get(position).setProporcion(progressChangedValue);
+                        GlobalValues.getInstancia().listaHeladosSeleccionados.get(position).setProporcion(progressChangedValue);
                         tvProporcionDescripcion.setText("Poco");
                     }
                     if (progressChangedValue >= 50 && progressChangedValue <= 100){
-                        GlobalValues.getINSTANCIA().listaHeladosSeleccionados.get(position).setProporcion(progressChangedValue);
+                        GlobalValues.getInstancia().listaHeladosSeleccionados.get(position).setProporcion(progressChangedValue);
                         tvProporcionDescripcion.setText("Equilibrado");
                     }
                     if (progressChangedValue >= 100 && progressChangedValue <= 150){
-                        GlobalValues.getINSTANCIA().listaHeladosSeleccionados.get(position).setProporcion(progressChangedValue);
+                        GlobalValues.getInstancia().listaHeladosSeleccionados.get(position).setProporcion(progressChangedValue);
                         tvProporcionDescripcion.setText("Mucho");
                     }
 
@@ -290,12 +292,12 @@ public class RVAdapterHelado extends RecyclerView.Adapter<RVAdapterHelado.Helado
         @Override
         public void onClick(View v) {
             int position  = getAdapterPosition();
-            Producto producto = (Producto)this.productos.get(position);
+            ProductoEntity producto = (ProductoEntity)this.productos.get(position);
             switch (v.getId()){
                 case R.id.item_helado_chk:
                     //Preguntar si esta marcado o no
-                    boolean newState = !GlobalValues.getINSTANCIA().listaHeladosSeleccionados.get(position).isChecked();
-                    GlobalValues.getINSTANCIA().listaHeladosSeleccionados.get(position).setChecked( newState);
+                    boolean newState = !GlobalValues.getInstancia().listaHeladosSeleccionados.get(position).isChecked();
+                    GlobalValues.getInstancia().listaHeladosSeleccionados.get(position).setChecked( newState);
                     if (newState){
                         seekProporcionHelado.setVisibility(View.VISIBLE);
                         tvProporcionDescripcion.setVisibility(View.VISIBLE);

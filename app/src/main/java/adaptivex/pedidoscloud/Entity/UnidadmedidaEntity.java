@@ -3,7 +3,7 @@ package adaptivex.pedidoscloud.Entity;
 /**
  * Created by ezequiel on 23/05/2016.
  */
-public class Unidadmedida {
+public class UnidadmedidaEntity {
     private Integer id;
     private String nombre;
     private String descripcion;

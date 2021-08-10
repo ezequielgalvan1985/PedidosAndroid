@@ -2,7 +2,7 @@ package adaptivex.pedidoscloud.Core.parserJSONtoModel;
 
 import android.util.Log;
 
-import adaptivex.pedidoscloud.Entity.User;
+import adaptivex.pedidoscloud.Entity.UserEntity;
 import adaptivex.pedidoscloud.Entity.DatabaseHelper.UserDataBaseHelper;
 
 import org.json.JSONObject;
@@ -19,13 +19,13 @@ public class UserParser {
     private String message;
     private JSONObject data;
     private JSONObject userjson;
-    private User user;
+    private UserEntity user;
 
     public UserParser(){
-        this.user = new User();
+        this.user = new UserEntity();
     }
 
-    public User parsearRespuesta(String json){
+    public UserEntity parsearRespuesta(String json){
 
         try{
             JSONObject object = new JSONObject(json);
@@ -34,7 +34,7 @@ public class UserParser {
             setMessage( object.getString("message"));
 
             if (Integer.parseInt(getStatus())== 200){
-                User vuser = new User();
+                UserEntity vuser = new UserEntity();
                 JSONObject data = new JSONObject(object.getString("data"));
                 setData(data);
 
@@ -88,11 +88,11 @@ public class UserParser {
         this.data = data;
     }
 
-    public User getUser() {
+    public UserEntity getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(UserEntity user) {
         this.user = user;
     }
 

@@ -7,7 +7,7 @@ import adaptivex.pedidoscloud.Core.WorkNumber;
 /**
  * Created by ezequiel on 23/05/2016.
  */
-public class Promo {
+public class PromoEntity {
 
     //Se guardan en la BD
     private Integer id;

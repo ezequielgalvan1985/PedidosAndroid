@@ -18,7 +18,8 @@ import android.widget.Toast;
 
 import adaptivex.pedidoscloud.Config.Constants;
 import adaptivex.pedidoscloud.Config.GlobalValues;
-import adaptivex.pedidoscloud.Core.FactoryRepositories;
+import adaptivex.pedidoscloud.Entity.ParameterEntity;
+import adaptivex.pedidoscloud.Repositories.FactoryRepositories;
 import adaptivex.pedidoscloud.Core.IniciarApp;
 import adaptivex.pedidoscloud.Entity.PedidoEntity;
 import adaptivex.pedidoscloud.Servicios.Helpers.HelperPedidos;
@@ -54,6 +55,10 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Toast.makeText(this, "Actualizando la informacion del sistema...", Toast.LENGTH_LONG);
+
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -123,7 +128,10 @@ public class MainActivity extends AppCompatActivity
 
 
         if (id == R.id.mnu_nuevo_pedido) {
-            if (GlobalValues.getINSTANCIA().crearNuevoPedido(this) > 0){
+            if (FactoryRepositories.getInstancia()
+                    .getPedidoRepository()
+                    .abrir()
+                    .crearNuevoPedido() > 0){
                 fragment = new CargarDireccionFragment();
                 fragmentTransaction = true;
             }
@@ -155,7 +163,7 @@ public class MainActivity extends AppCompatActivity
                 Log.println(Log.ERROR, "MainActivity:", " No Hay Pedidos Generados ");
             }
 
-            GlobalValues.getINSTANCIA().setVgFlagMenuNuevoPedido(true);
+            GlobalValues.getInstancia().setVgFlagMenuNuevoPedido(true);
             fragmentTransaction = true;
             fragment.setArguments(args);
 
@@ -187,7 +195,7 @@ public class MainActivity extends AppCompatActivity
                 case R.id.nav_pedidodetalles:
                     fragment = new ListadoPedidodetallesFragment();
                     fragmentTransaction = true;
-                    GlobalValues.getINSTANCIA().setActualFragment(GlobalValues.getINSTANCIA().LISTADOPEDIDODETALLES);
+                    GlobalValues.getInstancia().setActualFragment(GlobalValues.getInstancia().LISTADOPEDIDODETALLES);
                     break;
                 case R.id.nav_promos:
                     try{
@@ -202,8 +210,8 @@ public class MainActivity extends AppCompatActivity
                         fragment = new ListadoPedidosFragment();
                         fragmentTransaction = true;
 
-                        GlobalValues.getINSTANCIA().setActualFragment(GlobalValues.getINSTANCIA().LISTADOPEDIDOS);
-                        GlobalValues.getINSTANCIA().setESTADO_ID_SELECCIONADO(GlobalValues.getINSTANCIA().consPedidoEstadoNuevo);
+                        GlobalValues.getInstancia().setActualFragment(GlobalValues.getInstancia().LISTADOPEDIDOS);
+                        GlobalValues.getInstancia().setESTADO_ID_SELECCIONADO(GlobalValues.getInstancia().consPedidoEstadoNuevo);
                     }catch(Exception e){
                         Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
                     }
@@ -212,15 +220,15 @@ public class MainActivity extends AppCompatActivity
                         fragment = new ListadoPedidosFragment();
                         fragmentTransaction = true;
 
-                        GlobalValues.getINSTANCIA().setActualFragment(GlobalValues.getINSTANCIA().LISTADOPEDIDOS);
-                        GlobalValues.getINSTANCIA().setESTADO_ID_SELECCIONADO(GlobalValues.getINSTANCIA().consPedidoEstadoEnviado);
+                        GlobalValues.getInstancia().setActualFragment(GlobalValues.getInstancia().LISTADOPEDIDOS);
+                        GlobalValues.getInstancia().setESTADO_ID_SELECCIONADO(GlobalValues.getInstancia().consPedidoEstadoEnviado);
                     }catch(Exception e){
                         Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
                     }
                     break;
                 case R.id.nav_enviarpedidospendientes:
                     try {
-                        HelperPedidos hp = new HelperPedidos(getBaseContext(), GlobalValues.getINSTANCIA().OPTION_HELPER_ENVIO_PEDIDOS_PENDIENTES);
+                        HelperPedidos hp = new HelperPedidos(getBaseContext(), GlobalValues.getInstancia().OPTION_HELPER_ENVIO_PEDIDOS_PENDIENTES);
                         hp.execute();
                     }catch(Exception e){
                         Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
@@ -229,7 +237,7 @@ public class MainActivity extends AppCompatActivity
                 case  R.id.nav_categorias:
                     fragment = new ListadoCategoriasFragment();
                     fragmentTransaction = true;
-                    GlobalValues.getINSTANCIA().setActualFragment(GlobalValues.getINSTANCIA().LISTADOCATEGORIAS);
+                    GlobalValues.getInstancia().setActualFragment(GlobalValues.getInstancia().LISTADOCATEGORIAS);
                     break;
 
                 case R.id.nav_productos:
@@ -249,7 +257,7 @@ public class MainActivity extends AppCompatActivity
                 case R.id.nav_marcas:
                     fragment = new ListadoMarcasFragment();
                     fragmentTransaction = true;
-                    GlobalValues.getINSTANCIA().setActualFragment(GlobalValues.getINSTANCIA().LISTADOMARCAS);
+                    GlobalValues.getInstancia().setActualFragment(GlobalValues.getInstancia().LISTADOMARCAS);
                     break;
 
                 case R.id.nav_pedidosentrega:
@@ -272,20 +280,20 @@ public class MainActivity extends AppCompatActivity
                     args.putBoolean(Constants.PARAM_MODE_EDIT_USER, Constants.PARAM_MODE_EDIT_USER_ON);
                     fragment.setArguments(args);
                     fragmentTransaction = true;
-                    GlobalValues.getINSTANCIA().setActualFragment(GlobalValues.getINSTANCIA().DATOS_USER);
+                    GlobalValues.getInstancia().setActualFragment(GlobalValues.getInstancia().DATOS_USER);
                     break;
 
                 case R.id.nav_configuracion:
                     try{
                         fragment = new ConfigFragment();
                         fragmentTransaction = true;
-                        GlobalValues.getINSTANCIA().setActualFragment(GlobalValues.getINSTANCIA().CONFIGURACION);
+                        GlobalValues.getInstancia().setActualFragment(GlobalValues.getInstancia().CONFIGURACION);
                     }catch(Exception e){
                         Toast.makeText(this, "Error" + e.getMessage(), Toast.LENGTH_LONG).show();
                     }
                     break;
                 case R.id.nav_logout:
-                    GlobalValues.getINSTANCIA().setUsuariologueado(null);
+                    GlobalValues.getInstancia().setUsuariologueado(null);
                     // Borrar parametro de Base de datos
                     IniciarApp ia = new IniciarApp(getBaseContext());
                     ia.logout();
@@ -296,7 +304,7 @@ public class MainActivity extends AppCompatActivity
                     try{
                         fragment = new HomeFragment();
                         fragmentTransaction = true;
-                        GlobalValues.getINSTANCIA().setActualFragment(GlobalValues.getINSTANCIA().HOME);
+                        GlobalValues.getInstancia().setActualFragment(GlobalValues.getInstancia().HOME);
                     }catch(Exception e){
                         Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
                     }

@@ -1,19 +1,22 @@
-package adaptivex.pedidoscloud.Core;
+package adaptivex.pedidoscloud.Repositories;
 
 import android.content.Context;
+import android.widget.Toast;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
+import adaptivex.pedidoscloud.Config.Constants;
+import adaptivex.pedidoscloud.Config.GlobalValues;
+import adaptivex.pedidoscloud.Core.BusinessRules;
+import adaptivex.pedidoscloud.Core.IAbstractFactoryRepositories;
+import adaptivex.pedidoscloud.Core.IniciarApp;
+import adaptivex.pedidoscloud.Core.WorkNumber;
+import adaptivex.pedidoscloud.Entity.ParameterEntity;
 import adaptivex.pedidoscloud.Entity.PedidoEntity;
-import adaptivex.pedidoscloud.Repositories.CategoriaRepository;
-import adaptivex.pedidoscloud.Repositories.EstadoRepository;
-import adaptivex.pedidoscloud.Repositories.HorarioRepository;
-import adaptivex.pedidoscloud.Repositories.MarcaRepository;
-import adaptivex.pedidoscloud.Repositories.ParameterRepository;
-import adaptivex.pedidoscloud.Repositories.PedidoRepository;
-import adaptivex.pedidoscloud.Repositories.ProductoRepository;
-import adaptivex.pedidoscloud.Repositories.PromoRepository;
-import adaptivex.pedidoscloud.Repositories.UnidadmedidaRepository;
-import adaptivex.pedidoscloud.Repositories.UserProfileRepository;
-import adaptivex.pedidoscloud.Repositories.UserRepository;
+import adaptivex.pedidoscloud.Entity.UserProfileEntity;
 
 public class FactoryRepositories implements IAbstractFactoryRepositories {
     private static FactoryRepositories INSTANCIA;
@@ -59,6 +62,8 @@ public class FactoryRepositories implements IAbstractFactoryRepositories {
     public static void setCtx(Context ctx) {
         ctx = ctx;
     }
+
+
 
 
     @Override

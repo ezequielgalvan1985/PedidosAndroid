@@ -1,8 +1,5 @@
 package adaptivex.pedidoscloud.Servicios;
 
-import android.content.Context;
-
-import adaptivex.pedidoscloud.Core.FactoryRepositories;
 import adaptivex.pedidoscloud.Servicios.Retrofit.CategoriaServices;
 import adaptivex.pedidoscloud.Servicios.Retrofit.EstadoServices;
 import adaptivex.pedidoscloud.Servicios.Retrofit.HorarioServices;
@@ -113,12 +110,7 @@ public class FactoryServices implements IFactoryAbstractServices{
 
     }
 
-    @Override
-    public UserServices getUserServices() {
-        if (users==null)
-            users = new UserServices();
-        return users;
-    }
+
 
 
 }

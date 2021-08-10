@@ -18,14 +18,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import adaptivex.pedidoscloud.Config.Constants;
 import adaptivex.pedidoscloud.Config.GlobalValues;
-import adaptivex.pedidoscloud.Core.FactoryRepositories;
+import adaptivex.pedidoscloud.Repositories.FactoryRepositories;
 import adaptivex.pedidoscloud.Repositories.PedidoRepository;
 import adaptivex.pedidoscloud.Repositories.PedidodetalleRepository;
 import adaptivex.pedidoscloud.Entity.PedidodetalleEntity;
-import adaptivex.pedidoscloud.Entity.Pote;
+import adaptivex.pedidoscloud.Entity.PoteEntity;
 import adaptivex.pedidoscloud.R;
 import adaptivex.pedidoscloud.View.Pedidos.CargarCantidadFragment;
 import adaptivex.pedidoscloud.View.Pedidos.CargarHeladosFragment;
@@ -35,7 +36,7 @@ import adaptivex.pedidoscloud.View.Pedidos.CargarHeladosFragment;
  */
 
 public class RVAdapterPote extends RecyclerView.Adapter<RVAdapterPote.PoteViewHolder> {
-    private ArrayList<Pote> potes;
+    private ArrayList<PoteEntity> potes;
     private ContextWrapper cw;
     private Context ctx;
     private FragmentManager fragmentManager;
@@ -49,7 +50,7 @@ public class RVAdapterPote extends RecyclerView.Adapter<RVAdapterPote.PoteViewHo
         this.ctx = ctx;
     }
 
-    public void RVAdapterPote(ArrayList<Pote> potes){
+    public void RVAdapterPote(ArrayList<PoteEntity> potes){
         this.setPotes(potes);
     }
 
@@ -72,7 +73,7 @@ public class RVAdapterPote extends RecyclerView.Adapter<RVAdapterPote.PoteViewHo
     @Override
     public void onBindViewHolder(final PoteViewHolder holder, int i) {
         //Completa el Item Pote dentro del recycle view
-        final Pote pote = getPotes().get(i);
+        final PoteEntity pote = getPotes().get(i);
 
         holder.txtNro.setText(String.valueOf(getPotes().get(i).getNroPote()));
         holder.txtKilos.setText(getPotes().get(i).getCantidadKilosFormatString());
@@ -110,15 +111,15 @@ public class RVAdapterPote extends RecyclerView.Adapter<RVAdapterPote.PoteViewHo
                         }
 
 
-    public void openEditarHelados(Pote p){
+    public void openEditarHelados(PoteEntity p){
         try{
             Bundle args =new Bundle();
             args.putLong(Constants.PARAM_PEDIDO_ANDROID_ID, p.getPedido().getAndroid_id());
             args.putInt(Constants.PARAM_PEDIDO_NRO_POTE, p.getNroPote());
 
             //Estas variables se usan cuando se da de alta un nuevo pedidodetalle
-            GlobalValues.getINSTANCIA().PEDIDO_ACTUAL_NRO_POTE    = p.getNroPote();
-            GlobalValues.getINSTANCIA().PEDIDO_ACTUAL_MEDIDA_POTE = p.getKilos();
+            GlobalValues.getInstancia().PEDIDO_ACTUAL_NRO_POTE    = p.getNroPote();
+            GlobalValues.getInstancia().PEDIDO_ACTUAL_MEDIDA_POTE = p.getKilos();
 
 
 
@@ -135,20 +136,10 @@ public class RVAdapterPote extends RecyclerView.Adapter<RVAdapterPote.PoteViewHo
         }
     }
 
-    public void openEliminarHelados(Pote pote){
+    public void openEliminarHelados(PoteEntity pote){
         try{
-            PedidoRepository pc = new PedidoRepository(getCtx());
-            PedidodetalleRepository pdc = new PedidodetalleRepository(getCtx());
 
             FactoryRepositories.getInstancia().PEDIDO_TEMPORAL.quitarPote(pote);
-            pdc.abrir().deleteByPote(pote);
-            pc.abrir().edit(FactoryRepositories.getInstancia().PEDIDO_TEMPORAL);
-
-            ArrayList<PedidodetalleEntity> lista = FactoryRepositories.getInstancia().getPedidoRepository().findByAndroidId(FactoryRepositories.getInstancia().PEDIDO_TEMPORAL.getAndroid_id()).getDetalles();
-            FactoryRepositories.getInstancia().PEDIDO_TEMPORAL.setDetalles(lista);
-
-
-
 
             Fragment fragment                       = new CargarCantidadFragment();
             FragmentManager fragmentManager         = getFragmentManager();
@@ -168,11 +159,11 @@ public class RVAdapterPote extends RecyclerView.Adapter<RVAdapterPote.PoteViewHo
         super.onAttachedToRecyclerView(recyclerView);
     }
 
-    public ArrayList<Pote> getPotes() {
+    public ArrayList<PoteEntity> getPotes() {
         return potes;
     }
 
-    public void setPotes(ArrayList<Pote> potes) {
+    public void setPotes(ArrayList<PoteEntity> potes) {
         this.potes = potes;
     }
 
@@ -188,7 +179,7 @@ public class RVAdapterPote extends RecyclerView.Adapter<RVAdapterPote.PoteViewHo
     public static class PoteViewHolder extends RecyclerView.ViewHolder
             implements  View.OnClickListener{
 
-        private ArrayList<Pote> potes = new ArrayList<Pote>();
+        private ArrayList<PoteEntity> potes = new ArrayList<PoteEntity>();
         private Context ctx;
         private CardView cv;
         private TextView txtNro, txtMonto, txtKilos, txtOption;
@@ -197,7 +188,7 @@ public class RVAdapterPote extends RecyclerView.Adapter<RVAdapterPote.PoteViewHo
         OnHeadlineSelectedListener mCallback;
 
 
-        public PoteViewHolder(View itemView, Context ctx, ArrayList<Pote> potes) {
+        public PoteViewHolder(View itemView, Context ctx, ArrayList<PoteEntity> potes) {
             super(itemView);
             this.potes = potes;
             this.ctx = ctx;
@@ -214,7 +205,7 @@ public class RVAdapterPote extends RecyclerView.Adapter<RVAdapterPote.PoteViewHo
         @Override
         public void onClick(View v) {
             int position  = getAdapterPosition();
-            Pote pote = this.potes.get(position);
+            PoteEntity pote = this.potes.get(position);
 
 
         }

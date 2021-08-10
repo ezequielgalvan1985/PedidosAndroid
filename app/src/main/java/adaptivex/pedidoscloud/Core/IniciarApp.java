@@ -5,12 +5,16 @@ package adaptivex.pedidoscloud.Core;
  */
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 import android.widget.Toast;
 
 import adaptivex.pedidoscloud.Config.GlobalValues;
-import adaptivex.pedidoscloud.Repositories.ParameterRepository;
+import adaptivex.pedidoscloud.Entity.LoginResult;
+import adaptivex.pedidoscloud.Entity.UserProfileEntity;
+import adaptivex.pedidoscloud.MainActivity;
+import adaptivex.pedidoscloud.Repositories.FactoryRepositories;
 import adaptivex.pedidoscloud.Repositories.UserRepository;
 import adaptivex.pedidoscloud.Entity.DatabaseHelper.CategoriaDataBaseHelper;
 import adaptivex.pedidoscloud.Entity.DatabaseHelper.ClienteDataBaseHelper;
@@ -25,30 +29,28 @@ import adaptivex.pedidoscloud.Entity.DatabaseHelper.PedidoDataBaseHelper;
 import adaptivex.pedidoscloud.Entity.DatabaseHelper.PedidodetalleDataBaseHelper;
 import adaptivex.pedidoscloud.Entity.DatabaseHelper.ProductoDataBaseHelper;
 import adaptivex.pedidoscloud.Entity.DatabaseHelper.PromoDataBaseHelper;
-import adaptivex.pedidoscloud.Entity.User;
+import adaptivex.pedidoscloud.Entity.UserEntity;
 import adaptivex.pedidoscloud.Entity.DatabaseHelper.UserDataBaseHelper;
 import adaptivex.pedidoscloud.Servicios.FactoryServices;
-import adaptivex.pedidoscloud.Servicios.Helpers.HelperHorarios;
 import adaptivex.pedidoscloud.Servicios.Helpers.HelperParameters;
-import adaptivex.pedidoscloud.Servicios.Helpers.HelperProductos;
 import adaptivex.pedidoscloud.Servicios.Helpers.HelperPromos;
 
 import static java.lang.Thread.sleep;
 
-public  class IniciarApp  {
+public  class IniciarApp {
     private Context context;
 
 
-    public IniciarApp(Context c ){
+    public IniciarApp(Context c) {
         //leer valor de parametro
         setContext(c);
         iniciarFactories();
-
+        checkInstalation();
     }
 
 
-    public  boolean  iniciarBD(){
-        try{
+    public boolean createDataBase() {
+        try {
 
             SQLiteDatabase db;
             //Tablas
@@ -83,7 +85,6 @@ public  class IniciarApp  {
             db.execSQL(ped.DROP_TABLE);
             db.execSQL(ped.CREATE_TABLE);
             db.close();
-
 
 
             ParameterDataBaseHelper par = new ParameterDataBaseHelper(getContext());
@@ -136,62 +137,35 @@ public  class IniciarApp  {
             db.execSQL(up.CREATE_TABLE);
             db.close();
 
-            //HorarioDataBaseHelper   tabla_horario   = new HorarioDataBaseHelper(getContext());
-            //CategoriaDataBaseHelper tabla_categoria = new CategoriaDataBaseHelper(getContext());
-            //EstadoDataBaseHelper    tabla_estado    = new EstadoDataBaseHelper(getContext());
-
-            //List<DatabaseHelper> listaTablas = null;
-
-            //listaTablas.add(tabla_estado);
-            //listaTablas.add(tabla_categoria);
-            //listaTablas.add(tabla_horario);
-
-            //crearTablas(listaTablas);
-
             return true;
-        }catch(Exception e ){
-            Log.println(Log.DEBUG,"IniciarrApp: ", e.getMessage());
-            Toast.makeText(context,"IniciarApp:"+e.getMessage(), Toast.LENGTH_LONG);
+        } catch (Exception e) {
+            Log.println(Log.DEBUG, "IniciarrApp: ", e.getMessage());
+            Toast.makeText(context, "IniciarApp:" + e.getMessage(), Toast.LENGTH_LONG);
             return false;
         }
 
     }
 
-    /* no se usa, desarrollo por hacer
-    public boolean crearTablas(List<DatabaseHelper> listaTablas){
-        try{
-            SQLiteDatabase db;
-            for(DatabaseHelper tabla: listaTablas){
-
-                Log.println(Log.INFO,"Tabla: ", tabla.getNameTable());
-                db = tabla.getWritableDatabase();
-                db.execSQL(tabla.getDropTable());
-                db.execSQL(tabla.getCreateTable());
-                db.close();
-            }
-            return true;
-        }catch (Exception e){
-            Log.println(Log.DEBUG,"Error al Crear Tablas: ", e.getMessage());
-            return false;
-        }
-    }
-*/
-    public boolean loginRemember(User user){
-        try{
+    public boolean loginRemember(UserEntity user) {
+        try {
             /* Lee parametros, y los setea con el valor del usuario. Si no existen, los crea */
             boolean respuesta = true;
-            UserRepository uc = new UserRepository(this.getContext());
-            User u = uc.abrir().findUser(user.getId());
+            ParameterEntity p2;
+            p2 = FactoryRepositories
+                    .getInstancia()
+                    .getParameterRepository()
+                    .abrir()
+                    .findByNombre(GlobalValues.getInstancia().PARAM_REMEMBERME);
+            p2.setValor_texto("N");
 
-            user.setLogued("Y");
-            if (u == null){
-                uc.abrir().addDB(user);
-            }else{
-                uc.abrir().editDB(user);
-            }
+            FactoryRepositories
+                    .getInstancia()
+                    .getParameterRepository()
+                    .abrir()
+                    .modificar(p2);
 
             return respuesta;
-        }catch(Exception e){
+        } catch (Exception e) {
             Toast.makeText(getContext(), "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
             return false;
         }
@@ -199,42 +173,21 @@ public  class IniciarApp  {
     }
 
 
-    public boolean isLoginRemember(){
-        try{
-            boolean respuesta = false;
+    public void logout() {
+        try {
             UserRepository uc = new UserRepository(this.getContext());
-            User u = uc.abrir().findUser(1);
-
-            if (u!=null){
-                if(u.getLogued().equals("Y")){
-                    respuesta = true;
-                   // GlobalValues.getINSTANCIA().setUserlogued(u);
-                };
-            }
-            return respuesta;
-        }catch(Exception e){
-            Toast.makeText(getContext(), "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
-            return false;
-        }
-    }
-
-    public void logout(){
-        try{
-            UserRepository uc = new UserRepository(this.getContext());
-            User u = uc.abrir().findUser(GlobalValues.getINSTANCIA().getUsuariologueado().getId());
-            if (u != null){
+            UserEntity u = uc.abrir().findUser(GlobalValues.getInstancia().getUsuariologueado().getId());
+            if (u != null) {
                 u.setLogued("N");
                 uc.abrir().editDB(u);
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             Log.d("IniciarAPP", e.getMessage());
         }
     }
 
 
-
-
-    public boolean downloadDatabase(){
+    public boolean downloadDatabase() {
         try {
             FactoryServices.getInstancia().getMarcaServices().getMarcas();
             FactoryServices.getInstancia().getCategoriaServices().getCategorias();
@@ -246,137 +199,126 @@ public  class IniciarApp  {
             FactoryServices.getInstancia().getEstadoServices().getEstados();
             FactoryServices.getInstancia().getUnidadmedidaServices().getUnidadmedidas();
             FactoryServices.getInstancia().getPedidoServices().getPedidos();
+
+            createParameters();
+            //INSTALADO
+            ParameterEntity p = FactoryRepositories
+                    .getInstancia()
+                    .getParameterRepository()
+                    .abrir()
+                    .findByNombre(GlobalValues.getInstancia().PARAM_INSTALLED);
+            p.setValor_texto("Y");
+            FactoryRepositories
+                    .getInstancia()
+                    .getParameterRepository()
+                    .abrir()
+                    .modificar(p);
+
             return true;
-        }catch (Exception e ){
-          Log.e("IniciarAPP", e.getMessage());
+        } catch (Exception e) {
+            Log.e("IniciarAPP", e.getMessage());
             return false;
         }
     }
 
-    public void refreshHorariosOpenFromServer(){
-        try{
-            HelperHorarios helper = new HelperHorarios(getContext());
-            helper.setOpcion(HelperHorarios.OPTION_FIND_ALL);
-            helper.execute();
-
-        }catch (Exception e ){
-            Log.d("refreshDataFromServer", e.getMessage());
-        }
-    }
-
-    public void refreshPromosFromServer(){
-        try{
-            HelperPromos ph = new HelperPromos(getContext());
-            ph.execute();
-        }catch (Exception e ){
-            Log.d("refreshDataFromServer", e.getMessage());
-        }
-    }
-
-    public void refreshPriceFromServer(){
-        try{
-
-            HelperParameters hp = new HelperParameters(getContext());
-            hp.setCURRENT_OPTION(HelperParameters.OPTION_ALL);
-            hp.execute();
 
 
 
-        }catch (Exception e ){
-            Log.d("refreshDataFromServer", e.getMessage());
-        }
-    }
 
-    public void refreshHeladosDisponiblesFromServer(){
-        try{
-
-            HelperProductos hp = new HelperProductos(getContext());
-            hp.setOPTION(HelperProductos.OPTION_UPDATE_ENABLED);
-            hp.execute();
-
-        }catch (Exception e ){
-            Log.d("refreshDataFromServer", e.getMessage());
-        }
-    }
-
-    public boolean instalarApp(){
+    public void iniciarFactories() {
         try {
-
-            iniciarBD();
-            downloadDatabase();
-            createUserSystem();
-            setInstalledDatabase();
-            return true;
-        }catch (Exception e){
-            Log.d("IniciarApp", e.getMessage());
-            return false;
-        }
-    }
-
-    public void iniciarFactories(){
-        try{
             FactoryRepositories.getInstancia(getContext());
             FactoryServices.getInstancia();
-        }catch (Exception e ){
+        } catch (Exception e) {
             Log.e("IniciarApp:", e.getMessage());
         }
 
     }
 
-    public boolean createUserSystem() {
+
+    public void checkInstalation() {
+        //Leer Archivo de sistema el parametro INSTALLED
         try {
-            User u = new User();
-            u.setId(GlobalValues.getINSTANCIA().ID_ANDROID);
-            UserRepository uc = new UserRepository(this.getContext());
-            uc.abrir().addDB(u);
-            return true;
+            ParameterEntity p = FactoryRepositories
+                    .getInstancia()
+                    .getParameterRepository()
+                    .abrir()
+                    .findByNombre(GlobalValues.getInstancia().PARAM_INSTALLED);
+
+            if (p == null) {
+                //crear base de datos
+                createDataBase();
+
+            }
+
         } catch (Exception e) {
-            Log.d("IniciarApp", e.getMessage());
-            return false;
+            Log.e("IniciarApp", e.getMessage());
         }
     }
 
-
-    public boolean isInstalled(){
-        //Leer Archivo de sistema el parametro INSTALLED
-        try {
-            boolean respuesta = false;
-            ParameterRepository pc = new ParameterRepository(getContext());
+    public void createParameters()
+    {
+        try{
             ParameterEntity p = new ParameterEntity();
-            p = pc.abrir().findByNombre(GlobalValues.getINSTANCIA().PARAM_INSTALLED);
-            if (p != null) {
-                if (p.getValor_texto().equals("Y")) {
-                    respuesta = true;
-                }
-            }
-            return respuesta;
-        }catch(Exception e ){
-            Log.d("IniciarApp", e.getMessage());
-            return false;
+            p.setNombre(GlobalValues.getInstancia().PARAM_INSTALLED);
+            p.setValor_texto("N");
+
+            FactoryRepositories
+                    .getInstancia()
+                    .getParameterRepository()
+                    .abrir()
+                    .agregar(p);
+
+
+            ParameterEntity p2 = new ParameterEntity();
+            p2.setNombre(GlobalValues.getInstancia().PARAM_REMEMBERME);
+            p2.setValor_texto("N");
+            FactoryRepositories
+                    .getInstancia()
+                    .getParameterRepository()
+                    .abrir()
+                    .agregar(p2);
+
+
+            ParameterEntity token = new ParameterEntity();
+            token.setNombre(GlobalValues.getInstancia().PARAM_TOKEN);
+            //token.setValor_texto(GlobalValues.getInstancia().getAuthorization());
+            FactoryRepositories
+                    .getInstancia()
+                    .getParameterRepository()
+                    .abrir()
+                    .agregar(token);
+
+
+        }catch (Exception e){
+            Log.e("IniciarApp", e.getMessage());
         }
+
     }
 
-    public boolean setInstalledDatabase(){
-        //Leer Archivo de sistema el parametro INSTALLED
-        try {
-            boolean respuesta = false;
-            ParameterRepository pc = new ParameterRepository(getContext());
-            ParameterEntity p = new ParameterEntity();
-            p = pc.abrir().findByNombre(GlobalValues.getINSTANCIA().PARAM_INSTALLED);
-            if (p != null) {
-                p.setValor_texto("Y");
-                pc.abrir().modificar(p);
-                respuesta = true;
-            }
-            return respuesta;
-        }catch(Exception e ){
-            Log.d("IniciarApp", e.getMessage());
-            return false;
+    public void loadUserLoginRemember(){
+        try{
+            ParameterEntity ptoken =FactoryRepositories
+                    .getInstancia()
+                    .getParameterRepository()
+                    .abrir()
+                    .findByNombre(GlobalValues.PARAM_TOKEN);
+            LoginResult lr = new LoginResult();
+            lr.setToken(ptoken.getValor_texto());
+            GlobalValues.getInstancia().setToken(lr);
+
+            UserProfileEntity current =
+                    FactoryRepositories
+                            .getInstancia()
+                            .getUserProfileRepository()
+                            .abrir()
+                            .findByCurrentUser();
+            GlobalValues.getInstancia().setUsuariologueado(current);
+
+        }catch(Exception e){
+            Log.e("Iniciarapp loadlogin",e.getMessage());
         }
     }
-
-
-
 
     public Context getContext() {
         return context;

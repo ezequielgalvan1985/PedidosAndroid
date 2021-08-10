@@ -7,6 +7,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 import adaptivex.pedidoscloud.Config.Constants;
+import adaptivex.pedidoscloud.Config.GlobalValues;
+import adaptivex.pedidoscloud.Entity.ParameterEntity;
+import adaptivex.pedidoscloud.Repositories.FactoryRepositories;
 import adaptivex.pedidoscloud.Core.IniciarApp;
 
 import adaptivex.pedidoscloud.View.Users.HomeLoginFragment;
@@ -38,21 +41,27 @@ public class RegisterActivity
 
     private void preLoadActivity(){
         //Si no esta instalada, se instala, y luego se pide registrarse
-        IniciarApp ia = new IniciarApp(getBaseContext());
+        IniciarApp ia = new IniciarApp(RegisterActivity.this);
 
-        if (!ia.isInstalled()){
-            ia.instalarApp();
-            openRegisterFragment();
-        }else {
-            //Esta Instalada, pregunta Esta recordado el usuario, entonces se inicia la app directamente,
-            if (ia.isLoginRemember()) {
-                Intent i = new Intent(this.getBaseContext(), MainActivity.class);
-                startActivity(i);
-                finish();
-            } else {
-                //si no se abre formulario de seleccionar opcion HOMELogin login o register
-                openLoginFragment();
-            }
+        //Esta Instalada, pregunta Esta recordado el usuario, entonces se inicia la app directamente,
+        ParameterEntity rememberme = FactoryRepositories
+                .getInstancia()
+                .getParameterRepository()
+                .abrir()
+                .findByNombre(GlobalValues.PARAM_REMEMBERME);
+
+        if(rememberme ==null)
+        {
+            openLoginFragment();
+        } else if(rememberme.getValor_texto().equals("N")) {
+            openLoginFragment();
+        }else{
+            //cargar datos del usuario
+            ia.loadUserLoginRemember();
+
+            Intent i = new Intent(this.getBaseContext(), MainActivity.class);
+            startActivity(i);
+            finish();
         }
     }
 

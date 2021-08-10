@@ -12,8 +12,8 @@ import java.util.ArrayList;
 
 import adaptivex.pedidoscloud.Entity.PedidodetalleEntity;
 import adaptivex.pedidoscloud.Entity.DatabaseHelper.PedidodetalleDataBaseHelper;
-import adaptivex.pedidoscloud.Entity.Pote;
-import adaptivex.pedidoscloud.Entity.Producto;
+import adaptivex.pedidoscloud.Entity.PoteEntity;
+import adaptivex.pedidoscloud.Entity.ProductoEntity;
 
 /**
  * Created by ezequiel on 30/05/2016.
@@ -48,7 +48,7 @@ public class PedidodetalleRepository
         ContentValues valores = new ContentValues();
         //valores.put(PedidodetalleDataBaseHelper.CAMPO_ID, item.getId());
         valores.put(PedidodetalleDataBaseHelper.CAMPO_PEDIDO_ID, item.getPedidoId());
-        valores.put(PedidodetalleDataBaseHelper.CAMPO_PEDIDO_ID_TMP, item.getPedidoAndroidId());
+        valores.put(PedidodetalleDataBaseHelper.CAMPO_PEDIDO_ANDROID_ID, item.getPedidoAndroidId());
         valores.put(PedidodetalleDataBaseHelper.CAMPO_PRODUCTO_ID, item.getProductoId());
         valores.put(PedidodetalleDataBaseHelper.CAMPO_CANTIDAD, item.getCantidad());
         valores.put(PedidodetalleDataBaseHelper.CAMPO_PRECIOUNITARIO, item.getPreciounitario());
@@ -75,7 +75,7 @@ public class PedidodetalleRepository
         valores.put(PedidodetalleDataBaseHelper.CAMPO_PRECIOUNITARIO, item.getPreciounitario());
         valores.put(PedidodetalleDataBaseHelper.CAMPO_MONTO, item.getMonto());
         valores.put(PedidodetalleDataBaseHelper.CAMPO_ESTADO_ID, item.getEstadoId());
-        valores.put(PedidodetalleDataBaseHelper.CAMPO_ID_TMP, item.getAndroidId());
+        valores.put(PedidodetalleDataBaseHelper.CAMPO_ANDROID_ID, item.getAndroidId());
 
         //Heladeria
         valores.put(PedidodetalleDataBaseHelper.CAMPO_NRO_POTE, item.getNroPote());
@@ -83,23 +83,23 @@ public class PedidodetalleRepository
         valores.put(PedidodetalleDataBaseHelper.CAMPO_PROPORCION_HELADO, item.getProporcionHelado());
 
         db.update(PedidodetalleDataBaseHelper.TABLE_NAME, valores,
-                PedidodetalleDataBaseHelper.CAMPO_ID_TMP + " = ?", argumentos);
+                PedidodetalleDataBaseHelper.CAMPO_ANDROID_ID + " = ?", argumentos);
     }
     public void eliminar(PedidodetalleEntity registro)
     {
         String[] argumentos = new String[]
                 {String.valueOf(registro.getAndroidId())};
         db.delete(PedidodetalleDataBaseHelper.TABLE_NAME,
-                PedidodetalleDataBaseHelper.CAMPO_ID_TMP + " = ?", argumentos);
+                PedidodetalleDataBaseHelper.CAMPO_ANDROID_ID + " = ?", argumentos);
     }
 
 
-    public void deleteByPote(Pote pote)
+    public void deleteByPote(PoteEntity pote)
     {
         String[] argumentos = new String[]{String.valueOf(pote.getPedido().getAndroid_id()), String.valueOf(pote.getNroPote())};
 
         db.delete(PedidodetalleDataBaseHelper.TABLE_NAME,
-                PedidodetalleDataBaseHelper.CAMPO_PEDIDO_ID_TMP + " = ? AND " +
+                PedidodetalleDataBaseHelper.CAMPO_PEDIDO_ANDROID_ID + " = ? AND " +
                 PedidodetalleDataBaseHelper.CAMPO_NRO_POTE+ " = ?"
                 , argumentos);
     }
@@ -110,9 +110,9 @@ public class PedidodetalleRepository
     public Cursor obtenerTodos()
     {
         String[] campos = {PedidodetalleDataBaseHelper.CAMPO_ID,
-                PedidodetalleDataBaseHelper.CAMPO_ID_TMP,
+                PedidodetalleDataBaseHelper.CAMPO_ANDROID_ID,
                 PedidodetalleDataBaseHelper.CAMPO_PEDIDO_ID,
-                PedidodetalleDataBaseHelper.CAMPO_PEDIDO_ID_TMP,
+                PedidodetalleDataBaseHelper.CAMPO_PEDIDO_ANDROID_ID,
                 PedidodetalleDataBaseHelper.CAMPO_PRODUCTO_ID,
                 PedidodetalleDataBaseHelper.CAMPO_CANTIDAD,
                 PedidodetalleDataBaseHelper.CAMPO_PRECIOUNITARIO,
@@ -135,9 +135,9 @@ public class PedidodetalleRepository
     {
         String[] campos = {
                 PedidodetalleDataBaseHelper.CAMPO_ID,
-                PedidodetalleDataBaseHelper.CAMPO_ID_TMP,
+                PedidodetalleDataBaseHelper.CAMPO_ANDROID_ID,
                 PedidodetalleDataBaseHelper.CAMPO_PEDIDO_ID,
-                PedidodetalleDataBaseHelper.CAMPO_PEDIDO_ID_TMP,
+                PedidodetalleDataBaseHelper.CAMPO_PEDIDO_ANDROID_ID,
                 PedidodetalleDataBaseHelper.CAMPO_PRODUCTO_ID,
                 PedidodetalleDataBaseHelper.CAMPO_CANTIDAD,
                 PedidodetalleDataBaseHelper.CAMPO_PRECIOUNITARIO,
@@ -186,15 +186,15 @@ public class PedidodetalleRepository
 
             //Recibe cursor y completa el arralist de pedidodetalles
             PedidodetalleEntity registro;
-            Producto p = new Producto();
+            ProductoEntity p = new ProductoEntity();
             ProductoRepository prodCtrl = new ProductoRepository(context);
             for(c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
                 registro = new PedidodetalleEntity();
-                registro.setAndroidId(c.getInt(c.getColumnIndex(PedidodetalleDataBaseHelper.CAMPO_ID_TMP)));
+                registro.setAndroidId(c.getInt(c.getColumnIndex(PedidodetalleDataBaseHelper.CAMPO_ANDROID_ID)));
                 registro.setId(c.getInt(c.getColumnIndex(PedidodetalleDataBaseHelper.CAMPO_ID)));
 
                 registro.setPedidoId(c.getInt(c.getColumnIndex(PedidodetalleDataBaseHelper.CAMPO_PEDIDO_ID)));
-                registro.setPedidoAndroidId(c.getInt(c.getColumnIndex(PedidodetalleDataBaseHelper.CAMPO_PEDIDO_ID_TMP)));
+                registro.setPedidoAndroidId(c.getInt(c.getColumnIndex(PedidodetalleDataBaseHelper.CAMPO_PEDIDO_ANDROID_ID)));
                 //Producto
                 registro.setProductoId(c.getInt(c.getColumnIndex(PedidodetalleDataBaseHelper.CAMPO_PRODUCTO_ID)));
                 p = prodCtrl.abrir().buscar(registro.getProductoId());
@@ -225,13 +225,13 @@ public class PedidodetalleRepository
             String[] campos = {
                     PedidodetalleDataBaseHelper.CAMPO_ID,
                     PedidodetalleDataBaseHelper.CAMPO_PEDIDO_ID,
-                    PedidodetalleDataBaseHelper.CAMPO_PEDIDO_ID_TMP,
+                    PedidodetalleDataBaseHelper.CAMPO_PEDIDO_ANDROID_ID,
                     PedidodetalleDataBaseHelper.CAMPO_PRODUCTO_ID,
                     PedidodetalleDataBaseHelper.CAMPO_CANTIDAD,
                     PedidodetalleDataBaseHelper.CAMPO_PRECIOUNITARIO,
                     PedidodetalleDataBaseHelper.CAMPO_MONTO,
                     PedidodetalleDataBaseHelper.CAMPO_ESTADO_ID,
-                    PedidodetalleDataBaseHelper.CAMPO_ID_TMP,
+                    PedidodetalleDataBaseHelper.CAMPO_ANDROID_ID,
                     PedidodetalleDataBaseHelper.CAMPO_PROPORCION_HELADO,
                     PedidodetalleDataBaseHelper.CAMPO_NRO_POTE,
                     PedidodetalleDataBaseHelper.CAMPO_MEDIDA_POTE,
@@ -241,7 +241,7 @@ public class PedidodetalleRepository
 
             String[] argumentos =   {String.valueOf(pedidoAndroidId), String.valueOf(nroPote)};
             Cursor resultado = db.query(PedidodetalleDataBaseHelper.TABLE_NAME, campos,
-                    PedidodetalleDataBaseHelper.CAMPO_PEDIDO_ID_TMP +"=? AND " +
+                    PedidodetalleDataBaseHelper.CAMPO_PEDIDO_ANDROID_ID +"=? AND " +
                             PedidodetalleDataBaseHelper.CAMPO_NRO_POTE +"=? ",
                     argumentos, null, null, null);
             if (resultado != null)
@@ -262,13 +262,13 @@ public class PedidodetalleRepository
         String[] campos = {
                 PedidodetalleDataBaseHelper.CAMPO_ID,
                 PedidodetalleDataBaseHelper.CAMPO_PEDIDO_ID,
-                PedidodetalleDataBaseHelper.CAMPO_PEDIDO_ID_TMP,
+                PedidodetalleDataBaseHelper.CAMPO_PEDIDO_ANDROID_ID,
                 PedidodetalleDataBaseHelper.CAMPO_PRODUCTO_ID,
                 PedidodetalleDataBaseHelper.CAMPO_CANTIDAD,
                 PedidodetalleDataBaseHelper.CAMPO_PRECIOUNITARIO,
                 PedidodetalleDataBaseHelper.CAMPO_MONTO,
                 PedidodetalleDataBaseHelper.CAMPO_ESTADO_ID,
-                PedidodetalleDataBaseHelper.CAMPO_ID_TMP,
+                PedidodetalleDataBaseHelper.CAMPO_ANDROID_ID,
                 PedidodetalleDataBaseHelper.CAMPO_NRO_POTE,
                 PedidodetalleDataBaseHelper.CAMPO_PROPORCION_HELADO,
                 PedidodetalleDataBaseHelper.CAMPO_MEDIDA_POTE
@@ -276,7 +276,7 @@ public class PedidodetalleRepository
 
 
         Cursor resultado = db.query(PedidodetalleDataBaseHelper.TABLE_NAME, campos,
-                PedidodetalleDataBaseHelper.CAMPO_PEDIDO_ID_TMP + " = "+ String.valueOf(pedidoIdTmp), null, null, null, PedidodetalleDataBaseHelper.CAMPO_NRO_POTE );
+                PedidodetalleDataBaseHelper.CAMPO_PEDIDO_ANDROID_ID + " = "+ String.valueOf(pedidoIdTmp), null, null, null, PedidodetalleDataBaseHelper.CAMPO_NRO_POTE );
         if (resultado != null)
         {
             resultado.moveToFirst();
@@ -299,14 +299,14 @@ public class PedidodetalleRepository
                 PedidodetalleDataBaseHelper.CAMPO_PRECIOUNITARIO,
                 PedidodetalleDataBaseHelper.CAMPO_MONTO,
                 PedidodetalleDataBaseHelper.CAMPO_ESTADO_ID,
-                PedidodetalleDataBaseHelper.CAMPO_ID_TMP
+                PedidodetalleDataBaseHelper.CAMPO_ANDROID_ID
 
         };
         String[] argumentos = {String.valueOf(id)};
         Cursor resultado = db.query(PedidodetalleDataBaseHelper.TABLE_NAME, campos,
-                PedidodetalleDataBaseHelper.CAMPO_ID_TMP + " = ?", argumentos, null, null, null);
+                PedidodetalleDataBaseHelper.CAMPO_ANDROID_ID + " = ?", argumentos, null, null, null);
 
-        Producto producto;
+        ProductoEntity producto;
         ProductoRepository dbProducto = new ProductoRepository(this.context);
 
         if (resultado != null)
@@ -320,7 +320,7 @@ public class PedidodetalleRepository
             registro.setPreciounitario(resultado.getDouble(resultado.getColumnIndex(PedidodetalleDataBaseHelper.CAMPO_PRECIOUNITARIO)));
             registro.setMonto(resultado.getDouble(resultado.getColumnIndex(PedidodetalleDataBaseHelper.CAMPO_MONTO)));
             registro.setEstadoId(resultado.getInt(resultado.getColumnIndex(PedidodetalleDataBaseHelper.CAMPO_ESTADO_ID)));
-            registro.setAndroidId(resultado.getInt(resultado.getColumnIndex(PedidodetalleDataBaseHelper.CAMPO_ID_TMP)));
+            registro.setAndroidId(resultado.getInt(resultado.getColumnIndex(PedidodetalleDataBaseHelper.CAMPO_ANDROID_ID)));
             registro.setProducto(dbProducto.abrir().buscar(registro.getProductoId()));
             dbProducto.cerrar();
 
@@ -334,9 +334,9 @@ public class PedidodetalleRepository
     {
         PedidodetalleEntity registro = null;
         String[] campos = {PedidodetalleDataBaseHelper.CAMPO_ID,
-                PedidodetalleDataBaseHelper.CAMPO_ID_TMP,
+                PedidodetalleDataBaseHelper.CAMPO_ANDROID_ID,
                 PedidodetalleDataBaseHelper.CAMPO_PEDIDO_ID,
-                PedidodetalleDataBaseHelper.CAMPO_PEDIDO_ID_TMP,
+                PedidodetalleDataBaseHelper.CAMPO_PEDIDO_ANDROID_ID,
                 PedidodetalleDataBaseHelper.CAMPO_PRODUCTO_ID,
                 PedidodetalleDataBaseHelper.CAMPO_CANTIDAD,
                 PedidodetalleDataBaseHelper.CAMPO_PRECIOUNITARIO,
@@ -346,9 +346,9 @@ public class PedidodetalleRepository
         };
         String[] argumentos = {String.valueOf(idTmp)};
         Cursor resultado = db.query(PedidodetalleDataBaseHelper.TABLE_NAME, campos,
-                PedidodetalleDataBaseHelper.CAMPO_ID_TMP + " = ?", argumentos, null, null, null);
+                PedidodetalleDataBaseHelper.CAMPO_ANDROID_ID + " = ?", argumentos, null, null, null);
 
-        Producto producto;
+        ProductoEntity producto;
         ProductoRepository dbProducto = new ProductoRepository(this.context);
 
         if (resultado != null)
@@ -357,13 +357,13 @@ public class PedidodetalleRepository
             registro = new PedidodetalleEntity();
             registro.setId(resultado.getInt(resultado.getColumnIndex(PedidodetalleDataBaseHelper.CAMPO_ID)));
             registro.setPedidoId(resultado.getInt(resultado.getColumnIndex(PedidodetalleDataBaseHelper.CAMPO_PEDIDO_ID)));
-            registro.setPedidoAndroidId(resultado.getLong(resultado.getColumnIndex(PedidodetalleDataBaseHelper.CAMPO_PEDIDO_ID_TMP)));
+            registro.setPedidoAndroidId(resultado.getLong(resultado.getColumnIndex(PedidodetalleDataBaseHelper.CAMPO_PEDIDO_ANDROID_ID)));
             registro.setProductoId(resultado.getInt(resultado.getColumnIndex(PedidodetalleDataBaseHelper.CAMPO_PRODUCTO_ID)));
             registro.setCantidad(resultado.getDouble(resultado.getColumnIndex(PedidodetalleDataBaseHelper.CAMPO_CANTIDAD)));
             registro.setPreciounitario(resultado.getDouble(resultado.getColumnIndex(PedidodetalleDataBaseHelper.CAMPO_PRECIOUNITARIO)));
             registro.setMonto(resultado.getDouble(resultado.getColumnIndex(PedidodetalleDataBaseHelper.CAMPO_MONTO)));
             registro.setEstadoId(resultado.getInt(resultado.getColumnIndex(PedidodetalleDataBaseHelper.CAMPO_ESTADO_ID)));
-            registro.setAndroidId(resultado.getInt(resultado.getColumnIndex(PedidodetalleDataBaseHelper.CAMPO_ID_TMP)));
+            registro.setAndroidId(resultado.getInt(resultado.getColumnIndex(PedidodetalleDataBaseHelper.CAMPO_ANDROID_ID)));
             registro.setProducto(dbProducto.abrir().buscar(registro.getProductoId()));
             dbProducto.cerrar();
 

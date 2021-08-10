@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import adaptivex.pedidoscloud.Entity.Producto;
+import adaptivex.pedidoscloud.Entity.ProductoEntity;
 import adaptivex.pedidoscloud.R;
 
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ import java.util.ArrayList;
  */
 public class RVAdapterProducto extends RecyclerView.Adapter<RVAdapterProducto.ProductoViewHolder>
 {
-    private ArrayList<Object> productos;
+    private ArrayList<ProductoEntity> productos;
     private ContextWrapper cw;
     private Context ctx;
 
@@ -30,11 +30,11 @@ public class RVAdapterProducto extends RecyclerView.Adapter<RVAdapterProducto.Pr
         this.ctx = ctx;
     }
 
-    public ArrayList<Object> getProductos() {
+    public ArrayList<ProductoEntity> getProductos() {
         return productos;
     }
 
-    public void RVAdapterProducto(ArrayList<Object> productos){
+    public void RVAdapterProducto(ArrayList<ProductoEntity> productos){
 
         this.setProductos(productos);
 
@@ -58,7 +58,7 @@ public class RVAdapterProducto extends RecyclerView.Adapter<RVAdapterProducto.Pr
     @Override
     public void onBindViewHolder(ProductoViewHolder productoViewHolder, int i) {
 
-        Producto item = (Producto) getProductos().get(i);
+        ProductoEntity item = (ProductoEntity) getProductos().get(i);
 
         productoViewHolder.ptvId.setText(item.getId().toString());
         productoViewHolder.pNombre.setText(item.getNombre());
@@ -70,18 +70,18 @@ public class RVAdapterProducto extends RecyclerView.Adapter<RVAdapterProducto.Pr
         super.onAttachedToRecyclerView(recyclerView);
     }
 
-    public void setProductos(ArrayList<Object> productos) {
+    public void setProductos(ArrayList<ProductoEntity> productos) {
         this.productos = productos;
     }
 
 
     public static class ProductoViewHolder extends RecyclerView.ViewHolder{
-        ArrayList<Object> productos = new ArrayList<Object>();
+        ArrayList<ProductoEntity> productos = new ArrayList<ProductoEntity>();
         Context ctx;
         TextView pNombre,ptvId, pDescripcion;
 
 
-        public ProductoViewHolder(View itemView, Context ctx, ArrayList<Object> productos) {
+        public ProductoViewHolder(View itemView, Context ctx, ArrayList<ProductoEntity> productos) {
             super(itemView);
             this.productos = productos;
             this.ctx = ctx;

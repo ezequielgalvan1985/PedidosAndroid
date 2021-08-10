@@ -6,15 +6,15 @@ import adaptivex.pedidoscloud.Config.Constants;
  * Created by egalvan on 9/3/2018.
  */
 
-public class PoteItem {
-    private Producto producto;
+public class PoteItemEntity {
+    private ProductoEntity producto;
     private Integer  cantidad;
 
-    public Producto getProducto() {
+    public ProductoEntity getProducto() {
         return producto;
     }
 
-    public void setProducto(Producto producto) {
+    public void setProducto(ProductoEntity producto) {
         this.producto = producto;
     }
 

@@ -7,6 +7,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.util.Log;
 
+import java.util.List;
+
+import adaptivex.pedidoscloud.Entity.DatabaseHelper.MarcaDataBaseHelper;
+import adaptivex.pedidoscloud.Entity.MarcaEntity;
 import adaptivex.pedidoscloud.Entity.ParameterEntity;
 import adaptivex.pedidoscloud.Entity.DatabaseHelper.ParameterDataBaseHelper;
 
@@ -18,6 +22,16 @@ public class ParameterRepository
     private Context context;
     private ParameterDataBaseHelper dbHelper;
     private SQLiteDatabase db;
+    private String[] campos = {
+            ParameterDataBaseHelper.ID,
+            ParameterDataBaseHelper.DESCRIPCION,
+            ParameterDataBaseHelper.NOMBRE,
+            ParameterDataBaseHelper.VALOR_INTEGER,
+            ParameterDataBaseHelper.VALOR_DECIMAL,
+            ParameterDataBaseHelper.VALOR_TEXTO
+    };
+    private ContentValues valores = new ContentValues();
+
 
     public ParameterRepository(Context context)
     {
@@ -41,12 +55,7 @@ public class ParameterRepository
 
     public long agregar(ParameterEntity item)
     {
-        ContentValues valores = new ContentValues();
-        valores.put(ParameterDataBaseHelper.NOMBRE, item.getNombre());
-        valores.put(ParameterDataBaseHelper.DESCRIPCION, item.getDescripcion());
-        valores.put(ParameterDataBaseHelper.VALOR_TEXTO, item.getValor_texto());
-        valores.put(ParameterDataBaseHelper.VALOR_INTEGER, item.getValor_integer());
-        valores.put(ParameterDataBaseHelper.VALOR_DECIMAL, item.getValor_decimal());
+        setValores(item);
         return db.insert(ParameterDataBaseHelper.TABLE_NAME, null, valores);
     }
 
@@ -55,14 +64,7 @@ public class ParameterRepository
     {
         String[] argumentos = new String[]
                 {String.valueOf(item.getId())};
-        ContentValues valores = new ContentValues();
-
-        valores.put(ParameterDataBaseHelper.NOMBRE, item.getNombre());
-        valores.put(ParameterDataBaseHelper.DESCRIPCION, item.getDescripcion());
-        valores.put(ParameterDataBaseHelper.VALOR_TEXTO, item.getValor_texto());
-        valores.put(ParameterDataBaseHelper.VALOR_INTEGER, item.getValor_integer());
-        valores.put(ParameterDataBaseHelper.VALOR_DECIMAL, item.getValor_decimal());
-       // valores.put(ParameterDataBaseHelper.VALOR_FECHA, item.getValor_fecha().toString());
+        setValores(item);
         db.update(ParameterDataBaseHelper.TABLE_NAME, valores,
                 ParameterDataBaseHelper.ID + " = ?", argumentos);
     }
@@ -96,90 +98,87 @@ public class ParameterRepository
     public ParameterEntity findById(int id)
     {
         try{
-            ParameterEntity registro = null;
-            String[] campos = {
-                    ParameterDataBaseHelper.ID,
-                    ParameterDataBaseHelper.DESCRIPCION,
-                    ParameterDataBaseHelper.NOMBRE,
-                    ParameterDataBaseHelper.VALOR_INTEGER,
-                    ParameterDataBaseHelper.VALOR_DECIMAL,
-                    ParameterDataBaseHelper.VALOR_TEXTO,
-
-            };
             String[] argumentos = {String.valueOf(id)};
+            String sWhere = ParameterDataBaseHelper.ID + " = ?";
+            return parseRecordToParameter(findBy(sWhere,argumentos));
+        }catch(Exception e){
+            Log.e("ParameterRepo",e.getMessage());
+            return null;
+        }
+    }
+
+
+
+    public void setValores(ParameterEntity item){
+        valores.put(ParameterDataBaseHelper.NOMBRE, item.getNombre());
+        valores.put(ParameterDataBaseHelper.DESCRIPCION, item.getDescripcion());
+        valores.put(ParameterDataBaseHelper.VALOR_TEXTO, item.getValor_texto());
+        valores.put(ParameterDataBaseHelper.VALOR_INTEGER, item.getValor_integer());
+        valores.put(ParameterDataBaseHelper.VALOR_DECIMAL, item.getValor_decimal());
+    }
+
+    public ParameterEntity findByNombre(String pnombre){
+        try{
+            String[] argumentos = {pnombre};
+            String sWhere = ParameterDataBaseHelper.NOMBRE + " = ?";
+            return parseRecordToParameter(findBy(sWhere, argumentos));
+        }catch (Exception e ){
+            Log.e("ParameterRepository", e.getMessage());
+            return null;
+        }
+    }
+    /* procedimientos de acceso base*/
+    public Cursor findBy(String sWhere, String[] argumentos ){
+        try{
             Cursor resultado = db.query(ParameterDataBaseHelper.TABLE_NAME, campos,
-                    ParameterDataBaseHelper.ID + " = ?", argumentos, null, null, null);
-
-
+                    sWhere, argumentos, null, null, null);
             if (resultado != null)
             {
                 resultado.moveToFirst();
-                registro = new ParameterEntity();
-                registro.setId(resultado.getInt(resultado.getColumnIndex(ParameterDataBaseHelper.ID)));
-                registro.setNombre(resultado.getString(resultado.getColumnIndex(ParameterDataBaseHelper.NOMBRE)));
-                registro.setValor_texto(resultado.getString(resultado.getColumnIndex(ParameterDataBaseHelper.VALOR_TEXTO)));
-                registro.setValor_integer(resultado.getInt(resultado.getColumnIndex(ParameterDataBaseHelper.VALOR_INTEGER)));
-                registro.setValor_decimal(resultado.getDouble(resultado.getColumnIndex(ParameterDataBaseHelper.VALOR_DECIMAL)));
-                registro.setDescripcion(resultado.getString(resultado.getColumnIndex(ParameterDataBaseHelper.DESCRIPCION)));
             }
-            return registro;
-        }catch (Exception e){
-            Log.d("findByID", e.getMessage());
+            return resultado;
+        }catch(Exception e){
+            Log.e("ParameterRepository",e.getMessage());
             return null;
         }
     }
 
-
-
-    public ParameterEntity findByNombre(String nombre)
-    {
-        ParameterEntity registro = null;
+    /* ====== Parseadores de Cursores ========= */
+    public List<ParameterEntity> parseCursorToListParameter(Cursor resultado){
         try{
-
-            String[] campos = {
-                    ParameterDataBaseHelper.ID,
-                    ParameterDataBaseHelper.DESCRIPCION,
-                    ParameterDataBaseHelper.NOMBRE,
-                    ParameterDataBaseHelper.VALOR_INTEGER,
-                    ParameterDataBaseHelper.VALOR_DECIMAL,
-                    ParameterDataBaseHelper.VALOR_TEXTO
-                    };
-
-
-           String select  = "SELECT " +
-                   ParameterDataBaseHelper.ID + ", "+
-                   ParameterDataBaseHelper.DESCRIPCION + ", "+
-                   ParameterDataBaseHelper.NOMBRE + ", "+
-                   ParameterDataBaseHelper.VALOR_INTEGER + ", "+
-                   ParameterDataBaseHelper.VALOR_DECIMAL + ", "+
-                   ParameterDataBaseHelper.VALOR_TEXTO;
-           String from = " FROM " + ParameterDataBaseHelper.TABLE_NAME;
-           String where = " WHERE " +  ParameterDataBaseHelper.NOMBRE + " = '"+ nombre + "'";
-           String query = select + from + where;
-           Cursor resultado =  db.rawQuery(query,null);
-
+            List<ParameterEntity> parameterEntityList = null;
             if (resultado != null)
             {
-                if (resultado.getCount() > 0 ){
-                    resultado.moveToFirst();
-                    registro = new ParameterEntity();
-                    registro.setId(resultado.getInt(resultado.getColumnIndex(ParameterDataBaseHelper.ID)));
-                    registro.setNombre(resultado.getString(resultado.getColumnIndex(ParameterDataBaseHelper.NOMBRE)));
-                    registro.setValor_texto(resultado.getString(resultado.getColumnIndex(ParameterDataBaseHelper.VALOR_TEXTO)));
-                    registro.setValor_integer(resultado.getInt(resultado.getColumnIndex(ParameterDataBaseHelper.VALOR_INTEGER)));
-                    registro.setValor_decimal(resultado.getDouble(resultado.getColumnIndex(ParameterDataBaseHelper.VALOR_DECIMAL)));
-
-                    registro.setDescripcion(resultado.getString(resultado.getColumnIndex(ParameterDataBaseHelper.DESCRIPCION)));
-                    return registro;
+                while(resultado.moveToNext()){
+                    parameterEntityList.add(parseRecordToParameter(resultado));
                 }
             }
-        }catch (Exception e ){
-            Log.d("ParameterController",e.getMessage());
+            return parameterEntityList;
+        }catch(Exception e) {
+            Log.e("ParameterRepo", e.getMessage());
             return null;
         }
-        return registro;
-
     }
+
+    public ParameterEntity parseRecordToParameter(Cursor resultado){
+        try{
+            ParameterEntity registro = new ParameterEntity();
+            if (resultado != null)
+            {
+                registro.setId(resultado.getInt(resultado.getColumnIndex(ParameterDataBaseHelper.ID)));
+                registro.setNombre(resultado.getString(resultado.getColumnIndex(ParameterDataBaseHelper.NOMBRE)));
+                registro.setDescripcion(resultado.getString(resultado.getColumnIndex(ParameterDataBaseHelper.DESCRIPCION)));
+                registro.setValor_texto(resultado.getString(resultado.getColumnIndex(ParameterDataBaseHelper.VALOR_TEXTO)));
+                registro.setValor_decimal(resultado.getDouble(resultado.getColumnIndex(ParameterDataBaseHelper.VALOR_DECIMAL)));
+                registro.setValor_integer(resultado.getInt(resultado.getColumnIndex(ParameterDataBaseHelper.VALOR_INTEGER)));
+            }
+            return registro;
+        }catch(Exception e) {
+            Log.e("MarcaRepo", e.getMessage());
+            return null;
+        }
+    }
+
     public void limpiar()
     {
         db.delete(ParameterDataBaseHelper.TABLE_NAME, null, null);

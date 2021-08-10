@@ -14,7 +14,7 @@ import java.util.List;
 
 import adaptivex.pedidoscloud.Config.Configurador;
 import adaptivex.pedidoscloud.Config.GlobalValues;
-import adaptivex.pedidoscloud.Core.FactoryRepositories;
+import adaptivex.pedidoscloud.Repositories.FactoryRepositories;
 import adaptivex.pedidoscloud.Repositories.EstadoRepository;
 import adaptivex.pedidoscloud.Entity.EstadoEntity;
 import adaptivex.pedidoscloud.Servicios.Retrofit.Interface.IEstadoRetrofit;
@@ -64,7 +64,7 @@ public  class EstadoServices {
                     .build();
 
             IEstadoRetrofit service = retrofit.create(IEstadoRetrofit.class);
-            Call<List<EstadoEntity>> call = service.getEstados(GlobalValues.getINSTANCIA().getAuthorization());
+            Call<List<EstadoEntity>> call = service.getEstados(GlobalValues.getInstancia().getAuthorization());
             call.enqueue(new Callback<List<EstadoEntity>>() {
                 @Override
                 public void onResponse(Call<List<EstadoEntity>> call, Response<List<EstadoEntity>> response) {

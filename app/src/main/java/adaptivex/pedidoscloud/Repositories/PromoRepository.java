@@ -11,7 +11,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import adaptivex.pedidoscloud.Entity.PedidoEntity;
-import adaptivex.pedidoscloud.Entity.Promo;
+import adaptivex.pedidoscloud.Entity.PromoEntity;
 import adaptivex.pedidoscloud.Entity.DatabaseHelper.PromoDataBaseHelper;
 
 /**
@@ -50,7 +50,7 @@ public class PromoRepository
         }
     }
 
-    public long add(Promo item)
+    public long add(PromoEntity item)
     {
         try {
             ContentValues valores = new ContentValues();
@@ -80,7 +80,7 @@ public class PromoRepository
 
 
 
-    public void edit(Promo item)
+    public void edit(PromoEntity item)
     {
         try {
             String[] argumentos = new String[]
@@ -114,7 +114,7 @@ public class PromoRepository
 
 
 
-    public void delete(Promo promo)
+    public void delete(PromoEntity promo)
     {
         try{
             String[] argumentos = new String[]
@@ -204,10 +204,10 @@ public class PromoRepository
         }
     }
 
-    public ArrayList<Promo> findByEnabledToArrayList(){
+    public ArrayList<PromoEntity> findByEnabledToArrayList(){
         try{
             Cursor c = findByEnabled();
-            ArrayList<Promo> lista = new ArrayList<Promo>();
+            ArrayList<PromoEntity> lista = new ArrayList<PromoEntity>();
             lista = parseCursorToArrayList(c);
             return lista;
         }catch (Exception e){
@@ -235,9 +235,9 @@ public class PromoRepository
     * Se puede dar de tener 2 descuento
     * Se toma el descuento con el kilo mas alto
     * */
-    public Promo calculateDiscount(Integer paramKilos){
+    public PromoEntity calculateDiscount(Integer paramKilos){
         try{
-            Promo p;
+            PromoEntity p;
             p = findByOneAplicableToPromo(paramKilos);
             if (p!=null){
                 if (p.getCantKilos()!= null){
@@ -291,9 +291,9 @@ public class PromoRepository
         }
     }
 
-    public ArrayList<Promo> findByAplicableToArrayList(Integer paramKilos){
+    public ArrayList<PromoEntity> findByAplicableToArrayList(Integer paramKilos){
         try{
-            ArrayList<Promo> lista = new  ArrayList<Promo>();
+            ArrayList<PromoEntity> lista = new  ArrayList<PromoEntity>();
             Cursor c = findByAplicable(paramKilos);
             lista = parseCursorToArrayList(c);
             return lista;
@@ -303,10 +303,10 @@ public class PromoRepository
         }
     }
 
-    public Promo findByOneAplicableToPromo(Integer paramKilos){
+    public PromoEntity findByOneAplicableToPromo(Integer paramKilos){
         try{
             Cursor c = findByAplicable(paramKilos);
-            Promo p;
+            PromoEntity p;
             p = parseObjectFromRecord(c);
             return p;
         }catch (Exception e){
@@ -316,9 +316,9 @@ public class PromoRepository
     }
 
 
-    public Promo findByIdAndroid(Integer idAndroid)
+    public PromoEntity findByIdAndroid(Integer idAndroid)
     {
-        Promo registro = new Promo();
+        PromoEntity registro = new PromoEntity();
         String[] campos = {
                 PromoDataBaseHelper.CAMPO_ID,
                 PromoDataBaseHelper.CAMPO_NOMBRE,
@@ -349,9 +349,9 @@ public class PromoRepository
     }
 
 
-    public Promo findById(Integer id)
+    public PromoEntity findById(Integer id)
     {
-        Promo registro = new Promo();
+        PromoEntity registro = new PromoEntity();
         String[] campos = {
                 PromoDataBaseHelper.CAMPO_ID,
                 PromoDataBaseHelper.CAMPO_NOMBRE,
@@ -383,14 +383,14 @@ public class PromoRepository
 
 
 
-    public ArrayList<Promo> parseCursorToArrayList(Cursor c){
+    public ArrayList<PromoEntity> parseCursorToArrayList(Cursor c){
         try{
 
-            ArrayList<Promo> lista = new ArrayList<Promo>();
+            ArrayList<PromoEntity> lista = new ArrayList<PromoEntity>();
             //Recibe cursor y completa el arralist de pedidodetalles
-            Promo registro;
+            PromoEntity registro;
             for(c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
-                registro = new Promo();
+                registro = new PromoEntity();
                 registro.setIdAndroid(c.getInt(c.getColumnIndex(PromoDataBaseHelper.CAMPO_ID_ANDROID)));
                 registro.setId(c.getInt(c.getColumnIndex(PromoDataBaseHelper.CAMPO_ID)));
                 registro.setNombre(c.getString(c.getColumnIndex(PromoDataBaseHelper.CAMPO_NOMBRE)));
@@ -420,9 +420,9 @@ public class PromoRepository
         }
     }
 
-    public Promo parseObjectFromRecord(Cursor c ){
+    public PromoEntity parseObjectFromRecord(Cursor c ){
         try{
-            Promo object = new Promo();
+            PromoEntity object = new PromoEntity();
             if (c!=null){
                 if (c.getCount()>0 ){
                     c.moveToFirst();
@@ -451,16 +451,16 @@ public class PromoRepository
         }
     }
 
-    public Promo matchPromoForPedido(PedidoEntity pedido ){
+    public PromoEntity matchPromoForPedido(PedidoEntity pedido ){
         try{
-            Promo promomatching = new Promo();
+            PromoEntity promomatching = new PromoEntity();
             boolean matching           = false;
             boolean cancelarAplicacion = false;
             boolean matchTemp          = false;
 
 
-            ArrayList<Promo> listapromos = abrir().findByEnabledToArrayList();
-            for(Promo promoindex : listapromos){
+            ArrayList<PromoEntity> listapromos = abrir().findByEnabledToArrayList();
+            for(PromoEntity promoindex : listapromos){
                 matchTemp           = false;
                 cancelarAplicacion  = false;
                 if (promoindex.getCantPoteCuarto()> 0 ){

@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import adaptivex.pedidoscloud.Entity.Promo;
+import adaptivex.pedidoscloud.Entity.PromoEntity;
 import adaptivex.pedidoscloud.R;
 
 /**
@@ -18,7 +18,7 @@ import adaptivex.pedidoscloud.R;
  */
 public class RVAdapterPromo extends RecyclerView.Adapter<RVAdapterPromo.PromoViewHolder>
 {
-    private ArrayList<Promo> promos;
+    private ArrayList<PromoEntity> promos;
     private ContextWrapper cw;
     private Context ctx;
 
@@ -30,11 +30,11 @@ public class RVAdapterPromo extends RecyclerView.Adapter<RVAdapterPromo.PromoVie
         this.ctx = ctx;
     }
 
-    public ArrayList<Promo> getPromos() {
+    public ArrayList<PromoEntity> getPromos() {
         return promos;
     }
 
-    public void RVAdapterPromo(ArrayList<Promo> promos){
+    public void RVAdapterPromo(ArrayList<PromoEntity> promos){
 
         this.setPromos(promos);
 
@@ -71,19 +71,19 @@ public class RVAdapterPromo extends RecyclerView.Adapter<RVAdapterPromo.PromoVie
         super.onAttachedToRecyclerView(recyclerView);
     }
 
-    public void setPromos(ArrayList<Promo> promos) {
+    public void setPromos(ArrayList<PromoEntity> promos) {
         this.promos = promos;
     }
 
 
     public static class PromoViewHolder extends RecyclerView.ViewHolder{
-        ArrayList<Promo> promos = new ArrayList<Promo>();
+        ArrayList<PromoEntity> promos = new ArrayList<PromoEntity>();
         Context ctx;
         TextView txtNombre, txtDescripcion, txtCantKilos, txtVigencia, txtPorcentajeDescuento,
                 txtPrecioAnterior, txtFechaHasta, txtPrecioPromo;
 
 
-        public PromoViewHolder(View itemView, Context ctx, ArrayList<Promo> promos) {
+        public PromoViewHolder(View itemView, Context ctx, ArrayList<PromoEntity> promos) {
             super(itemView);
             this.promos = promos;
             this.ctx = ctx;

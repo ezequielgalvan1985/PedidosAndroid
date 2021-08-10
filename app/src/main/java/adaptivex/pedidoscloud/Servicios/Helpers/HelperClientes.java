@@ -41,7 +41,7 @@ public class HelperClientes extends AsyncTask<Void, Void, Void> {
             cp.parseJsonToObject();
 
         }catch (Exception e){
-                setRespuesta(GlobalValues.getINSTANCIA().RETURN_ERROR);
+                setRespuesta(GlobalValues.getInstancia().RETURN_ERROR);
                 Log.println(Log.ERROR,"ErrorHelper:",e.getMessage());
 
         }
@@ -66,9 +66,9 @@ public class HelperClientes extends AsyncTask<Void, Void, Void> {
         for (int i = 0; i < cp.getListadoClientes().size(); i++) {
             clienteCtr.abrir().agregar(cp.getListadoClientes().get(i));
         }
-        setRespuesta(GlobalValues.getINSTANCIA().RETURN_OK);
+        setRespuesta(GlobalValues.getInstancia().RETURN_OK);
 
-        if (getRespuesta()== GlobalValues.getINSTANCIA().RETURN_OK){
+        if (getRespuesta()== GlobalValues.getInstancia().RETURN_OK){
 
         }
     }

@@ -102,7 +102,7 @@ public class PedidoParser {
                     pedido.setAndroid_id(WorkJsonField.getInt(pedidoJson, PedidoDataBaseHelper.ANDROID_ID_JSON));
                     pedido.setCreated(WorkJsonField.getString(pedidoJson, PedidoDataBaseHelper.FECHA_JSON));
                     pedido.setEstadoId(WorkJsonField.getInt(pedidoJson, PedidoDataBaseHelper.CAMPO_ESTADO_ID));
-                    pedido.setCliente_id(WorkJsonField.getInt(pedidoJson, PedidoDataBaseHelper.CAMPO_CLIENTE_ID));
+                   // pedido.setCliente_id(WorkJsonField.getInt(pedidoJson, PedidoDataBaseHelper.CAMPO_CLIENTE_ID));
 
                     pedido.setTiempoDemora(WorkJsonField.getInt(pedidoJson, PedidoDataBaseHelper.CAMPO_TIEMPO_DEMORA));
                     pedido.setHoraentrega(WorkJsonField.getDate(pedidoJson, PedidoDataBaseHelper.CAMPO_HORA_ENTREGA_JSON));
@@ -144,7 +144,7 @@ public class PedidoParser {
                         JSONObject pedidodetalleJson = (JSONObject) pedidodetallesJson.get(d);
                         PedidodetalleEntity pd = new PedidodetalleEntity();
 
-                        pd.setAndroidId(WorkJsonField.getInt(pedidodetalleJson, PedidodetalleDataBaseHelper.CAMPO_ID_TMP));
+                        pd.setAndroidId(WorkJsonField.getInt(pedidodetalleJson, PedidodetalleDataBaseHelper.CAMPO_ANDROID_ID));
                         pd.setId(WorkJsonField.getInt(pedidodetalleJson, PedidodetalleDataBaseHelper.CAMPO_ID));
                         pd.setMonto(WorkJsonField.getDouble(pedidodetalleJson, PedidodetalleDataBaseHelper.CAMPO_MONTO));
                         pd.setCantidad(WorkJsonField.getDouble(pedidodetalleJson, PedidodetalleDataBaseHelper.CAMPO_CANTIDAD));
@@ -152,11 +152,11 @@ public class PedidoParser {
                         pd.setProporcionHelado(WorkJsonField.getInt(pedidodetalleJson, PedidodetalleDataBaseHelper.CAMPO_PROPORCION_HELADO));
                         pd.setNroPote(WorkJsonField.getInt(pedidodetalleJson, PedidodetalleDataBaseHelper.CAMPO_NRO_POTE));
                         pd.setPedidoId(WorkJsonField.getInt(pedidodetalleJson, PedidodetalleDataBaseHelper.CAMPO_PEDIDO_ID));
-                        pd.setPedidoAndroidId(WorkJsonField.getInt(pedidodetalleJson, PedidodetalleDataBaseHelper.CAMPO_PEDIDO_ID_TMP));
+                        pd.setPedidoAndroidId(WorkJsonField.getInt(pedidodetalleJson, PedidodetalleDataBaseHelper.CAMPO_PEDIDO_ANDROID_ID));
 
                         detalles.add(pd);
                     }
-                    pedido.setDetalles(detalles);
+                    pedido.setItems(detalles);
                     listadoPedidos.add(pedido);
                 }
 

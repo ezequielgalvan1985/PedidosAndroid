@@ -19,7 +19,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import adaptivex.pedidoscloud.Repositories.ProductoRepository;
-import adaptivex.pedidoscloud.Entity.Producto;
+import adaptivex.pedidoscloud.Entity.ProductoEntity;
 import adaptivex.pedidoscloud.Entity.DatabaseHelper.ProductoDataBaseHelper;
 import adaptivex.pedidoscloud.R;
 
@@ -93,11 +93,11 @@ public class DescargaImagenActivity extends AppCompatActivity {
                 Log.i("Debug 1:", "Comienza Descarga de Imagenes, por favor esperar...");
 
                 ProductoRepository dbHelper = new ProductoRepository(getApplicationContext());
-                Cursor resultSet = dbHelper.abrir().findAll();
-                Producto producto;
-
+                //Cursor resultSet = dbHelper.abrir().findAll();
+                ProductoEntity producto;
+/*
                 for(resultSet.moveToFirst(); !resultSet.isAfterLast(); resultSet.moveToNext()) {
-                    producto = new Producto();
+                    producto = new ProductoEntity();
 
                     //leer imagenurl
                     producto.setImagen(resultSet.getString(resultSet.getColumnIndex(ProductoDataBaseHelper.CAMPO_IMAGEN)));
@@ -113,7 +113,7 @@ public class DescargaImagenActivity extends AppCompatActivity {
                     producto = null;
                 }
 
-
+*/
                 Toast.makeText(getBaseContext(), "FIN  Descarga de Imagenes...", Toast.LENGTH_LONG).show();
 
             }

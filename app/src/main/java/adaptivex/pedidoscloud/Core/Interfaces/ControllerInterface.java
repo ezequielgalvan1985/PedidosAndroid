@@ -17,7 +17,7 @@ public interface ControllerInterface {
     public void commit();
 
 
-    public Cursor findAllBy(String sWhere, String[] argumentos);
+    public Cursor findBy(String sWhere, String[] argumentos);
 
 
 

@@ -21,8 +21,8 @@ public class PedidodetalleDataBaseHelper extends SQLiteOpenHelper
     public static final String CAMPO_PRECIOUNITARIO = "preciounitario";
     public static final String CAMPO_MONTO          = "monto";
     public static final String CAMPO_ESTADO_ID      = "estado_id";
-    public static final String CAMPO_ID_TMP         = "idtmp";
-    public static final String CAMPO_PEDIDO_ID_TMP  = "pedidoidtmp";
+    public static final String CAMPO_ANDROID_ID         = "idtmp";
+    public static final String CAMPO_PEDIDO_ANDROID_ID  = "pedido_android_id";
 
     //HELADERIA
     public static final String CAMPO_NRO_POTE            = "nropote";
@@ -39,8 +39,8 @@ public class PedidodetalleDataBaseHelper extends SQLiteOpenHelper
             CAMPO_PRECIOUNITARIO + " real null ," +
             CAMPO_MONTO          + " real null ," +
             CAMPO_ESTADO_ID      + " integer null, " +
-            CAMPO_ID_TMP         + " integer primary key autoincrement not null," +
-            CAMPO_PEDIDO_ID_TMP  + " integer  null, " +
+            CAMPO_ANDROID_ID         + " integer primary key autoincrement not null," +
+            CAMPO_PEDIDO_ANDROID_ID  + " integer  null, " +
             CAMPO_NRO_POTE           + " integer  null, " +
             CAMPO_PROPORCION_HELADO  + " integer  null, " +
             CAMPO_MEDIDA_POTE        + " integer  null " +

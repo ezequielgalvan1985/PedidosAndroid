@@ -14,14 +14,14 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 
 import adaptivex.pedidoscloud.Repositories.PromoRepository;
-import adaptivex.pedidoscloud.Entity.Promo;
+import adaptivex.pedidoscloud.Entity.PromoEntity;
 import adaptivex.pedidoscloud.R;
 import adaptivex.pedidoscloud.View.RVAdapters.RVAdapterPromo;
 
 public class ListadoPromosFragment extends Fragment {
 
     private RecyclerView rvPromos;
-    private ArrayList<Promo> listaPromos;
+    private ArrayList<PromoEntity> listaPromos;
 
     private OnFragmentInteractionListener mListener;
 
@@ -39,7 +39,7 @@ public class ListadoPromosFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        listaPromos = new ArrayList<Promo>();
+        listaPromos = new ArrayList<PromoEntity>();
     }
 
     @Override

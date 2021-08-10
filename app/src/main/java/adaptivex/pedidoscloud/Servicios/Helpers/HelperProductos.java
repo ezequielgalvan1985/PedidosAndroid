@@ -9,7 +9,7 @@ import adaptivex.pedidoscloud.Config.Configurador;
 import adaptivex.pedidoscloud.Config.GlobalValues;
 import adaptivex.pedidoscloud.Repositories.ProductoRepository;
 import adaptivex.pedidoscloud.Core.parserJSONtoModel.ProductoParser;
-import adaptivex.pedidoscloud.Entity.Producto;
+import adaptivex.pedidoscloud.Entity.ProductoEntity;
 import adaptivex.pedidoscloud.Servicios.WebRequest;
 
 import java.util.HashMap;
@@ -21,7 +21,7 @@ import java.util.HashMap;
 public class HelperProductos extends AsyncTask<Void, Void, Void> {
     private Context ctx;
     private HashMap<String,String> registro;
-    private Producto producto;
+    private ProductoEntity producto;
     private ProductoRepository productoCtr;
     private int respuesta; //1=ok, 200=error
     private ProductoParser cp;
@@ -56,7 +56,7 @@ public class HelperProductos extends AsyncTask<Void, Void, Void> {
 
 
         }catch (Exception e){
-                setRespuesta(GlobalValues.getINSTANCIA().RETURN_ERROR);
+                setRespuesta(GlobalValues.getInstancia().RETURN_ERROR);
                 Log.println(Log.ERROR,"ErrorHelper:",e.getMessage());
 
         }
@@ -114,7 +114,7 @@ public class HelperProductos extends AsyncTask<Void, Void, Void> {
 
         }
 
-        setRespuesta(GlobalValues.getINSTANCIA().RETURN_OK);
+        setRespuesta(GlobalValues.getInstancia().RETURN_OK);
         if (pDialog.isShowing()) pDialog.dismiss();
 
     }

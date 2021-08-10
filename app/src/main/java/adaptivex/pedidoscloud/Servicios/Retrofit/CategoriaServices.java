@@ -14,7 +14,7 @@ import java.util.List;
 
 import adaptivex.pedidoscloud.Config.Configurador;
 import adaptivex.pedidoscloud.Config.GlobalValues;
-import adaptivex.pedidoscloud.Core.FactoryRepositories;
+import adaptivex.pedidoscloud.Repositories.FactoryRepositories;
 import adaptivex.pedidoscloud.Repositories.CategoriaRepository;
 import adaptivex.pedidoscloud.Entity.CategoriaEntity;
 import adaptivex.pedidoscloud.Servicios.Retrofit.Interface.ICategoriaRetrofit;
@@ -63,10 +63,10 @@ public  class CategoriaServices {
                 .build();
 
         ICategoriaRetrofit service = retrofit.create(ICategoriaRetrofit.class);
-        //UserSessionLogin.getINSTANCIA().getUser().setToken("5d3b54d7422aa18506d26656bd93a0db5e4fcc6c");
+        //UserSessionLogin.getInstancia().getUser().setToken("5d3b54d7422aa18506d26656bd93a0db5e4fcc6c");
         //Call<List<Categoria>> call = service.getCategorias("Basic YWRtaW4yOjEyMzQ=");
 
-        Call<List<CategoriaEntity>> call = service.getCategorias(GlobalValues.getINSTANCIA().getAuthorization());
+        Call<List<CategoriaEntity>> call = service.getCategorias(GlobalValues.getInstancia().getAuthorization());
         call.enqueue(new Callback<List<CategoriaEntity>>() {
             @Override
             public void onResponse(Call<List<CategoriaEntity>> call, Response<List<CategoriaEntity>> response) {

@@ -2,7 +2,7 @@ package adaptivex.pedidoscloud.Core.parserJSONtoModel;
 
 import android.util.Log;
 
-import adaptivex.pedidoscloud.Entity.Producto;
+import adaptivex.pedidoscloud.Entity.ProductoEntity;
 import adaptivex.pedidoscloud.Entity.DatabaseHelper.ProductoDataBaseHelper;
 
 import org.json.JSONArray;
@@ -22,8 +22,8 @@ public class ProductoParser {
     private String message;
     private JSONArray data;
     private JSONObject productojson;
-    private Producto producto;
-    private ArrayList<Producto> listadoProductos;
+    private ProductoEntity producto;
+    private ArrayList<ProductoEntity> listadoProductos;
     /* Solamente parsea los datos de un String Json, al Objeto ProductoParser */
     public ProductoParser(){
     }
@@ -32,11 +32,11 @@ public class ProductoParser {
         setJsonstr(jsonstr);
     }
 
-    public Producto parseJsonToObject(){
+    public ProductoEntity parseJsonToObject(){
         /* Completa datos del objeto  */
         try{
             //leer raiz
-            listadoProductos  = new ArrayList<Producto>();
+            listadoProductos  = new ArrayList<ProductoEntity>();
             setJsonobj(new JSONObject(getJsonstr()));
             setStatus(getJsonobj().getString("code"));
             setMessage(getJsonobj().getString("message"));
@@ -45,7 +45,7 @@ public class ProductoParser {
             if (Integer.parseInt(getStatus())== 200){
                 //parser Usuario
                 JSONArray productos = getData();
-                Producto producto = new Producto();
+                ProductoEntity producto = new ProductoEntity();
                 for (int i = 0; i < productos.length(); i++) {
                     JSONObject registro = productos.getJSONObject(i);
                     int enabled = 0;
@@ -69,7 +69,7 @@ public class ProductoParser {
                     }
 
                     listadoProductos.add(producto);
-                    producto = new Producto();
+                    producto = new ProductoEntity();
                 }//endfor
 
             }else {
@@ -105,11 +105,11 @@ public class ProductoParser {
         this.data = data;
     }
 
-    public Producto getProducto() {
+    public ProductoEntity getProducto() {
         return producto;
     }
 
-    public void setProducto(Producto producto) {
+    public void setProducto(ProductoEntity producto) {
         this.producto = producto;
     }
 
@@ -145,11 +145,11 @@ public class ProductoParser {
         this.productojson = productojson;
     }
 
-    public ArrayList<Producto> getListadoProductos() {
+    public ArrayList<ProductoEntity> getListadoProductos() {
         return listadoProductos;
     }
 
-    public void setListadoProductos(ArrayList<Producto> listadoProductos) {
+    public void setListadoProductos(ArrayList<ProductoEntity> listadoProductos) {
         this.listadoProductos = listadoProductos;
     }
 }

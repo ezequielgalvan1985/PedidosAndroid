@@ -12,7 +12,7 @@ import java.util.List;
 
 import adaptivex.pedidoscloud.Config.Configurador;
 import adaptivex.pedidoscloud.Config.GlobalValues;
-import adaptivex.pedidoscloud.Core.FactoryRepositories;
+import adaptivex.pedidoscloud.Repositories.FactoryRepositories;
 import adaptivex.pedidoscloud.Entity.PedidoEntity;
 import adaptivex.pedidoscloud.Servicios.Retrofit.Interface.IPedidoRetrofit;
 import retrofit2.Call;
@@ -35,7 +35,7 @@ public  class PedidoServices {
                 .build();
 
         IPedidoRetrofit service = retrofit.create(IPedidoRetrofit.class);
-        Call<List<PedidoEntity>> call = service.getPedidos(GlobalValues.getINSTANCIA().getAuthorization());
+        Call<List<PedidoEntity>> call = service.getPedidos(GlobalValues.getInstancia().getAuthorization());
         call.enqueue(new Callback<List<PedidoEntity>>() {
             @Override
             public void onResponse(Call<List<PedidoEntity>> call, Response<List<PedidoEntity>> response) {
@@ -64,5 +64,43 @@ public  class PedidoServices {
             }
         });
         return pedidosList;
+    }
+
+
+    public void postPedido(PedidoEntity pPedido){
+        try{
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl(Configurador.urlBase)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+
+            IPedidoRetrofit service = retrofit.create(IPedidoRetrofit.class);
+
+            Call<PedidoEntity> call =
+                    service.postPedido(
+                            GlobalValues.getInstancia().getAuthorization(),
+                            pPedido);
+
+            call.enqueue(
+                    new Callback<PedidoEntity>() {
+                        @Override
+                        public void onResponse(Call<PedidoEntity> call, Response<PedidoEntity> response) {
+                            if(!response.isSuccessful()){
+                                Log.println(Log.ERROR,"PedidoServices",String.valueOf(response.code()));
+                                return;
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<PedidoEntity> call, Throwable t) {
+                            Log.println(Log.ERROR,"Pedidoservices: ",t.getMessage());
+                        }
+                    }
+            );
+
+
+        }catch(Exception e){
+            Log.e("pedidoservices",e.getMessage());
+        }
     }
 }

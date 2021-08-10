@@ -26,13 +26,13 @@ import java.util.List;
 
 import adaptivex.pedidoscloud.Config.Configurador;
 import adaptivex.pedidoscloud.Config.GlobalValues;
-import adaptivex.pedidoscloud.Core.FactoryRepositories;
+import adaptivex.pedidoscloud.Repositories.FactoryRepositories;
 import adaptivex.pedidoscloud.Repositories.PedidoRepository;
 import adaptivex.pedidoscloud.Repositories.PedidodetalleRepository;
 import adaptivex.pedidoscloud.Core.parserJSONtoModel.PedidoParser;
 import adaptivex.pedidoscloud.Entity.PedidoEntity;
 import adaptivex.pedidoscloud.Entity.PedidodetalleEntity;
-import adaptivex.pedidoscloud.Entity.Producto;
+import adaptivex.pedidoscloud.Entity.ProductoEntity;
 import adaptivex.pedidoscloud.Servicios.Helpers.HelperPedidos;
 
 /**
@@ -46,7 +46,7 @@ public class IntentServiceEnvioPedidos extends IntentService {
 
     private Context ctx;
     private HashMap<String,String> registro;
-    private Producto producto;
+    private ProductoEntity producto;
     private int respuesta; //1=ok, 200=error
     private int opcion; //1 enviar Post Producto
     private ProgressDialog pDialog;
@@ -74,7 +74,7 @@ public class IntentServiceEnvioPedidos extends IntentService {
                             .getInstancia()
                             .getPedidoRepository()
                             .abrir()
-                            .findByEstadoId(GlobalValues.getINSTANCIA().ESTADO_NUEVO);
+                            .findByEstadoId(GlobalValues.getInstancia().ESTADO_NUEVO);
 
                     for (PedidoEntity pedido : listaPedidos) {
                         URL url;
@@ -103,10 +103,10 @@ public class IntentServiceEnvioPedidos extends IntentService {
                         System.out.println(dateFormat.format(fechahoy));
 
                         pedido_json.put("fecha", String.valueOf(fechahoystr));
-                        pedido_json.put("user_id", String.valueOf(GlobalValues.getINSTANCIA().getUsuariologueado().getId()));
-                        pedido_json.put("cliente_id", paramPedido.getCliente_id().toString());
+                        pedido_json.put("user_id", String.valueOf(GlobalValues.getInstancia().getUsuariologueado().getId()));
+                        //pedido_json.put("cliente_id", paramPedido.getCliente_id().toString());
                         pedido_json.put("android_id", String.valueOf(paramPedido.getAndroid_id()));
-                        pedido_json.put("estado_id", String.valueOf(GlobalValues.getINSTANCIA().consPedidoEstadoEnviado));
+                        pedido_json.put("estado_id", String.valueOf(GlobalValues.getInstancia().consPedidoEstadoEnviado));
                         pedido_json.put("monto", String.valueOf(paramPedido.getMonto()));
                         pedido_json.put("iva", String.valueOf(paramPedido.getIva()));
                         pedido_json.put("subtotal", String.valueOf(paramPedido.getSubtotal()));
@@ -119,9 +119,9 @@ public class IntentServiceEnvioPedidos extends IntentService {
                         PedidodetalleEntity pd = new PedidodetalleEntity();
                         PedidodetalleRepository pdc = new PedidodetalleRepository(getBaseContext());
 
-                        for (int x = 0; x < paramPedido.getDetalles().size(); x++) {
+                        for (int x = 0; x < paramPedido.getItems().size(); x++) {
                             JSONObject item = new JSONObject();
-                            pd = (PedidodetalleEntity) paramPedido.getDetalles().get(x);
+                            pd = (PedidodetalleEntity) paramPedido.getItems().get(x);
                             item.put("producto_id", pd.getProductoId().toString());
                             item.put("cantidad", String.valueOf(pd.getCantidad()));
                             item.put("android_id", String.valueOf(pd.getAndroidId()));
@@ -161,10 +161,10 @@ public class IntentServiceEnvioPedidos extends IntentService {
                         PedidoEntity pedidopostsave = pp.parseJsonToObject();
                         PedidoEntity pedidoprevsave = pedidoCtr.abrir().findByAndroidId(paramPedido.getAndroid_id());
                         pedidoprevsave.setId(pedidopostsave.getId());
-                        pedidoprevsave.setEstadoId(GlobalValues.getINSTANCIA().consPedidoEstadoEnviado);
+                        pedidoprevsave.setEstadoId(GlobalValues.getInstancia().consPedidoEstadoEnviado);
                         pedidoCtr.abrir().modificar(pedidoprevsave, true);
                         pedidoCtr.cerrar();
-                        //setRespuesta(GlobalValues.getINSTANCIA().RETURN_OK);
+                        //setRespuesta(GlobalValues.getInstancia().RETURN_OK);
                         Log.println(Log.ERROR, "Helper:", " Guardado Correctamente ");
 
                     }
@@ -176,7 +176,7 @@ public class IntentServiceEnvioPedidos extends IntentService {
                 } catch (Exception e) {
                     if (pDialog.isShowing())
                         pDialog.dismiss();
-                    setRespuesta(GlobalValues.getINSTANCIA().RETURN_ERROR);
+                    setRespuesta(GlobalValues.getInstancia().RETURN_ERROR);
                     Log.println(Log.ERROR, "ErrorHelper:", e.getMessage());
                     Toast.makeText(getBaseContext(), "Error " + e.getMessage().toString(), Toast.LENGTH_SHORT).show();
                 }

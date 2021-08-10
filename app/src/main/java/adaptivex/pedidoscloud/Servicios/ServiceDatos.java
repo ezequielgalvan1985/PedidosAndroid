@@ -12,7 +12,7 @@ import adaptivex.pedidoscloud.Config.Configurador;
 import adaptivex.pedidoscloud.Config.GlobalValues;
 import adaptivex.pedidoscloud.Repositories.ProductoRepository;
 import adaptivex.pedidoscloud.Core.parserJSONtoModel.ProductoParser;
-import adaptivex.pedidoscloud.Entity.Producto;
+import adaptivex.pedidoscloud.Entity.ProductoEntity;
 
 import java.util.HashMap;
 
@@ -56,7 +56,7 @@ public class ServiceDatos extends Service {
     private class HelperStockPrecioss extends AsyncTask<Void, Void, Void> {
         private Context ctx;
         private HashMap<String,String> registro;
-        private Producto producto;
+        private ProductoEntity producto;
         private ProductoRepository productoCtr;
         private int respuesta; //1=ok, 200=error
         private int opcion; //1 enviar Post Producto
@@ -75,7 +75,7 @@ public class ServiceDatos extends Service {
             try{
                 WebRequest webreq = new WebRequest();
                 registro = new HashMap<String, String>();
-                //registro.put("empresa_id", String.valueOf(GlobalValues.getINSTANCIA().getUserlogued().getEntidad_id()));
+                //registro.put("empresa_id", String.valueOf(GlobalValues.getInstancia().getUserlogued().getEntidad_id()));
                 String jsonStr = webreq.makeWebServiceCall(Configurador.urlProductos, WebRequest.POST,registro);
                 ProductoParser cp = new ProductoParser(jsonStr);
                 cp.parseJsonToObject();
@@ -86,10 +86,10 @@ public class ServiceDatos extends Service {
 
                     productoCtr.abrir().add(cp.getListadoProductos().get(i));
                 }
-                setRespuesta(GlobalValues.getINSTANCIA().RETURN_OK);
+                setRespuesta(GlobalValues.getInstancia().RETURN_OK);
                 Thread.sleep(5000);
             }catch (Exception e){
-                setRespuesta(GlobalValues.getINSTANCIA().RETURN_ERROR);
+                setRespuesta(GlobalValues.getInstancia().RETURN_ERROR);
                 Log.println(Log.ERROR,"ErrorHelper:",e.getMessage());
             }
 
@@ -107,7 +107,7 @@ public class ServiceDatos extends Service {
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
-            if (getRespuesta()== GlobalValues.getINSTANCIA().RETURN_OK){
+            if (getRespuesta()== GlobalValues.getInstancia().RETURN_OK){
                 Toast.makeText(getCtx(), "Actualizacion de Productos Finalizada ", Toast.LENGTH_SHORT).show();
             }
         }

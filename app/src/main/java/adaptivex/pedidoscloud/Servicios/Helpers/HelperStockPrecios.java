@@ -8,7 +8,7 @@ import adaptivex.pedidoscloud.Config.Configurador;
 import adaptivex.pedidoscloud.Config.GlobalValues;
 import adaptivex.pedidoscloud.Repositories.ProductoRepository;
 import adaptivex.pedidoscloud.Core.parserJSONtoModel.ProductoParser;
-import adaptivex.pedidoscloud.Entity.Producto;
+import adaptivex.pedidoscloud.Entity.ProductoEntity;
 import adaptivex.pedidoscloud.Servicios.WebRequest;
 
 import java.util.HashMap;
@@ -20,7 +20,7 @@ import java.util.HashMap;
 public class HelperStockPrecios extends AsyncTask<Void, Void, Void> {
     private Context ctx;
     private HashMap<String,String> registro;
-    private Producto producto;
+    private ProductoEntity producto;
     private ProductoRepository productoCtr;
     private int respuesta; //1=ok, 200=error
     private int opcion; //1 enviar Post Producto
@@ -46,10 +46,10 @@ public class HelperStockPrecios extends AsyncTask<Void, Void, Void> {
 
                 productoCtr.abrir().add(cp.getListadoProductos().get(i));
             }
-            setRespuesta(GlobalValues.getINSTANCIA().RETURN_OK);
+            setRespuesta(GlobalValues.getInstancia().RETURN_OK);
 
         }catch (Exception e){
-                setRespuesta(GlobalValues.getINSTANCIA().RETURN_ERROR);
+                setRespuesta(GlobalValues.getInstancia().RETURN_ERROR);
                 Log.println(Log.ERROR,"ErrorHelper:",e.getMessage());
         }
 
@@ -67,7 +67,7 @@ public class HelperStockPrecios extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPostExecute(Void result) {
         super.onPostExecute(result);
-        if (getRespuesta()== GlobalValues.getINSTANCIA().RETURN_OK){
+        if (getRespuesta()== GlobalValues.getInstancia().RETURN_OK){
 
         }
     }

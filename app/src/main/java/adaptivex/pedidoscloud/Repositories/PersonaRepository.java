@@ -6,7 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 
-import adaptivex.pedidoscloud.Entity.Persona;
+import adaptivex.pedidoscloud.Entity.PersonaEntity;
 import adaptivex.pedidoscloud.Entity.DatabaseHelper.PersonaDataBaseHelper;
 
 /**
@@ -37,7 +37,7 @@ public class PersonaRepository
         }
     }
 
-    public long agregar(Persona persona)
+    public long agregar(PersonaEntity persona)
     {
         ContentValues valores = new ContentValues();
         valores.put(PersonaDataBaseHelper.CAMPO_APELLIDO, persona.getApellido());
@@ -48,7 +48,7 @@ public class PersonaRepository
         valores.put(PersonaDataBaseHelper.CAMPO_TELEFONO, persona.getTelefono());
         return db.insert(PersonaDataBaseHelper.TABLE_NAME, null, valores);
     }
-    public void modificar(Persona persona)
+    public void modificar(PersonaEntity persona)
     {
         String[] argumentos = new String[]
                 {String.valueOf(persona.getId())};
@@ -63,7 +63,7 @@ public class PersonaRepository
         db.update(PersonaDataBaseHelper.TABLE_NAME, valores,
                 PersonaDataBaseHelper.CAMPO_ID + " = ?", argumentos);
     }
-    public void eliminar(Persona persona)
+    public void eliminar(PersonaEntity persona)
     {
         String[] argumentos = new String[]
                 {String.valueOf(persona.getId())};
@@ -89,9 +89,9 @@ public class PersonaRepository
         return resultado;
     }
 
-    public Persona buscar(int id)
+    public PersonaEntity buscar(int id)
     {
-        Persona persona = null;
+        PersonaEntity persona = null;
         String[] campos = {PersonaDataBaseHelper.CAMPO_ID,
                 PersonaDataBaseHelper.CAMPO_APELLIDO,
                 PersonaDataBaseHelper.CAMPO_NOMBRE,
@@ -106,7 +106,7 @@ public class PersonaRepository
         if (resultado != null)
         {
             resultado.moveToFirst();
-            persona = new Persona();
+            persona = new PersonaEntity();
             persona.setId(resultado.getInt(resultado.getColumnIndex(PersonaDataBaseHelper.CAMPO_ID)));
             persona.setApellido(resultado.getString(resultado.getColumnIndex(PersonaDataBaseHelper.CAMPO_APELLIDO)));
             persona.setNombre(resultado.getString(resultado.getColumnIndex(PersonaDataBaseHelper.CAMPO_NOMBRE)));

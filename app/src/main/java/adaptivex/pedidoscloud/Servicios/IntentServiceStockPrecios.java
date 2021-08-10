@@ -13,7 +13,7 @@ import adaptivex.pedidoscloud.Config.GlobalValues;
 import adaptivex.pedidoscloud.Repositories.ProductoRepository;
 import adaptivex.pedidoscloud.Core.ParameterHelper;
 import adaptivex.pedidoscloud.Core.parserJSONtoModel.ProductoParser;
-import adaptivex.pedidoscloud.Entity.Producto;
+import adaptivex.pedidoscloud.Entity.ProductoEntity;
 
 /**
  * An {@link IntentService} subclass for handling asynchronous task requests in
@@ -35,7 +35,7 @@ public class IntentServiceStockPrecios extends IntentService {
 
     private Context ctx;
     private HashMap<String,String> registro;
-    private Producto producto;
+    private ProductoEntity producto;
     private ProductoRepository productoCtr;
     private int respuesta; //1=ok, 200=error
     private int opcion; //1 enviar Post Producto
@@ -71,7 +71,7 @@ public class IntentServiceStockPrecios extends IntentService {
         while(true) {
             final String action = intent.getAction();
 /*
-            if (GlobalValues.getINSTANCIA().ACTION_GET_STOCK_PRECIOS.equals(action)) {
+            if (GlobalValues.getInstancia().ACTION_GET_STOCK_PRECIOS.equals(action)) {
 
             }
 */
@@ -80,21 +80,21 @@ public class IntentServiceStockPrecios extends IntentService {
             try {
                 WebRequest webreq = new WebRequest();
                 registro = new HashMap<String, String>();
-                //registro.put("empresa_id", String.valueOf(GlobalValues.getINSTANCIA().getUserlogued().getEntidad_id()));
+                //registro.put("empresa_id", String.valueOf(GlobalValues.getInstancia().getUserlogued().getEntidad_id()));
                 String jsonStr = webreq.makeWebServiceCall(Configurador.urlProductos, WebRequest.POST, registro);
                 ProductoParser cp = new ProductoParser(jsonStr);
                 cp.parseJsonToObject();
                 //Recorrer Lista
                 // Setear bandera de Actualizacion de stock
                 ParameterHelper ph = new ParameterHelper(getBaseContext());
-                //ph.setServiceStockPrecioWorking(GlobalValues.getINSTANCIA().VALUE_SERVICE_STOCK_PRECIOS_WORKING);
+                //ph.setServiceStockPrecioWorking(GlobalValues.getInstancia().VALUE_SERVICE_STOCK_PRECIOS_WORKING);
 
 
 
                 for (int i = 0; i < cp.getListadoProductos().size(); i++) {
                     //Validar, si existe producto, por codigo externo
-                    Producto itemProducto = cp.getListadoProductos().get(i);
-                    Producto p = new Producto();
+                    ProductoEntity itemProducto = cp.getListadoProductos().get(i);
+                    ProductoEntity p = new ProductoEntity();
                     p = productoCtr.abrir().findByCodigoExterno(itemProducto.getCodigoexterno());
                     if (p== null){
                         //si no existe agrego el nuevo producto
@@ -110,8 +110,8 @@ public class IntentServiceStockPrecios extends IntentService {
 
                 }
 
-                //ph.setServiceStockPrecioWorking(GlobalValues.getINSTANCIA().VALUE_SERVICE_STOCK_PRECIOS_WORKING_NOT);
-                setRespuesta(GlobalValues.getINSTANCIA().RETURN_OK);
+                //ph.setServiceStockPrecioWorking(GlobalValues.getInstancia().VALUE_SERVICE_STOCK_PRECIOS_WORKING_NOT);
+                setRespuesta(GlobalValues.getInstancia().RETURN_OK);
                 Toast.makeText(getBaseContext(), "Finalizacion Actualizacion de Productos ", Toast.LENGTH_SHORT).show();
                 Thread.sleep(10000);
 

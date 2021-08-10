@@ -5,7 +5,7 @@ import adaptivex.pedidoscloud.Core.WorkString;
 /**
  * Created by ezequiel on 23/05/2016.
  */
-public class UserProfile {
+public class UserProfileEntity {
     private Integer id;
     private String nombre;
     private String apellido;
@@ -14,13 +14,13 @@ public class UserProfile {
     private String nro;
     private String piso;
     private String contacto;
-    private User user;
+    private UserEntity user;
 
-    public User getUser() {
+    public UserEntity getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(UserEntity user) {
         this.user = user;
     }
 

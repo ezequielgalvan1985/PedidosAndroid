@@ -11,9 +11,7 @@ import adaptivex.pedidoscloud.Config.Configurador;
  */
 public class ProductoDataBaseHelper extends SQLiteOpenHelper
 {
-    public static final String DB_NAME = Configurador.DBName;
     public static final String TABLE_NAME          = "productos";
-    public static final int DB_VERSION             =  Configurador.DBVersion;
     public static final String CAMPO_ID            = "id";
     public static final String CAMPO_NOMBRE        = "nombre";
     public static final String CAMPO_DESCRIPCION   = "descripcion";
@@ -60,7 +58,7 @@ public class ProductoDataBaseHelper extends SQLiteOpenHelper
 
     public ProductoDataBaseHelper(Context context)
     {
-        super(context, DB_NAME, null, DB_VERSION);
+        super(context, Configurador.DBName, null, Configurador.DBVersion);
     }
 
     @Override

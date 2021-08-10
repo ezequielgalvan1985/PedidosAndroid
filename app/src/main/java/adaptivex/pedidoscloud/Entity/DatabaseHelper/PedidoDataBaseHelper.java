@@ -23,7 +23,7 @@ public class PedidoDataBaseHelper extends SQLiteOpenHelper
     public static final String CAMPO_CLIENTE_ID = "cliente_id";
     public static final String CAMPO_BONIFICACION = "bonificacion";
     public static final String CAMPO_ESTADO_ID = "estado_id";
-    public static final String CAMPO_ID_TMP = "idtmp";
+    public static final String CAMPO_ANDROID_ID = "android_id";
 
     //DIRECCION
     public static final String CAMPO_LOCALIDAD = "localidad";
@@ -106,9 +106,7 @@ public class PedidoDataBaseHelper extends SQLiteOpenHelper
             CAMPO_CANTIDAD_POTE_MEDIO            + " integer null, " +
             CAMPO_CANTIDAD_POTE_TRESCUARTO       + " integer null, " +
             CAMPO_CANTIDAD_POTE_KILO             + " integer null, " +
-
-
-            CAMPO_ID_TMP             + " integer primary key autoincrement not null" +
+            CAMPO_ANDROID_ID             + " integer primary key autoincrement not null" +
             ")";
 
     public PedidoDataBaseHelper(Context context)
@@ -122,9 +120,9 @@ public class PedidoDataBaseHelper extends SQLiteOpenHelper
                 " set " +
                 CAMPO_MONTO + " = (select sum("+PedidodetalleDataBaseHelper.CAMPO_MONTO +") " +
                                      " from "+PedidodetalleDataBaseHelper.TABLE_NAME+
-                                     " where "+PedidodetalleDataBaseHelper.CAMPO_PEDIDO_ID_TMP + " = "+  String.valueOf(tmpid) +
+                                     " where "+PedidodetalleDataBaseHelper.CAMPO_PEDIDO_ANDROID_ID + " = "+  String.valueOf(tmpid) +
                                      " ) "+
-                " where " + PedidoDataBaseHelper.CAMPO_ID_TMP + " = " + String.valueOf(tmpid);
+                " where " + PedidoDataBaseHelper.CAMPO_ANDROID_ID + " = " + String.valueOf(tmpid);
 
         return sql;
     }
@@ -132,7 +130,7 @@ public class PedidoDataBaseHelper extends SQLiteOpenHelper
     public static String get_PED_TOTALES_TMP_ID(int tmpid){
         String sql ="select sum("+PedidodetalleDataBaseHelper.CAMPO_MONTO +") " +
                         " from "+PedidodetalleDataBaseHelper.TABLE_NAME+
-                        " where "+PedidodetalleDataBaseHelper.CAMPO_PEDIDO_ID_TMP + " = "+  String.valueOf(tmpid);
+                        " where "+PedidodetalleDataBaseHelper.CAMPO_PEDIDO_ANDROID_ID + " = "+  String.valueOf(tmpid);
 
 
         return sql;

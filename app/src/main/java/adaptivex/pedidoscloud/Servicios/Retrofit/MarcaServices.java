@@ -12,7 +12,7 @@ import java.util.List;
 
 import adaptivex.pedidoscloud.Config.Configurador;
 import adaptivex.pedidoscloud.Config.GlobalValues;
-import adaptivex.pedidoscloud.Core.FactoryRepositories;
+import adaptivex.pedidoscloud.Repositories.FactoryRepositories;
 import adaptivex.pedidoscloud.Entity.MarcaEntity;
 import adaptivex.pedidoscloud.Servicios.Retrofit.Interface.IMarcaRetrofit;
 import retrofit2.Call;
@@ -39,7 +39,7 @@ public  class MarcaServices {
                     .build();
 
             IMarcaRetrofit service = retrofit.create(IMarcaRetrofit.class);
-            Call<List<MarcaEntity>> call = service.getMarcas(GlobalValues.getINSTANCIA().getAuthorization());
+            Call<List<MarcaEntity>> call = service.getMarcas(GlobalValues.getInstancia().getAuthorization());
             call.enqueue(new Callback<List<MarcaEntity>>() {
                 @Override
                 public void onResponse(Call<List<MarcaEntity>> call, Response<List<MarcaEntity>> response) {

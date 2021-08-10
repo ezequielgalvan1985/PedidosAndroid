@@ -15,7 +15,7 @@ import android.widget.Toast;
 
 import adaptivex.pedidoscloud.Config.Constants;
 import adaptivex.pedidoscloud.Config.GlobalValues;
-import adaptivex.pedidoscloud.Core.FactoryRepositories;
+import adaptivex.pedidoscloud.Repositories.FactoryRepositories;
 import adaptivex.pedidoscloud.Repositories.PedidoRepository;
 import adaptivex.pedidoscloud.Core.WorkNumber;
 import adaptivex.pedidoscloud.R;
@@ -72,7 +72,7 @@ public class CargarOtrosDatosFragment extends Fragment implements View.OnClickLi
             //Cargar datos en los Objetos
             btnListo.setOnClickListener(this);
 
-            txtCucuruchoPrecio.setText("Cucurucho ("+GlobalValues.getINSTANCIA().PRECIO_CUCURUCHO_MONEY+" c/u):");
+            txtCucuruchoPrecio.setText("Cucurucho ("+GlobalValues.getInstancia().PRECIO_CUCURUCHO_MONEY+" c/u):");
             txt_monto_total_helados.setText("Monto a Pagar: "+ FactoryRepositories.getInstancia().PEDIDO_TEMPORAL.getMontoHeladoFormatMoney());
 
 
@@ -139,6 +139,7 @@ public class CargarOtrosDatosFragment extends Fragment implements View.OnClickLi
 
             PedidoRepository pc = new PedidoRepository(getContext());
             pc.abrir().edit(FactoryRepositories.getInstancia().PEDIDO_TEMPORAL);
+
             return true;
         }catch (Exception e){
             Toast.makeText(getContext(),"Error: " + e.getMessage(),Toast.LENGTH_LONG).show();

@@ -16,10 +16,13 @@ import android.widget.Toast;
 
 import adaptivex.pedidoscloud.Config.Configurador;
 import adaptivex.pedidoscloud.Config.GlobalValues;
+import adaptivex.pedidoscloud.Core.IniciarApp;
+import adaptivex.pedidoscloud.Entity.ParameterEntity;
 import adaptivex.pedidoscloud.MainActivity;
 import adaptivex.pedidoscloud.Entity.LoginData;
 import adaptivex.pedidoscloud.Entity.LoginResult;
 import adaptivex.pedidoscloud.Entity.MarcaEntity;
+import adaptivex.pedidoscloud.Repositories.FactoryRepositories;
 import adaptivex.pedidoscloud.Servicios.Retrofit.Interface.IUserRetrofit;
 import adaptivex.pedidoscloud.Servicios.Retrofit.UserServices;
 import retrofit2.Call;
@@ -27,7 +30,7 @@ import retrofit2.Callback;
 
 import java.util.List;
 
-import adaptivex.pedidoscloud.Entity.User;
+import adaptivex.pedidoscloud.Entity.UserEntity;
 import adaptivex.pedidoscloud.R;
 import retrofit2.Response;
 import retrofit2.Retrofit;
@@ -41,7 +44,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
     private TextView loginTxtCartel;
     private Button btn_login, btn_register;
 
-    private User usertmp;
+    private UserEntity usertmp;
 
     private List<MarcaEntity>marcasList;
 
@@ -134,12 +137,45 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
                     //se recibe el token
                     //guardamos el token
                     LoginResult token = response.body();
-                    GlobalValues.getINSTANCIA().setToken(token);
+                    GlobalValues.getInstancia().setToken(token);
 
-                    Log.println(Log.INFO,"Login: ",GlobalValues.getINSTANCIA().getAuthorization()  );
+
+
+                    //graba bandera instalado, luego de descargar
+                    ParameterEntity p = FactoryRepositories
+                            .getInstancia()
+                            .getParameterRepository()
+                            .abrir()
+                            .findByNombre(GlobalValues.getInstancia().PARAM_INSTALLED);
+                    if (p==null){
+                        IniciarApp ia = new IniciarApp(getContext());
+                        ia.downloadDatabase();
+                    }
+                    //RECORDARME
+                    //graba bandera rememberme
+                    ParameterEntity prememberme =FactoryRepositories
+                            .getInstancia()
+                            .getParameterRepository()
+                            .abrir()
+                            .findByNombre(GlobalValues.PARAM_REMEMBERME);
+                    prememberme.setValor_texto("Y");
+                    FactoryRepositories.getInstancia().getParameterRepository().abrir().modificar(prememberme);
+
+                    //graba token en parametro para recordarlo
+                    ParameterEntity ptoken =FactoryRepositories
+                            .getInstancia()
+                            .getParameterRepository()
+                            .abrir()
+                            .findByNombre(GlobalValues.PARAM_TOKEN);
+                    ptoken.setValor_texto(token.getToken());
+                    FactoryRepositories.getInstancia().getParameterRepository().abrir().modificar(ptoken);
+
+
+                    Log.println(Log.INFO,"Login: ",GlobalValues.getInstancia().getAuthorization()  );
                     Intent i = new Intent(getActivity(), MainActivity.class);
                     startActivity(i);
-                    getActivity().finish();
+                    getActivity()
+                            .finish();
                 }
 
                 @Override
@@ -162,7 +198,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
             if(login_password.getText().length()<4){
                 Toast.makeText(getContext(), "Contraseña debe tener 4 caracteres minimo: ", Toast.LENGTH_LONG).show();
             }
-            usertmp = new User();
+            usertmp = new UserEntity();
             usertmp.setUsername(login_email.getText().toString());
             usertmp.setPassword(login_password.getText().toString());
 

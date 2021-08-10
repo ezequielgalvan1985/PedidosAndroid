@@ -9,7 +9,7 @@ import android.widget.Toast;
 
 import adaptivex.pedidoscloud.Config.GlobalValues;
 import adaptivex.pedidoscloud.Entity.DatabaseHelper.EstadoDataBaseHelper;
-import adaptivex.pedidoscloud.Entity.User;
+import adaptivex.pedidoscloud.Entity.UserEntity;
 import adaptivex.pedidoscloud.Entity.DatabaseHelper.UserDataBaseHelper;
 import adaptivex.pedidoscloud.Servicios.Helpers.HelperUser;
 
@@ -17,7 +17,7 @@ import adaptivex.pedidoscloud.Servicios.Helpers.HelperUser;
  * Created by ezequiel on 28/05/2016.
  */
 public class UserRepository extends AppController{
-    private User user;
+    private UserEntity user;
     private String tabla = "User";
 
     /*      DATABASE        */
@@ -29,10 +29,10 @@ public class UserRepository extends AppController{
 
 
     //Obtener datos del usuario guardado en la base de datos
-    public User getUserDB(int id){
+    public UserEntity getUserDB(int id){
         try{
             UserRepository pc = new UserRepository(this.getContext());
-            User u = pc.abrir().findUser(id);
+            UserEntity u = pc.abrir().findUser(id);
             return u;
         }catch(Exception e){
             Toast.makeText(getContext(), "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
@@ -47,7 +47,7 @@ public class UserRepository extends AppController{
 
 
 
-    public boolean add(User userParam){
+    public boolean add(UserEntity userParam){
 
         //cargar valores
         ContentValues valores = new ContentValues();
@@ -74,7 +74,7 @@ public class UserRepository extends AppController{
     }
 
     public boolean isUserLogin(){
-        if (GlobalValues.getINSTANCIA().getUsuariologueado()!= null){
+        if (GlobalValues.getInstancia().getUsuariologueado()!= null){
             return false;
         }else{
             return true;
@@ -92,11 +92,11 @@ public class UserRepository extends AppController{
         this.context = context;
     }
 
-    public User getUser() {
+    public UserEntity getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(UserEntity user) {
         this.user = user;
     }
 
@@ -116,7 +116,7 @@ public class UserRepository extends AppController{
         return this;
     }
 
-    public long addDB(User item)
+    public long addDB(UserEntity item)
     {
         try {
             ContentValues valores = new ContentValues();
@@ -136,7 +136,7 @@ public class UserRepository extends AppController{
 
 
 
-    public void editDB(User item)
+    public void editDB(UserEntity item)
     {
         try {
             String[] argumentos = new String[] {String.valueOf(item.getId())};
@@ -164,9 +164,9 @@ public class UserRepository extends AppController{
     }
 
 
-    public User findById(Integer id)
+    public UserEntity findById(Integer id)
     {
-        User registro = new User();
+        UserEntity registro = new UserEntity();
         String[] campos = {
                 UserDataBaseHelper.ID,
                 UserDataBaseHelper.USERNAME,
@@ -185,10 +185,10 @@ public class UserRepository extends AppController{
         return registro;
     }
 
-    public User findUser(int id)
+    public UserEntity findUser(int id)
     {
         try {
-            User registro = new User();
+            UserEntity registro = new UserEntity();
             String[] campos = {
                     UserDataBaseHelper.ID,
                     UserDataBaseHelper.USERNAME,
@@ -212,9 +212,9 @@ public class UserRepository extends AppController{
 
 
 
-    public User parseObjectFromRecord(Cursor c ){
+    public UserEntity parseObjectFromRecord(Cursor c ){
         try{
-            User object = new User();
+            UserEntity object = new UserEntity();
             if (c!=null){
                     c.moveToFirst();
                     object.setId(c.getInt(c.getColumnIndex(UserDataBaseHelper.ID)));

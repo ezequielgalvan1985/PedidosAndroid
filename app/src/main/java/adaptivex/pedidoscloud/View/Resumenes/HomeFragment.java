@@ -16,7 +16,7 @@ import android.widget.Toast;
 import adaptivex.pedidoscloud.Config.Constants;
 import adaptivex.pedidoscloud.Config.GlobalValues;
 import adaptivex.pedidoscloud.Config.InsertRowsTest;
-import adaptivex.pedidoscloud.Core.FactoryRepositories;
+import adaptivex.pedidoscloud.Repositories.FactoryRepositories;
 import adaptivex.pedidoscloud.R;
 import adaptivex.pedidoscloud.View.Pedidos.CargarDireccionFragment;
 import adaptivex.pedidoscloud.View.Pedidos.ResumenPedidoFragment;
@@ -127,7 +127,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 break;
 
             case R.id.home_btn_nuevo_pedido:
-                if (GlobalValues.getINSTANCIA().crearNuevoPedido(getContext()) > 0) {
+
+                if (
+                    FactoryRepositories
+                        .getInstancia()
+                        .getPedidoRepository()
+                        .abrir()
+                        .crearNuevoPedido() > 0) {
                     Fragment fragment3 = new CargarDireccionFragment();
                     openFragment(fragment3);
                 }

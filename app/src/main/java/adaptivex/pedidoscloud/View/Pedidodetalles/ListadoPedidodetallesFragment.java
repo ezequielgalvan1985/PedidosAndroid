@@ -15,7 +15,7 @@ import adaptivex.pedidoscloud.Repositories.PedidodetalleRepository;
 import adaptivex.pedidoscloud.Repositories.ProductoRepository;
 import adaptivex.pedidoscloud.Entity.PedidodetalleEntity;
 import adaptivex.pedidoscloud.Entity.DatabaseHelper.PedidodetalleDataBaseHelper;
-import adaptivex.pedidoscloud.Entity.Producto;
+import adaptivex.pedidoscloud.Entity.ProductoEntity;
 import adaptivex.pedidoscloud.R;
 import adaptivex.pedidoscloud.View.RVAdapters.RVAdapterPedidodetalle;
 
@@ -90,12 +90,12 @@ public class ListadoPedidodetallesFragment extends Fragment {
         String datos = "";
         PedidodetalleEntity registro;
 
-        Producto producto;
+        ProductoEntity producto;
         ProductoRepository dbProducto = new ProductoRepository(vista.getContext());
 
         for(c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
             registro = new PedidodetalleEntity();
-            registro.setPedidoAndroidId(c.getLong(c.getColumnIndex(PedidodetalleDataBaseHelper.CAMPO_PEDIDO_ID_TMP)));
+            registro.setPedidoAndroidId(c.getLong(c.getColumnIndex(PedidodetalleDataBaseHelper.CAMPO_PEDIDO_ANDROID_ID)));
             registro.setPedidoId(c.getInt(c.getColumnIndex(PedidodetalleDataBaseHelper.CAMPO_PEDIDO_ID)));
 
             registro.setProductoId(c.getInt(c.getColumnIndex(PedidodetalleDataBaseHelper.CAMPO_PRODUCTO_ID)));

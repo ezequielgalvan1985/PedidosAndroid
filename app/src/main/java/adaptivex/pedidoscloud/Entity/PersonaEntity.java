@@ -3,7 +3,7 @@ package adaptivex.pedidoscloud.Entity;
 /**
  * Created by ezequiel on 30/05/2016.
  */
-public class Persona {
+public class PersonaEntity {
     private Integer id;
     private String apellido;
     private String nombre;

@@ -12,8 +12,8 @@ import java.util.List;
 
 import adaptivex.pedidoscloud.Config.Configurador;
 import adaptivex.pedidoscloud.Config.GlobalValues;
-import adaptivex.pedidoscloud.Core.FactoryRepositories;
-import adaptivex.pedidoscloud.Entity.Producto;
+import adaptivex.pedidoscloud.Repositories.FactoryRepositories;
+import adaptivex.pedidoscloud.Entity.ProductoEntity;
 import adaptivex.pedidoscloud.Servicios.Retrofit.Interface.IProductoRetrofit;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -22,24 +22,24 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public  class ProductoServices {
-    public List<Producto> productosList;
-    public Producto producto;
+    public List<ProductoEntity> productosList;
+    public ProductoEntity producto;
 
     public ProductoServices() {
     }
 
 
-    public List<Producto> getProductos(){
+    public List<ProductoEntity> getProductos(){
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(Configurador.urlBase)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
         IProductoRetrofit service = retrofit.create(IProductoRetrofit.class);
-        Call<List<Producto>> call = service.getProductos(GlobalValues.getINSTANCIA().getAuthorization());
-        call.enqueue(new Callback<List<Producto>>() {
+        Call<List<ProductoEntity>> call = service.getProductos(GlobalValues.getInstancia().getAuthorization());
+        call.enqueue(new Callback<List<ProductoEntity>>() {
             @Override
-            public void onResponse(Call<List<Producto>> call, Response<List<Producto>> response) {
+            public void onResponse(Call<List<ProductoEntity>> call, Response<List<ProductoEntity>> response) {
                 if(!response.isSuccessful()){
                     Log.println(Log.INFO,"Producto: Error",String.valueOf(response.code()));
                     return;
@@ -47,14 +47,14 @@ public  class ProductoServices {
                 FactoryRepositories.getInstancia().getProductoRepository().abrir().limpiar();
                 productosList = response.body();
                 String content = "";
-                for (Producto producto: productosList){
+                for (ProductoEntity producto: productosList){
                     FactoryRepositories.getInstancia().getProductoRepository().abrir().add(producto);
                      Log.println(Log.INFO,"Producto: ",producto.getNombre().toString());
                 }
             }
 
             @Override
-            public void onFailure(Call<List<Producto>> call, Throwable t) {
+            public void onFailure(Call<List<ProductoEntity>> call, Throwable t) {
                 Log.println(Log.ERROR,"Codigo: ",t.getMessage());
             }
         });

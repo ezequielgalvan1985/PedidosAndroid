@@ -23,7 +23,7 @@ public interface IFactoryAbstractServices {
     public PedidoServices getPedidoServices();
     public PromoServices getPromoServices();
     public UnidadmedidaServices getUnidadmedidaServices();
-    public UserServices getUserServices();
+
 
 
 }

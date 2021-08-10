@@ -8,10 +8,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import adaptivex.pedidoscloud.Config.Constants;
-import adaptivex.pedidoscloud.Core.FactoryRepositories;
+import adaptivex.pedidoscloud.Repositories.FactoryRepositories;
 import adaptivex.pedidoscloud.Core.WorkDate;
 import adaptivex.pedidoscloud.Core.WorkNumber;
 import adaptivex.pedidoscloud.Entity.DatabaseHelper.PedidodetalleDataBaseHelper;
@@ -21,19 +22,20 @@ import adaptivex.pedidoscloud.Entity.DatabaseHelper.PedidodetalleDataBaseHelper;
  */
 public class PedidoEntity {
     //Datos de la api
-    private Integer id;
-    private long    android_id;
-    private EstadoEntity estadoEntity;
-    private User    cliente;
-    private Double  subtotal;
-    private Double  monto;
-    private Date    fecha;
-    private String  localidad;
-    private String  calle;
-    private String  nro;
-    private String  piso;
-    private String  telefono;
-    private String  contacto;
+    private Integer             id;
+    private long                android_id;
+    private EstadoEntity        estado;
+    private UserProfileEntity   cliente;
+    private Double              subtotal;
+    private Double              monto;
+    private Date                fecha;
+    private String              localidad;
+    private String              calle;
+    private String              nro;
+    private String              piso;
+    private String              telefono;
+    private String              contacto;
+    private List<PedidodetalleEntity> items ;
 
 
 
@@ -43,23 +45,15 @@ public class PedidoEntity {
     private Date    fechaWebRecibido;
     private Date    fechaWebEnviado;
     private Double  iva;
-    private Integer cliente_id;
     private Double  bonificacion;
     private Integer estadoId;
     private Integer nroPedidoReal;
     private Double  montoabona;
-
-
-
-
-
-
     //Datos que no se guardan en la DB
     //Para la heladeria
-    private ArrayList<Pote> potes;
+    private ArrayList<PoteEntity> potes;
 
     //Entidades externas
-    private ArrayList<PedidodetalleEntity> detalles ;
 
     private Double  precioxkilo;
     private Double  montoDescuento;
@@ -72,12 +66,11 @@ public class PedidoEntity {
     private Double  montoCucuruchos;
     private Double  montoHelados;
     private boolean envioDomicilio;
-
+    private Double  precioUnitCucurucho;
 
     private Date     horaRecepcion;
     private Integer  tiempoDemora;
     private Date     horaentrega;
-
 
     private Integer cantPoteCuarto      = 0 ;
     private Integer cantPoteMedio       = 0 ;
@@ -93,6 +86,36 @@ public class PedidoEntity {
 
 
 
+
+
+
+
+    /* getters and setters */
+
+    public List<PedidodetalleEntity> getItems() {
+        return items;
+    }
+
+    public void setItems(List<PedidodetalleEntity> items) {
+        this.items = items;
+    }
+
+    public EstadoEntity getEstado() {
+        return estado;
+    }
+
+    public void setEstado(EstadoEntity estado) {
+        this.estado = estado;
+    }
+
+    public Double getPrecioUnitCucurucho() {
+        return precioUnitCucurucho;
+    }
+
+    public void setPrecioUnitCucurucho(Double precioUnitCucurucho) {
+        this.precioUnitCucurucho = precioUnitCucurucho;
+    }
+
     /*GETTERS AND SETTERS */
 
     public long getAndroid_id() {
@@ -103,25 +126,10 @@ public class PedidoEntity {
         this.android_id = android_id;
     }
 
-    public EstadoEntity getEstado() {
-        return estadoEntity;
-    }
-
-    public void setEstado(EstadoEntity estadoEntity) {
-        this.estadoEntity = estadoEntity;
-    }
-
-    public void setCliente(User cliente) {
+    public void setCliente(UserProfileEntity cliente) {
         this.cliente = cliente;
     }
 
-    public Date getFecha() {
-        return fecha;
-    }
-
-    public void setFecha(Date fecha) {
-        this.fecha = fecha;
-    }
 
     public String getProporcionDesc(Integer proporcion){
         String cadena = "";
@@ -156,7 +164,7 @@ public class PedidoEntity {
 
 
     public PedidoEntity(){
-        this.detalles = new ArrayList<PedidodetalleEntity>();
+        this.items = null;
         this.cantidadKilos = 0;
         this.cucharitas = 0 ;
         this.cucuruchos = 0;
@@ -224,7 +232,7 @@ public class PedidoEntity {
     }
 
 
-    public void quitarPote(Pote pote){
+    public void quitarPote(PoteEntity pote){
         cantidadKilos -= pote.getKilos();
         deleteCantPoteMedida(pote.getKilos());
         Double mh = getMontoHelados() - getPrecioMedidaPote(pote.getKilos());
@@ -233,17 +241,17 @@ public class PedidoEntity {
     }
 
     public void addPedidodetalle(PedidodetalleEntity pd){
-        this.detalles.add(pd);
+        this.items.add(pd);
     }
 
     public void editPedidodetalle(PedidodetalleEntity pd_param){
         try{
             Integer index = 0;
-            for (PedidodetalleEntity pd : detalles){
+            for (PedidodetalleEntity pd : items){
 
                 if (pd_param.getAndroidId() == pd.getAndroidId()){
 
-                    this.detalles.set(index, pd_param);
+                    this.items.set(index, pd_param);
 
                 }
                 index++;
@@ -394,13 +402,7 @@ public class PedidoEntity {
         this.monto = monto;
     }
 
-    public Integer getCliente_id() {
-        return cliente_id;
-    }
 
-    public void setCliente_id(Integer cliente_id) {
-        this.cliente_id = cliente_id;
-    }
 
     public Double getBonificacion() {
         return WorkNumber.getValue(bonificacion);
@@ -431,48 +433,30 @@ public class PedidoEntity {
         this.nroPedidoReal = nroPedidoReal;
     }
 
-    public User getCliente() {
+    public UserProfileEntity getCliente() {
         return cliente;
     }
 
-    public void setUser(User cliente) {
+    public void setUserProfile(UserProfileEntity cliente) {
         this.cliente = cliente;
     }
 
 
-    /**
-     * Devuelve ArrayList Pedidodetalle
-     * @author Ezequiel
-     * @version 2021.08
-     * @since 1.0
-     */
-    public ArrayList<PedidodetalleEntity> getDetalles() {
-        return detalles;
-    }
 
 
 
     public void setDetalles(Cursor c) {
         //Recibe cursor y completa el arralist de pedidodetalles
-        PedidodetalleEntity registro;
-        this.setDetalles(new ArrayList<PedidodetalleEntity>());
 
         for(c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
-            registro = new PedidodetalleEntity();
+            PedidodetalleEntity registro = new PedidodetalleEntity();
             registro.setPedidoId(c.getInt(c.getColumnIndex(PedidodetalleDataBaseHelper.CAMPO_PEDIDO_ID)));
             registro.setProductoId(c.getInt(c.getColumnIndex(PedidodetalleDataBaseHelper.CAMPO_PRODUCTO_ID)));
-/*
-            Log.d("Debug: detaped", String.valueOf(registro.getProductoId()));
-            producto = dbProducto.abrir().buscar(registro.getProductoId());
-            registro.setProducto(producto);
-            dbProducto.cerrar();
-*/
             registro.setCantidad(c.getDouble(c.getColumnIndex(PedidodetalleDataBaseHelper.CAMPO_CANTIDAD)));
             registro.setPreciounitario(c.getDouble(c.getColumnIndex(PedidodetalleDataBaseHelper.CAMPO_PRECIOUNITARIO)));
             registro.setMonto(c.getDouble(c.getColumnIndex(PedidodetalleDataBaseHelper.CAMPO_MONTO)));
             registro.setEstadoId(c.getInt(c.getColumnIndex(PedidodetalleDataBaseHelper.CAMPO_ESTADO_ID)));
-            this.getDetalles().add(registro);
-            registro = null;
+            this.getItems().add(registro);
         }
     }
 
@@ -494,9 +478,6 @@ public class PedidoEntity {
         return fecha;
     }
 
-    public void setDetalles(ArrayList<PedidodetalleEntity> detalles) {
-        this.detalles = detalles;
-    }
 
     public Double getPrecioxkilo() {
         return WorkNumber.getValue(precioxkilo);

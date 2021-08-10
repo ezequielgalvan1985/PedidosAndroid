@@ -3,7 +3,7 @@ package adaptivex.pedidoscloud.Entity;
 /**
  * Created by ezequiel on 23/05/2016.
  */
-public class Producto {
+public class ProductoEntity {
     private Integer id;
     private String  nombre;
     private String  descripcion;
@@ -21,24 +21,24 @@ public class Producto {
     private Boolean isfraccionado;
     private float   preciopromo;
 
-    private MarcaEntity marcaEntity;
+    private MarcaEntity marca;
     private CategoriaEntity categoria;
-    private Unidadmedida unidadmedida;
+    private UnidadmedidaEntity unidadmedida;
 
-    public Unidadmedida getUnidadmedida() {
+    public MarcaEntity getMarca() {
+        return marca;
+    }
+
+    public void setMarca(MarcaEntity marca) {
+        this.marca = marca;
+    }
+
+    public UnidadmedidaEntity getUnidadmedida() {
         return unidadmedida;
     }
 
-    public void setUnidadmedida(Unidadmedida unidadmedida) {
+    public void setUnidadmedida(UnidadmedidaEntity unidadmedida) {
         this.unidadmedida = unidadmedida;
-    }
-
-    public MarcaEntity getMarca() {
-        return marcaEntity;
-    }
-
-    public void setMarca(MarcaEntity marcaEntity) {
-        this.marcaEntity = marcaEntity;
     }
 
     public CategoriaEntity getCategoria() {

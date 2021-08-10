@@ -26,7 +26,7 @@ import java.util.List;
 import adaptivex.pedidoscloud.Config.Configurador;
 import adaptivex.pedidoscloud.Config.Constants;
 import adaptivex.pedidoscloud.Config.GlobalValues;
-import adaptivex.pedidoscloud.Core.FactoryRepositories;
+import adaptivex.pedidoscloud.Repositories.FactoryRepositories;
 import adaptivex.pedidoscloud.Repositories.PedidoRepository;
 import adaptivex.pedidoscloud.Repositories.PedidodetalleRepository;
 import adaptivex.pedidoscloud.Core.Interfaces.OnTaskCompleted;
@@ -123,7 +123,7 @@ public class HelperPedidos extends AsyncTask<Void, Void, Void> {
         }catch (Exception e){
             if (pDialog.isShowing())
                 pDialog.dismiss();
-                setRespuesta(GlobalValues.getINSTANCIA().RETURN_ERROR);
+                setRespuesta(GlobalValues.getInstancia().RETURN_ERROR);
 
 
             Log.println(Log.ERROR,"ErrorHelper:",e.getMessage());
@@ -163,7 +163,7 @@ public class HelperPedidos extends AsyncTask<Void, Void, Void> {
 
         if (pDialog.isShowing()){
             pDialog.dismiss();
-            if (getRespuesta()== GlobalValues.getINSTANCIA().RETURN_OK){
+            if (getRespuesta()== GlobalValues.getInstancia().RETURN_OK){
 
             }
         }
@@ -238,7 +238,7 @@ public class HelperPedidos extends AsyncTask<Void, Void, Void> {
 
             pedido.put("id", String.valueOf(paramPedido.getId()));
             //pedido.put("fecha", String.valueOf(fechahoystr));
-            pedido.put("user_id", String.valueOf(GlobalValues.getINSTANCIA().getUsuariologueado().getId()));
+            pedido.put("user_id", String.valueOf(GlobalValues.getInstancia().getUsuariologueado().getId()));
             pedido.put("android_id", String.valueOf(paramPedido.getAndroid_id()));
             pedido.put("subtotal", String.valueOf(paramPedido.getSubtotal()));
             pedido.put("monto", String.valueOf(paramPedido.getMonto())); //Precio total del helado
@@ -267,9 +267,9 @@ public class HelperPedidos extends AsyncTask<Void, Void, Void> {
             pedido.put("monto_helados", String.valueOf(paramPedido.getMontoHelados()));
             pedido.put("cantidadpotes", String.valueOf(paramPedido.getCantidadPotes()));
 
-            for(int x = 0; x< paramPedido.getDetalles().size(); x++) {
+            for(int x = 0; x< paramPedido.getItems().size(); x++) {
                 JSONObject item = new JSONObject();
-                PedidodetalleEntity pd = (PedidodetalleEntity) paramPedido.getDetalles().get(x);
+                PedidodetalleEntity pd = (PedidodetalleEntity) paramPedido.getItems().get(x);
                 item.put("producto_id", pd.getProductoId().toString());
                 item.put("cantidad",  String.valueOf(pd.getCantidad())); //Proporcion
                 item.put("medidapote",  String.valueOf(pd.getMedidaPote())); //Proporcion
@@ -284,7 +284,7 @@ public class HelperPedidos extends AsyncTask<Void, Void, Void> {
         }catch (Exception e){
             if (pDialog.isShowing())
                 pDialog.dismiss();
-            setRespuesta(GlobalValues.getINSTANCIA().RETURN_ERROR);
+            setRespuesta(GlobalValues.getInstancia().RETURN_ERROR);
             Log.println(Log.ERROR,"ErrorHelper:",e.getMessage());
             return null;
         }
@@ -340,7 +340,7 @@ public class HelperPedidos extends AsyncTask<Void, Void, Void> {
         }catch(Exception e){
             if (pDialog.isShowing())
                 pDialog.dismiss();
-            setRespuesta(GlobalValues.getINSTANCIA().RETURN_ERROR);
+            setRespuesta(GlobalValues.getInstancia().RETURN_ERROR);
             Log.println(Log.ERROR,"ErrorHelper:",e.getMessage());
             return null;
         }
@@ -428,7 +428,7 @@ public class HelperPedidos extends AsyncTask<Void, Void, Void> {
             if (pDialog.isShowing())
                 pDialog.dismiss();
             */
-            setRespuesta(GlobalValues.getINSTANCIA().RETURN_ERROR);
+            setRespuesta(GlobalValues.getInstancia().RETURN_ERROR);
             Log.println(Log.ERROR,"ErrorHelper:",e.getMessage());
             return false;
         }
@@ -440,7 +440,7 @@ public class HelperPedidos extends AsyncTask<Void, Void, Void> {
 
     public boolean enviarPedidosPendientes(){
         try {
-            List<PedidoEntity> listaPedidos = FactoryRepositories.getInstancia().getPedidoRepository().abrir().findByEstadoId(GlobalValues.getINSTANCIA().ESTADO_NUEVO);
+            List<PedidoEntity> listaPedidos = FactoryRepositories.getInstancia().getPedidoRepository().abrir().findByEstadoId(GlobalValues.getInstancia().ESTADO_NUEVO);
             for (PedidoEntity pedido : listaPedidos)
             {
                 enviarPedido2(pedido);
@@ -449,7 +449,7 @@ public class HelperPedidos extends AsyncTask<Void, Void, Void> {
         }catch(Exception e ){
             if (pDialog.isShowing())
                 pDialog.dismiss();
-            setRespuesta(GlobalValues.getINSTANCIA().RETURN_ERROR);
+            setRespuesta(GlobalValues.getInstancia().RETURN_ERROR);
             Log.println(Log.ERROR,"ErrorHelper:",e.getMessage());
             return false;
         }

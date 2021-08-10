@@ -53,8 +53,8 @@ public  class ClienteServices {
                 .build();
 
         IClienteRetrofit service = retrofit.create(IClienteRetrofit.class);
-        //UserSessionLogin.getINSTANCIA().getUser().setToken("5d3b54d7422aa18506d26656bd93a0db5e4fcc6c");
-        Call<List<ClienteEntity>> call = service.getClientes(GlobalValues.getINSTANCIA().getAuthorization());
+        //UserSessionLogin.getInstancia().getUser().setToken("5d3b54d7422aa18506d26656bd93a0db5e4fcc6c");
+        Call<List<ClienteEntity>> call = service.getClientes(GlobalValues.getInstancia().getAuthorization());
         call.enqueue(new Callback<List<ClienteEntity>>() {
             @Override
             public void onResponse(Call<List<ClienteEntity>> call, Response<List<ClienteEntity>> response) {

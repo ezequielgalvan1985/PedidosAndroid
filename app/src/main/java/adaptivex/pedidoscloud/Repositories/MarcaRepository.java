@@ -89,73 +89,21 @@ public class MarcaRepository
 
     public Cursor obtenerTodos()
     {
-        return findAllBy(null,null);
+        return findBy(null,null);
     }
 
-    public List<MarcaEntity> findAll(){
-        return parseCursorToListMarca(findAllBy(null,null));
-    }
 
-    /* procedimientos de acceso base*/
-    public Cursor findAllBy(String sWhere, String[] argumentos ){
-        try{
-            Cursor resultado = db.query(MarcaDataBaseHelper.TABLE_NAME, campos,
-                    sWhere, argumentos, null, null, null);
-            if (resultado != null)
-            {
-                resultado.moveToFirst();
-            }
-            return resultado;
-        }catch(Exception e){
-            Log.e("MarcaRepository",e.getMessage());
-            return null;
-        }
-    }
 
     public MarcaEntity findById(int id){
         try{
             String[] argumentos = {String.valueOf(id)};
             String sWhere = MarcaDataBaseHelper.CAMPO_ID + " = ?";
-            return parseRecordToMarca(findAllBy(sWhere,argumentos));
+            return parseRecordToMarca(findBy(sWhere,argumentos));
         }catch(Exception e){
-            Log.e("MarcaRepo",e.getMessage());
+            Log.e("MarcaRepo findbyid",e.getMessage());
             return null;
         }
     }
-
-    /* ====== Parseadores de Cursores ========= */
-    public List<MarcaEntity> parseCursorToListMarca(Cursor resultado){
-        try{
-            List<MarcaEntity> marcaEntityList = null;
-            if (resultado != null)
-            {
-                while(resultado.moveToNext()){
-                    marcaEntityList.add(parseRecordToMarca(resultado));
-                }
-            }
-            return marcaEntityList;
-        }catch(Exception e) {
-            Log.e("MarcaRepo", e.getMessage());
-            return null;
-        }
-    }
-
-    public MarcaEntity parseRecordToMarca(Cursor resultado){
-        try{
-            MarcaEntity registro = new MarcaEntity();
-            if (resultado != null)
-            {
-                registro.setId(resultado.getInt(resultado.getColumnIndex(MarcaDataBaseHelper.CAMPO_ID)));
-                registro.setNombre(resultado.getString(resultado.getColumnIndex(MarcaDataBaseHelper.CAMPO_NOMBRE)));
-                registro.setDescripcion(resultado.getString(resultado.getColumnIndex(MarcaDataBaseHelper.CAMPO_DESCRIPCION)));
-            }
-            return registro;
-        }catch(Exception e) {
-            Log.e("MarcaRepo", e.getMessage());
-            return null;
-        }
-    }
-
 
     public MarcaEntity buscar(int id)
     {
@@ -166,12 +114,7 @@ public class MarcaRepository
 
     public void limpiar()
     {
-
         db.delete(MarcaDataBaseHelper.TABLE_NAME, null, null);
-
-    }
-    public void reset(){
-
     }
     public void beginTransaction()
     {
@@ -194,4 +137,53 @@ public class MarcaRepository
             db.endTransaction();
         }
     }
+    /* procedimientos de acceso base*/
+    public Cursor findBy(String sWhere, String[] argumentos ){
+        try{
+            Cursor resultado = db.query(MarcaDataBaseHelper.TABLE_NAME, campos,
+                    sWhere, argumentos, null, null, null);
+            if (resultado != null)
+            {
+                resultado.moveToFirst();
+            }
+            return resultado;
+        }catch(Exception e){
+            Log.e("MarcaRepository findby",e.getMessage());
+            return null;
+        }
+    }
+    /* ====== Parseadores de Cursores ========= */
+    public List<MarcaEntity> parseCursorToListMarca(Cursor resultado){
+        try{
+            List<MarcaEntity> marcaEntityList = null;
+            if (resultado != null)
+            {
+                while(resultado.moveToNext()){
+                    marcaEntityList.add(parseRecordToMarca(resultado));
+                }
+            }
+            return marcaEntityList;
+        }catch(Exception e) {
+            Log.e("MarcaRepo parsecursor", e.getMessage());
+            return null;
+        }
+    }
+
+    public MarcaEntity parseRecordToMarca(Cursor resultado){
+        try{
+            MarcaEntity registro = new MarcaEntity();
+            if (resultado != null)
+            {
+                registro.setId(resultado.getInt(resultado.getColumnIndex(MarcaDataBaseHelper.CAMPO_ID)));
+                registro.setNombre(resultado.getString(resultado.getColumnIndex(MarcaDataBaseHelper.CAMPO_NOMBRE)));
+                registro.setDescripcion(resultado.getString(resultado.getColumnIndex(MarcaDataBaseHelper.CAMPO_DESCRIPCION)));
+            }
+            return registro;
+        }catch(Exception e) {
+            Log.e("MarcaRepo recordtomarca", e.getMessage());
+            return null;
+        }
+    }
+
+
 }
