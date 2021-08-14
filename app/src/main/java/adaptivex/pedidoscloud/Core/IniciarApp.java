@@ -32,8 +32,6 @@ import adaptivex.pedidoscloud.Entity.DatabaseHelper.PromoDataBaseHelper;
 import adaptivex.pedidoscloud.Entity.UserEntity;
 import adaptivex.pedidoscloud.Entity.DatabaseHelper.UserDataBaseHelper;
 import adaptivex.pedidoscloud.Servicios.FactoryServices;
-import adaptivex.pedidoscloud.Servicios.Helpers.HelperParameters;
-import adaptivex.pedidoscloud.Servicios.Helpers.HelperPromos;
 
 import static java.lang.Thread.sleep;
 

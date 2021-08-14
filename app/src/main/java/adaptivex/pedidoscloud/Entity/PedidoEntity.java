@@ -35,7 +35,7 @@ public class PedidoEntity {
     private String              piso;
     private String              telefono;
     private String              contacto;
-    private List<PedidodetalleEntity> items ;
+    private ArrayList<PedidodetalleEntity> items;
 
 
 
@@ -92,11 +92,11 @@ public class PedidoEntity {
 
     /* getters and setters */
 
-    public List<PedidodetalleEntity> getItems() {
+    public ArrayList<PedidodetalleEntity> getItems() {
         return items;
     }
 
-    public void setItems(List<PedidodetalleEntity> items) {
+    public void setItems(ArrayList<PedidodetalleEntity> items) {
         this.items = items;
     }
 
@@ -131,20 +131,6 @@ public class PedidoEntity {
     }
 
 
-    public String getProporcionDesc(Integer proporcion){
-        String cadena = "";
-        if (proporcion >=Constants.MEDIDA_HELADO_POCO_DESDE  && proporcion <= Constants.MEDIDA_HELADO_POCO_HASTA){
-            cadena = Constants.MEDIDA_HELADO_POCO;
-        }
-        if (proporcion >=Constants.MEDIDA_HELADO_EQUILIBRADO_DESDE  && proporcion <= Constants.MEDIDA_HELADO_EQUILIBRADO_HASTA){
-            cadena = Constants.MEDIDA_HELADO_EQUILIBRADO;
-        }
-        if (proporcion >=Constants.MEDIDA_HELADO_MUCHO_LIMIT_DESDE  && proporcion <= Constants.MEDIDA_HELADO_MUCHO_LIMIT_HASTA){
-            cadena = Constants.MEDIDA_HELADO_MUCHO;
-        }
-        return cadena;
-    }
-
     public double getPrecioMedidaPote(Integer medidaPote){
         double precio = 0.0;
         if (medidaPote== Constants.MEDIDA_KILO){
@@ -164,13 +150,14 @@ public class PedidoEntity {
 
 
     public PedidoEntity(){
-        this.items = null;
+        this.items = new ArrayList<PedidodetalleEntity>();
         this.cantidadKilos = 0;
         this.cucharitas = 0 ;
         this.cucuruchos = 0;
         this.montoCucuruchos = 0.0;
         this.montoHelados = 0.0;
         this.monto = 0.0;
+
 
     }
 

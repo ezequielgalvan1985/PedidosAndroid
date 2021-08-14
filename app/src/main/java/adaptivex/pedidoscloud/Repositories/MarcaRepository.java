@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import adaptivex.pedidoscloud.Entity.MarcaEntity;
@@ -153,9 +154,9 @@ public class MarcaRepository
         }
     }
     /* ====== Parseadores de Cursores ========= */
-    public List<MarcaEntity> parseCursorToListMarca(Cursor resultado){
+    public ArrayList<MarcaEntity> parseCursorToListMarca(Cursor resultado){
         try{
-            List<MarcaEntity> marcaEntityList = null;
+            ArrayList<MarcaEntity> marcaEntityList = new ArrayList<MarcaEntity>();
             if (resultado != null)
             {
                 while(resultado.moveToNext()){

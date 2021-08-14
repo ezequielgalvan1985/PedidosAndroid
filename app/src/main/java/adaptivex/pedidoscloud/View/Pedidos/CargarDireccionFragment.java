@@ -16,12 +16,9 @@ import android.widget.Toast;
 
 import adaptivex.pedidoscloud.Config.Constants;
 import adaptivex.pedidoscloud.Config.GlobalValues;
+import adaptivex.pedidoscloud.Entity.UserProfileEntity;
 import adaptivex.pedidoscloud.Repositories.FactoryRepositories;
-import adaptivex.pedidoscloud.Repositories.PedidoRepository;
-import adaptivex.pedidoscloud.Repositories.UserRepository;
-import adaptivex.pedidoscloud.Entity.UserEntity;
 import adaptivex.pedidoscloud.R;
-import adaptivex.pedidoscloud.Servicios.Helpers.HelperUser;
 
 public class CargarDireccionFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
@@ -38,14 +35,6 @@ public class CargarDireccionFragment extends Fragment {
     private boolean              MODE_EDIT_USER = false;
 
 
-    private void flushPedidoTemporal(){
-        FactoryRepositories.getInstancia().PEDIDO_TEMPORAL.setTelefono(txtTelefono.getText().toString());
-        FactoryRepositories.getInstancia().PEDIDO_TEMPORAL.setLocalidad(txtLocalidad.getText().toString());
-        FactoryRepositories.getInstancia().PEDIDO_TEMPORAL.setCalle(txtCalle.getText().toString());
-        FactoryRepositories.getInstancia().PEDIDO_TEMPORAL.setNro(txtNro.getText().toString());
-        FactoryRepositories.getInstancia().PEDIDO_TEMPORAL.setPiso(txtPiso.getText().toString());
-        FactoryRepositories.getInstancia().PEDIDO_TEMPORAL.setContacto(txtContacto.getText().toString());
-    }
 
     private boolean validateForm(){
         boolean validate = true;
@@ -87,6 +76,12 @@ public class CargarDireccionFragment extends Fragment {
         if (validate == false){
             Toast.makeText(getView().getContext(),message,Toast.LENGTH_LONG).show();
         }
+        FactoryRepositories.getInstancia().PEDIDO_TEMPORAL.setTelefono(txtTelefono.getText().toString());
+        FactoryRepositories.getInstancia().PEDIDO_TEMPORAL.setLocalidad(txtLocalidad.getText().toString());
+        FactoryRepositories.getInstancia().PEDIDO_TEMPORAL.setCalle(txtCalle.getText().toString());
+        FactoryRepositories.getInstancia().PEDIDO_TEMPORAL.setNro(txtNro.getText().toString());
+        FactoryRepositories.getInstancia().PEDIDO_TEMPORAL.setPiso(txtPiso.getText().toString());
+        FactoryRepositories.getInstancia().PEDIDO_TEMPORAL.setContacto(txtContacto.getText().toString());
         return validate;
     }
 
@@ -147,14 +142,16 @@ public class CargarDireccionFragment extends Fragment {
             return null;
         }
     }
+
     public void setTitle(){
         if (MODE_EDIT_USER){
             lblTitulo.setText("Mi Cuenta - Editar Dirección");
         }
     }
+
     public void openFragmentCargarCantidad(){
-        //getFragmentManager().beginTransaction().remove(this).commit();
-        CargarCantidadFragment fragment         = new CargarCantidadFragment();
+
+        CargarProductosFragment fragment         = new CargarProductosFragment();
         FragmentManager fragmentManager         = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.content_main, fragment);
@@ -165,16 +162,24 @@ public class CargarDireccionFragment extends Fragment {
 
     public boolean saveDireccionUser() {
         try{
-            UserRepository uc = new UserRepository(getContext());
-            UserEntity u = uc.abrir().getUserDB(GlobalValues.getInstancia().getUsuariologueado().getId());
-            uc.abrir().editDB(u);
 
-            //Envia datos al servidor
-            HelperUser hu = new HelperUser(getContext());
-            hu.setOpcion(HelperUser.OPTION_UPDATE);
-            hu.setUser(u);
-            hu.execute();
+            // Si los datos son distintos a los guardado,
+            //      Preguntar si quiere actualizar los datos de envio
+            UserProfileEntity up = GlobalValues.getInstancia().getUsuariologueado();
 
+            up.setTelefono(txtTelefono.getText().toString());
+            up.setCalle(txtCalle.getText().toString());
+            up.setPiso(txtPiso.getText().toString());
+            up.setNro(txtNro.getText().toString());
+            up.setContacto(txtContacto.getText().toString());
+
+            GlobalValues.getInstancia().setUsuariologueado(up);
+
+            FactoryRepositories
+                    .getInstancia()
+                    .getUserProfileRepository()
+                    .abrir()
+                    .modificar(up);
 
             return true;
         }catch(Exception e) {
@@ -185,9 +190,13 @@ public class CargarDireccionFragment extends Fragment {
 
     public boolean saveDireccion(){
         boolean validate = false;
-        flushPedidoTemporal();
-        PedidoRepository pc = new PedidoRepository(getContext());
-        pc.abrir().edit(FactoryRepositories.getInstancia().PEDIDO_TEMPORAL);
+
+        FactoryRepositories
+                .getInstancia()
+                .getPedidoRepository()
+                .abrir()
+                .modificar(FactoryRepositories.getInstancia().PEDIDO_TEMPORAL);
+
         validate = true;
         return validate;
     }

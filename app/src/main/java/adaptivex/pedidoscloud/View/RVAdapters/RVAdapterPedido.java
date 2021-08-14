@@ -14,7 +14,6 @@ import android.widget.Toast;
 import adaptivex.pedidoscloud.Config.GlobalValues;
 import adaptivex.pedidoscloud.Entity.PedidoEntity;
 import adaptivex.pedidoscloud.R;
-import adaptivex.pedidoscloud.Servicios.Helpers.HelperPedidos;
 
 import java.util.ArrayList;
 
@@ -136,11 +135,7 @@ public class RVAdapterPedido extends RecyclerView.Adapter<RVAdapterPedido.Pedido
                 */
                 try{
 
-                    HelperPedidos hp = new HelperPedidos(v.getContext(), pedido.getAndroid_id(), GlobalValues.getInstancia().OPTION_HELPER_ENVIO_PEDIDO );
-                    hp.execute();
-                    if (hp.getRespuesta()==GlobalValues.getInstancia().RETURN_OK){
-                        //Toast.makeText(v.getContext(), "Pedido "+ String.valueOf(pedido.getAndroid_id())+ " Sincronizado OK ", Toast.LENGTH_SHORT).show();
-                    }
+
                 }catch (Exception e){
                     Toast.makeText(v.getContext(),"Error RVAdapterPedido: "+ e.getMessage(), Toast.LENGTH_LONG);
                 }

@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.util.Log;
+import android.widget.ExpandableListAdapter;
 import android.widget.Toast;
 
 import adaptivex.pedidoscloud.Config.Constants;
@@ -20,6 +21,7 @@ import adaptivex.pedidoscloud.Entity.DatabaseHelper.PedidoDataBaseHelper;
 import adaptivex.pedidoscloud.Entity.PedidodetalleEntity;
 import adaptivex.pedidoscloud.Entity.PoteEntity;
 import adaptivex.pedidoscloud.Entity.PoteItemEntity;
+import adaptivex.pedidoscloud.Entity.ProductoEntity;
 import adaptivex.pedidoscloud.Entity.PromoEntity;
 import adaptivex.pedidoscloud.Entity.UserProfileEntity;
 
@@ -33,14 +35,17 @@ import java.util.List;
 /**
  * Created by ezequiel on 30/05/2016.
  */
-public class PedidoRepository implements ControllerInterface
+public class PedidoRepository
 {
     private Context context;
     private PedidoDataBaseHelper dbHelper;
     private SQLiteDatabase db;
     private ContentValues valores;
+
     private ArrayList<PedidoEntity> arrayListPedidos;
     private List<PedidoEntity> listPedidos;
+    private ArrayList<PoteEntity> listaPotes;
+    private PedidoEntity pedidoTemp;
 
     private String[] campos = {
             PedidoDataBaseHelper.CAMPO_ID,
@@ -73,6 +78,8 @@ public class PedidoRepository implements ControllerInterface
     {
         this.context = context;
         this.valores = new ContentValues();
+        this.listaPotes =  new ArrayList<PoteEntity>();
+        this.pedidoTemp = new PedidoEntity();
     }
 
     public PedidoRepository abrir() throws SQLiteException
@@ -90,7 +97,10 @@ public class PedidoRepository implements ControllerInterface
         }
     }
 
-
+    /*
+    * Solo setea la informacion de la cabecera del pedido
+    * @Param item recibe PedidoEntity
+    * */
     private void setValores(PedidoEntity item){
         try{
             valores.put(PedidoDataBaseHelper.CAMPO_ID, item.getId());
@@ -125,69 +135,17 @@ public class PedidoRepository implements ControllerInterface
             valores.put(PedidoDataBaseHelper.CAMPO_MONTO_ABONA,  item.getMontoabona());
             valores.put(PedidoDataBaseHelper.CAMPO_MONTO,  item.getMonto());
             valores.put(PedidoDataBaseHelper.CAMPO_CANTIDAD_DESCUENTO, item.getCantidadDescuento());
-            //valores.put(PedidoDataBaseHelper.CAMPO_ANDROID_ID, item.getAndroid_id());
+
 
             valores.put(PedidoDataBaseHelper.CAMPO_HORA_ENTREGA, String.valueOf(item.getHoraentrega()));
             valores.put(PedidoDataBaseHelper.CAMPO_HORA_RECEPCION, String.valueOf(item.getHoraRecepcion()));
             valores.put(PedidoDataBaseHelper.CAMPO_TIEMPO_DEMORA, item.getTiempoDemora());
 
         }catch(Exception e){
-            Log.e("PedidoRepository - setvalores",e.getMessage());
-
+            Log.e("PedidoRepo valores",e.getMessage());
         }
     }
 
-
-
-
-    public ArrayList<PoteEntity> getPotesArrayList2(long idAndroid ){
-        try{
-            PedidodetalleRepository pdc = new PedidodetalleRepository(context);
-            //Crear arraylist de potes
-            ArrayList<PoteEntity> listaPotes = new ArrayList<PoteEntity>();
-            PedidoEntity p = new PedidoEntity();
-
-            p = this.abrir().findByAndroidId(idAndroid);
-            //obtener todos los pedido detalles
-            ArrayList  <PedidodetalleEntity> lista = pdc.findByPedido_android_idToArrayList(idAndroid);
-            Integer currentnropote = 0;
-            PoteEntity pote            = new PoteEntity();
-            PoteEntity poteanterior    = null;
-            for (PedidodetalleEntity pd :lista){
-
-                if  (currentnropote != pd.getNroPote()) {
-
-                    //Crear Pote
-                    pote = new PoteEntity();
-                    pote.setPedido(p);
-                    pote.setNroPote(pd.getNroPote());
-                    pote.setKilos(pd.getMedidaPote());
-                    pote.setHeladomonto(pd.getMonto());
-                    // FIn creacion de pote
-                }
-                // Crea el item del pote
-                PoteItemEntity item = new PoteItemEntity();
-                item.setCantidad(pd.getProporcionHelado());
-                item.setProducto(pd.getProducto());
-                pote.addItemPote(item);
-
-                //
-                poteanterior = pote;
-                if  (currentnropote != pd.getNroPote()) {
-                    if (poteanterior != null ) {
-                        listaPotes.add(poteanterior);
-                    }
-                }
-                currentnropote = pd.getNroPote();
-
-            }
-
-            return listaPotes;
-        }catch(Exception e ){
-            Toast.makeText(context, "Error:" + e.getMessage(),Toast.LENGTH_LONG).show();
-            return null;
-        }
-    }
 
 
 
@@ -195,10 +153,55 @@ public class PedidoRepository implements ControllerInterface
     {
         try{
             setValores(item);
-            return db.insert(PedidoDataBaseHelper.TABLE_NAME, null, valores);
+            long id = db.insert(PedidoDataBaseHelper.TABLE_NAME, null, valores);
+            //Guardar los datos de los Items del pedido
+            // se hace un foreach por cada pedido detalle
+            pedidoTemp = findById(id);
+            return id ;
         }catch(Exception e ){
-            Log.e("PedidoRepository - agregar",e.getMessage());
+            Log.e("PedidoRepos- agregar",e.getMessage());
             return -1;
+        }
+    }
+
+    public void modificarItems(PedidoEntity pedido, PedidodetalleEntity pd){
+        try{
+
+            PedidodetalleEntity detalle =
+                FactoryRepositories
+                    .getInstancia()
+                    .getPedidodetalleRepository()
+                    .abrir()
+                    .findByPedidoAndProducto(pedido, pd.getProducto());
+
+            //NUEVO registro detalle de pedido
+            if (detalle==null && pd.getCantidad()> 0){
+                pd.setPedidoAndroidId(pedido.getAndroid_id());
+                pd.setEstadoId(Constants.ESTADO_NUEVO);
+                FactoryRepositories.getInstancia().getPedidodetalleRepository().abrir().agregar(pd);
+            }
+
+            //ACTUALIZA / ELIMINA
+            if (detalle!=null ) {
+                if (pd.getCantidad() > 0) {
+                    //actualizar
+                    detalle.setCantidad(pd.getCantidad());
+                    FactoryRepositories.getInstancia().getPedidodetalleRepository().abrir().modificar(detalle);
+                }else{
+                    //eliminar
+                    FactoryRepositories.getInstancia().getPedidodetalleRepository().abrir().eliminar(detalle);
+                }
+            }
+            //si esta seteado y esta cargando un pedido, refrescar el temporal
+            if (FactoryRepositories.PEDIDO_TEMPORAL != null){
+                FactoryRepositories.PEDIDO_TEMPORAL = FactoryRepositories
+                        .getInstancia()
+                        .getPedidoRepository()
+                        .findById(FactoryRepositories.PEDIDO_TEMPORAL.getAndroid_id());
+            }
+
+        }catch(Exception e){
+            Log.e("updateItems", e.getMessage());
         }
     }
 
@@ -240,25 +243,18 @@ public class PedidoRepository implements ControllerInterface
     }
 
 
-    public void modificar(PedidoEntity item, boolean isIdTmp )
+    public void modificar(PedidoEntity pedido)
     {
         try{
-            setValores(item);
-            if (isIdTmp){
-                String[] argumentos = new String[] {String.valueOf(item.getAndroid_id())};
-                db.update(PedidoDataBaseHelper.TABLE_NAME, valores,
-                        PedidoDataBaseHelper.CAMPO_ANDROID_ID + " = ?", argumentos);
-            }else{
-                String[] argumentos = new String[]
-                        {String.valueOf(item.getId())};
-                db.update(PedidoDataBaseHelper.TABLE_NAME, valores,
-                        PedidoDataBaseHelper.CAMPO_ID + " = ?", argumentos);
-            }
+            setValores(pedido);
+            String[] argumentos = new String[] {String.valueOf(pedido.getAndroid_id())};
+            db.update(PedidoDataBaseHelper.TABLE_NAME, valores,
+                    PedidoDataBaseHelper.CAMPO_ANDROID_ID + " = ? ", argumentos);
         }catch(Exception e){
             Toast.makeText(context, "Error - modificar" + e.getMessage(),Toast.LENGTH_LONG).show();
         }
-
     }
+
 
     public void eliminar(PedidoEntity pedido)
     {
@@ -283,46 +279,17 @@ public class PedidoRepository implements ControllerInterface
             String sWhere = PedidoDataBaseHelper.CAMPO_ESTADO_ID + " = ?";
             return parseCursorToListPedido(findBy(sWhere,argumentos));
         }catch(Exception e){
-            Log.d("PedidoController - findbyestadoid", e.getMessage());
+            Log.d("PedidoCtr-findbyestid", e.getMessage());
             return null;
         }
     }
 
-    public List<PedidoEntity> obtenerTodos()
-    {
-        return parseCursorToListPedido(findBy(null,null));
-    }
-
-
-    public boolean calculatePromoBeforeEdit2(PedidoEntity pedido){
-        try{
-            PromoRepository promoCtr = new PromoRepository(context);
-            PromoEntity promo = promoCtr.abrir().matchPromoForPedido(pedido);
-            if (promo!= null){
-                if (promo.getImporteDescuento()!=null ){
-                    pedido.setMontoDescuento(promo.getImporteDescuento());
-
-                }
-            }
-            abrir().edit(pedido);
-            return true;
-        }catch (Exception e){
-            Toast.makeText(context,"Error:" + e.getMessage(),Toast.LENGTH_LONG).show();
-            return false;
-        }
-    }
 
     public long crearNuevoPedido(){
         try{
             Date fecha      = new Date();
             Calendar cal    = Calendar.getInstance();
             fecha           = cal.getTime();
-            //IniciarApp ia = new IniciarApp(ctx);
-            //ia.refreshHorariosOpenFromServer();
-            //BusinessRules br = new BusinessRules(ctx);
-            //ia.refreshPromosFromServer();
-            //ia.refreshPriceFromServer();
-            //ia.refreshHeladosDisponiblesFromServer();
 
             DateFormat df1  = new SimpleDateFormat("yyyy-MM-dd");
             String fechaDMY = df1.format(fecha);
@@ -341,11 +308,17 @@ public class PedidoRepository implements ControllerInterface
             );
             //GUARDAR EN BD
             long id = FactoryRepositories.getInstancia().getPedidoRepository().abrir().agregar(pedido);
-            FactoryRepositories.getInstancia().PEDIDO_TEMPORAL = pedido;
+
+            FactoryRepositories.PEDIDO_TEMPORAL =
+                    FactoryRepositories
+                            .getInstancia()
+                            .getPedidoRepository()
+                            .abrir()
+                            .findById(id);
 
             return id;
         }catch (Exception e ){
-            Log.e("PedidoRepository - crearnuevopedido",e.getMessage());
+            Log.e("PedidoRepo crearpedido",e.getMessage());
             return -1;
         }
     }
@@ -353,40 +326,6 @@ public class PedidoRepository implements ControllerInterface
     /* Funciones de negocios */
 
 
-    //Metodos de Interface
-    @Override
-    public long add(Object object)
-    {
-        PedidoEntity item = (PedidoEntity) object;
-        try{
-            //valores.put(PedidoDataBaseHelper.CAMPO_ANDROID_ID, item.getAndroid_id()); // es ID Autonumerico
-            setValores(item);
-            return db.insert(PedidoDataBaseHelper.TABLE_NAME, null, valores);
-        }catch(Exception e ){
-            Toast.makeText(context,"Error:" + e.getMessage(),Toast.LENGTH_LONG).show();
-            return -1;
-        }
-    }
-
-    @Override
-    public boolean edit(Object object) {
-
-        try {
-            PedidoEntity item = (PedidoEntity) object;
-            setValores(item);
-            String[] argumentos = new String[]{String.valueOf(item.getAndroid_id())};
-            db.update(PedidoDataBaseHelper.TABLE_NAME, valores, PedidoDataBaseHelper.CAMPO_ANDROID_ID + " = ?", argumentos);
-            return true;
-        } catch (Exception e) {
-            Toast.makeText(context, "Error " + e.getMessage(), Toast.LENGTH_LONG).show();
-            return false;
-        }
-    }
-
-    @Override
-    public boolean delete(Object object) {
-        return false;
-    }
 
 
 
@@ -405,16 +344,26 @@ public class PedidoRepository implements ControllerInterface
     }
 
 
-    public PedidoEntity findById(int id){
+    public PedidoEntity findById(long id){
         try{
             String[] argumentos = {String.valueOf(id)};
             String sWhere = PedidoDataBaseHelper.CAMPO_ID + " = ?";
-            return parseRecordToPedido(findBy(sWhere,argumentos));
+            Cursor resultado = findBy(sWhere,argumentos);
+            PedidoEntity pedido = new PedidoEntity();
+            if (resultado != null)
+            {
+                while(resultado.moveToNext()){
+                    pedido = parseRecordToPedido(resultado);
+                }
+            }
+            return pedido;
         }catch(Exception e){
             Log.e("MarcaRepo",e.getMessage());
             return null;
         }
     }
+
+
 
     /**
      * Devuelve Cursor,
@@ -458,9 +407,9 @@ public class PedidoRepository implements ControllerInterface
 
 
     /* ====== Parseadores de Cursores ========= */
-    public List<PedidoEntity> parseCursorToListPedido(Cursor resultado){
+    public ArrayList<PedidoEntity> parseCursorToListPedido(Cursor resultado){
         try{
-            List<PedidoEntity> pedidoList= null;
+            ArrayList<PedidoEntity> pedidoList= null;
             if (resultado != null)
             {
                 while(resultado.moveToNext()){
@@ -474,25 +423,10 @@ public class PedidoRepository implements ControllerInterface
         }
     }
 
-    public PedidoEntity parseCursorToPedido(Cursor resultado){
-        try{
-            PedidoEntity pedido= null;
-            if (resultado != null)
-            {
-               resultado.moveToFirst();
-               pedido = parseRecordToPedido(resultado);
-            }
-            return pedido;
-        }catch(Exception e) {
-            Log.e("PedidoRepo", e.getMessage());
-            return null;
-        }
-    }
 
     public PedidoEntity parseRecordToPedido(Cursor resultado){
         try{
             PedidoEntity registro = new PedidoEntity();
-            PedidodetalleRepository dbDetalles = new PedidodetalleRepository(this.context);
 
             if (resultado != null)
             {
@@ -539,11 +473,14 @@ public class PedidoRepository implements ControllerInterface
                 registro.setCliente(cliente);
 
 
-                //ArrayList<PedidodetalleEntity> lista =  dbDetalles.abrir().findByPedido_android_idToArrayList(registro.getAndroid_id());
+                ArrayList<PedidodetalleEntity> items =
+                        FactoryRepositories
+                        .getInstancia()
+                        .getPedidodetalleRepository()
+                        .abrir()
+                        .findAllByPedido(registro);
 
-                //registro.setDetalles(lista);
-                dbDetalles.cerrar();
-
+                registro.setItems(items);
             }
             return registro;
         }catch(Exception e) {
@@ -552,19 +489,10 @@ public class PedidoRepository implements ControllerInterface
         }
     }
 
-    public ArrayList<PedidoEntity> parseListToArrayList(List<PedidoEntity> listaPedido){
-        ArrayList<PedidoEntity> arrayOfPedidos = new ArrayList<PedidoEntity>();
-        for (PedidoEntity pedido :listaPedido) {
-            arrayOfPedidos.add (pedido) ;
-        }
-        return arrayOfPedidos;
-    }
 
     public void limpiar()
     {
-
         db.delete(PedidoDataBaseHelper.TABLE_NAME, null, null);
-
     }
     public void reset(){
 

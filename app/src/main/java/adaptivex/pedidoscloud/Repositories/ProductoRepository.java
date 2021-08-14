@@ -118,27 +118,16 @@ public class ProductoRepository {
         }
     }
 
-    public List<ProductoEntity> findAll() {
+    public ArrayList<ProductoEntity> findAll() {
         try {
             String orderBy = ProductoDataBaseHelper.CAMPO_NOMBRE + " ASC ";
-            String[] argumentos = {""};
-            String sWhere = "";
-            return parseCursorToListProducto(findBy(sWhere,argumentos));
+            return parseCursorToListProducto(findBy(null,null));
         } catch (Exception e) {
             Toast.makeText(context, "Error " + e.getMessage().toString(), Toast.LENGTH_SHORT).show();
             return null;
         }
     }
-    public ArrayList<ProductoEntity> findAllToArrayList(){
-        ArrayList<ProductoEntity> lista = new ArrayList<ProductoEntity>();
-        List <ProductoEntity> listaproductos = findAll();
 
-        for (ProductoEntity p: listaproductos
-             ) {
-            lista.add(p);
-        }
-        return lista;
-    }
 
     public ProductoEntity findByEnabled() {
         try {
@@ -154,11 +143,20 @@ public class ProductoRepository {
     public ProductoEntity buscar(int id) {
             return findById(id);
     }
-    public ProductoEntity findById(int id){
+
+    public ProductoEntity findById(long id){
         try{
+            ProductoEntity producto = new ProductoEntity();
             String[] argumentos = {String.valueOf(id)};
             String sWhere = ProductoDataBaseHelper.CAMPO_ID + " = ?";
-            return parseRecordToProducto(findBy(sWhere,argumentos));
+            Cursor resultado = findBy(sWhere,argumentos);
+            if (resultado != null)
+            {
+                while(resultado.moveToNext()){
+                    producto = parseRecordToProducto(resultado);
+                }
+            }
+            return producto;
         }catch(Exception e){
             Log.e("MarcaRepo findbyid",e.getMessage());
             return null;
@@ -167,12 +165,9 @@ public class ProductoRepository {
 
     public ProductoEntity findByCodigoExterno(String codigoExterno) {
         try {
-            //checkServiceWorking();
-            ProductoEntity registro = null;
             String[] argumentos = {codigoExterno};
             String where = ProductoDataBaseHelper.CAMPO_CODIGOEXTERNO + "=?";
-
-            return registro;
+            return parseRecordToProducto(findBy(where, argumentos));
         } catch (Exception e) {
             Toast.makeText(context, "Error: " + e.getMessage().toString(), Toast.LENGTH_SHORT).show();
             return null;
@@ -211,12 +206,10 @@ public class ProductoRepository {
     /* ====== Parseadores de Cursores ========= */
     public Cursor findBy(String sWhere, String[] argumentos ){
         try{
+
             Cursor resultado = db.query(ProductoDataBaseHelper.TABLE_NAME, campos,
                     sWhere, argumentos, null, null, null);
-            if (resultado != null)
-            {
-                resultado.moveToFirst();
-            }
+
             return resultado;
         }catch(Exception e){
             Log.e("ProductoRepo findby",e.getMessage());
@@ -224,9 +217,9 @@ public class ProductoRepository {
         }
     }
 
-    public List<ProductoEntity> parseCursorToListProducto(Cursor resultado){
+    public ArrayList<ProductoEntity> parseCursorToListProducto(Cursor resultado){
         try{
-            List<ProductoEntity> productoEntityList = null;
+            ArrayList<ProductoEntity> productoEntityList = new ArrayList<ProductoEntity>();
             if (resultado != null)
             {
                 while(resultado.moveToNext()){
@@ -242,9 +235,10 @@ public class ProductoRepository {
 
     public ProductoEntity parseRecordToProducto(Cursor resultado){
         try{
-            ProductoEntity registro = new ProductoEntity();
+            ProductoEntity registro = null;
             if (resultado != null)
             {
+                registro = new ProductoEntity();
                 registro.setId(resultado.getInt(resultado.getColumnIndex(ProductoDataBaseHelper.CAMPO_ID)));
                 registro.setNombre(resultado.getString(resultado.getColumnIndex(ProductoDataBaseHelper.CAMPO_NOMBRE)));
                 registro.setDescripcion(resultado.getString(resultado.getColumnIndex(ProductoDataBaseHelper.CAMPO_DESCRIPCION)));

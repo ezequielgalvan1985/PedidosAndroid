@@ -26,10 +26,6 @@ import adaptivex.pedidoscloud.Entity.DatabaseHelper.PedidoDataBaseHelper;
 import adaptivex.pedidoscloud.Entity.ProductoEntity;
 import adaptivex.pedidoscloud.Entity.DatabaseHelper.ProductoDataBaseHelper;
 import adaptivex.pedidoscloud.R;
-import adaptivex.pedidoscloud.Servicios.Helpers.HelperCategorias;
-import adaptivex.pedidoscloud.Servicios.Helpers.HelperClientes;
-import adaptivex.pedidoscloud.Servicios.Helpers.HelperMarcas;
-import adaptivex.pedidoscloud.Servicios.Helpers.HelperProductos;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -88,29 +84,9 @@ public class SyncDatosActivity extends AppCompatActivity implements View.OnClick
 
         switch (v.getId()){
 
-            case R.id.btnSyncClientes:
-                Toast.makeText(getBaseContext(), "Descargando Clientes", Toast.LENGTH_LONG).show();
-                HelperClientes hc = new HelperClientes(getBaseContext());
-                hc.execute();
-                break;
 
-            case R.id.btnSyncProductos:
-                Toast.makeText(getBaseContext(), "Descargando Productos", Toast.LENGTH_LONG).show();
-                HelperProductos hp = new HelperProductos(getBaseContext());
-                hp.execute();
-                break;
 
-            case R.id.btnSyncCategorias:
-                Toast.makeText(getBaseContext(), "Descargando Categorias", Toast.LENGTH_LONG).show();
-                HelperCategorias hcat = new HelperCategorias(getBaseContext());
-                hcat.execute();
-                break;
 
-            case R.id.btnSyncMarcas:
-                Toast.makeText(getBaseContext(), "Descargando Marcas", Toast.LENGTH_LONG).show();
-                HelperMarcas hmar = new HelperMarcas(getBaseContext());
-                hmar.execute();
-                break;
 
             case R.id.btnSyncPedidos:
                 Toast.makeText(getBaseContext(), "Descargando Pedidos", Toast.LENGTH_LONG).show();

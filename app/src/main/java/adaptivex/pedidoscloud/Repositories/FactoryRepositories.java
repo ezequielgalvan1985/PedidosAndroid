@@ -36,6 +36,7 @@ public class FactoryRepositories implements IAbstractFactoryRepositories {
     private static PromoRepository promos;
     private static UnidadmedidaRepository unidadmedidas;
     private static UserRepository users;
+    private static PedidodetalleRepository pedidodetalles;
 
 
 
@@ -114,6 +115,13 @@ public class FactoryRepositories implements IAbstractFactoryRepositories {
         if (pedidos == null)
             pedidos = new PedidoRepository(ctx);
         return pedidos;
+    }
+
+    @Override
+    public PedidodetalleRepository getPedidodetalleRepository() {
+        if (pedidodetalles == null)
+            pedidodetalles = new PedidodetalleRepository(ctx);
+        return pedidodetalles;
     }
 
     @Override

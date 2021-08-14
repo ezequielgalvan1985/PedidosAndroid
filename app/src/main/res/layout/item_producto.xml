@@ -12,7 +12,7 @@
 
 
 <LinearLayout
-    android:orientation="horizontal"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -30,8 +30,8 @@
 
     <LinearLayout
         android:orientation="vertical"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <TextView
             android:id="@+id/item_producto_id"
@@ -47,23 +47,25 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/item_producto_nombre"
-            android:text="nombre"
+            android:id="@+id/item_producto_precio"
             android:textSize="@dimen/textsize_h1"
+            android:text="Precio"
             android:layout_gravity="left"
             android:gravity="left"
+            android:textStyle="bold"
             >
         </TextView>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/item_producto_descripcion"
+            android:id="@+id/item_producto_nombre"
+            android:text="nombre"
             android:textSize="@dimen/textsize_h2"
-            android:text="Descripcion"
             android:layout_gravity="left"
             android:gravity="left"
             >
         </TextView>
+
     </LinearLayout>
 
 

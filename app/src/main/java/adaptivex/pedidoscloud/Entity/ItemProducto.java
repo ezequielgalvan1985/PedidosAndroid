@@ -4,20 +4,20 @@ package adaptivex.pedidoscloud.Entity;
  * Created by egalvan on 13/3/2018.
  */
 
-public class ItemHelado {
+public class ItemProducto {
     private boolean checked;
     private ProductoEntity helado;
     private Integer proporcion;
     private PedidodetalleEntity pedidodetalleEntity;
 
-    public ItemHelado(){}
+    public ItemProducto(){}
 
-    public ItemHelado(ProductoEntity h, boolean c, Integer p){
+    public ItemProducto(ProductoEntity h, boolean c, Integer p){
         setHelado(h);
         setChecked(c);
         setProporcion(p);
     }
-    public ItemHelado(ProductoEntity h, boolean c, Integer p, PedidodetalleEntity pd){
+    public ItemProducto(ProductoEntity h, boolean c, Integer p, PedidodetalleEntity pd){
         setHelado(h);
         setChecked(c);
         setProporcion(p);

@@ -11,7 +11,7 @@ import adaptivex.pedidoscloud.Config.GlobalValues;
 import adaptivex.pedidoscloud.Entity.DatabaseHelper.EstadoDataBaseHelper;
 import adaptivex.pedidoscloud.Entity.UserEntity;
 import adaptivex.pedidoscloud.Entity.DatabaseHelper.UserDataBaseHelper;
-import adaptivex.pedidoscloud.Servicios.Helpers.HelperUser;
+
 
 /**
  * Created by ezequiel on 28/05/2016.
@@ -65,13 +65,6 @@ public class UserRepository extends AppController{
         return true;
     }
 
-    public boolean login(String username, String pass){
-        boolean result = false;
-        HelperUser hu = new HelperUser(this.getContext());
-        //hu.setUser(this.getUser());
-        hu.execute();
-        return result;
-    }
 
     public boolean isUserLogin(){
         if (GlobalValues.getInstancia().getUsuariologueado()!= null){

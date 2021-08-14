@@ -91,7 +91,7 @@ public class ListadoPedidosFragment extends Fragment {
             }else if(GlobalValues.getInstancia().getESTADO_ID_SELECCIONADO() == GlobalValues.getInstancia().consPedidoEstadoNuevo){
                 listaPedido = FactoryRepositories.getInstancia().getPedidoRepository().abrir().findByEstadoId(GlobalValues.getInstancia().consPedidoEstadoNuevo);
             }else{
-                listaPedido = FactoryRepositories.getInstancia().getPedidoRepository().abrir().obtenerTodos();
+                //listaPedido = FactoryRepositories.getInstancia().getPedidoRepository().abrir().findAll();
             }
 
             GlobalValues.getInstancia().setESTADO_ID_SELECCIONADO(GlobalValues.getInstancia().consPedidoEstadoTodos);

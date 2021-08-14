@@ -136,9 +136,8 @@ public class CargarOtrosDatosFragment extends Fragment implements View.OnClickLi
         //Obtiene valores del formulario, y luego lo guarda en la base de datos
         try{
             getDataForm();
-
             PedidoRepository pc = new PedidoRepository(getContext());
-            pc.abrir().edit(FactoryRepositories.getInstancia().PEDIDO_TEMPORAL);
+            pc.abrir().modificar(FactoryRepositories.PEDIDO_TEMPORAL);
 
             return true;
         }catch (Exception e){

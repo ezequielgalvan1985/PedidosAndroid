@@ -18,18 +18,15 @@ import android.widget.Toast;
 
 import adaptivex.pedidoscloud.Config.Constants;
 import adaptivex.pedidoscloud.Config.GlobalValues;
-import adaptivex.pedidoscloud.Entity.ParameterEntity;
 import adaptivex.pedidoscloud.Repositories.FactoryRepositories;
 import adaptivex.pedidoscloud.Core.IniciarApp;
 import adaptivex.pedidoscloud.Entity.PedidoEntity;
-import adaptivex.pedidoscloud.Servicios.Helpers.HelperPedidos;
 import adaptivex.pedidoscloud.View.Categorias.ListadoCategoriasFragment;
 import adaptivex.pedidoscloud.View.Consulting.ConfigFragment;
 import adaptivex.pedidoscloud.View.Consulting.ResumenFragment;
 import adaptivex.pedidoscloud.View.Marcas.ListadoMarcasFragment;
-import adaptivex.pedidoscloud.View.Pedidodetalles.ListadoPedidodetallesFragment;
 import adaptivex.pedidoscloud.View.Pedidos.CargarDireccionFragment;
-import adaptivex.pedidoscloud.View.Pedidos.CargarHeladosFragment;
+import adaptivex.pedidoscloud.View.Pedidos.CargarProductosFragment;
 import adaptivex.pedidoscloud.View.Pedidos.ListadoPedidosFragment;
 import adaptivex.pedidoscloud.View.Pedidos.ResumenPedidoFragment;
 import adaptivex.pedidoscloud.View.Productos.ListadoHeladosFragment;
@@ -46,7 +43,7 @@ public class MainActivity extends AppCompatActivity
         HomeFragment.OnFragmentInteractionListener,
         ResumenFragment.OnFragmentInteractionListener,
         ConfigFragment.OnFragmentInteractionListener,
-        CargarHeladosFragment.OnFragmentInteractionListener,
+        CargarProductosFragment.OnFragmentInteractionListener,
         ListadoPromosFragment.OnFragmentInteractionListener
 {
     private FloatingActionButton BTN_PRINCIPAL;
@@ -96,8 +93,6 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-
-
         if (getFragmentManager().getBackStackEntryCount() > 0) {
             getFragmentManager().popBackStack();
         } else {
@@ -192,11 +187,7 @@ public class MainActivity extends AppCompatActivity
         Bundle args = new Bundle();
         try{
             switch (id){
-                case R.id.nav_pedidodetalles:
-                    fragment = new ListadoPedidodetallesFragment();
-                    fragmentTransaction = true;
-                    GlobalValues.getInstancia().setActualFragment(GlobalValues.getInstancia().LISTADOPEDIDODETALLES);
-                    break;
+
                 case R.id.nav_promos:
                     try{
                         fragment = new ListadoPromosFragment();
@@ -228,8 +219,7 @@ public class MainActivity extends AppCompatActivity
                     break;
                 case R.id.nav_enviarpedidospendientes:
                     try {
-                        HelperPedidos hp = new HelperPedidos(getBaseContext(), GlobalValues.getInstancia().OPTION_HELPER_ENVIO_PEDIDOS_PENDIENTES);
-                        hp.execute();
+
                     }catch(Exception e){
                         Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
                     }

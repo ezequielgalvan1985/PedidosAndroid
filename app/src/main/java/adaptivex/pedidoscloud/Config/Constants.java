@@ -35,10 +35,6 @@ public class Constants {
     public static final int MEDIDA_HELADO_MUCHO_LIMIT_DESDE = 101;
     public static final int MEDIDA_HELADO_MUCHO_LIMIT_HASTA = 150;
 
-    public static final String PARAM_ANDROID_ID                 = "android_id";
-    public static final String PARAM_PEDIDO_ANDROID_ID          = "pedido_android_id";
-    public static final String PARAM_PEDIDODETALLE_ANDROID_ID   = "pedidodetalle_android_id";
-    public static final String PARAM_PEDIDO_NRO_POTE            = "nro_pte";
     public static final String PARAM_MODE_EDIT_USER             = "datos_user";
     public static final String PARAM_PRECIO_CUCURUCHO           = "preciocucurucho";
 
@@ -59,37 +55,18 @@ public class Constants {
 
 
     public static final String FRAGMENT_CARGAR_DIRECCION    = "cargar_direccion";
-    public static final String FRAGMENT_CARGAR_CANTIDAD     = "cargar_cantidad";
-    public static final String FRAGMENT_CARGAR_HELADOS      = "cargar_helados";
     public static final String FRAGMENT_CARGAR_OTROS_DATOS  = "cargar_otros_datos";
-    public static final String FRAGMENT_CARGAR_RESUMEN      = "cargar_resumen";
     public static final String FRAGMENT_CARGAR_HOME         = "cargar_home";
     public static final String FRAGMENT_HOME_LOGIN          = "home_login";
+    public static final String FRAGMENT_DETAIL              = "detail_producto";
+    public static final String FRAGMENT_CARGAR_PRODUCTOS    = "cargar_productos";
 
-
-    //SQL
-    public static final String MAYOR = ">";
-    public static final String IGUAL = "=";
-    public static final String MENOR = "<";
-    public static final String MAYOR_IGUAL = ">=";
-    public static final String MENOR_IGUAL = "<=";
-    public static final String LIKE = "%";
-    public static final String AND = " AND ";
-    public static final String OR = " OR ";
-    //CATEGORIAS
-    public static final Integer CATEGORIA_HELADOS = 1;
-    public static final Integer CATEGORIA_POSTRES = 2;
 
     //FECHA FORMATOS
     public static final String DATE_FORMAT_SQLITE = "yyyy-MM-dd";
     public static final String DATE_FORMAT_DISPLAY_APP = "dd-MM-yyyy";
 
-    //HelperUser Service
-    public static final String SERVICE_OPTION_LOGIN         = "login";
-    public static final String SERVICE_OPTION_REGISTER      = "register";
-    public static final String SERVICE_OPTION_UPDATE_USER   = "update";
 
-    public static final String SERVICE_PEDIDO_OPTION_UPDATE_USER   = "update";
 
     public static final int LUNES       = 1;
     public static final int MARTES      = 2;

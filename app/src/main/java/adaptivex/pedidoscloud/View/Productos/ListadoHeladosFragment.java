@@ -22,9 +22,8 @@ import adaptivex.pedidoscloud.View.RVAdapters.RVAdapterProducto;
 
 public class ListadoHeladosFragment extends Fragment {
 
-    private RecyclerView rvHeladosPostres;
-    private ArrayList<ProductoEntity> listaHelados;
-    private Integer tipo_listado;
+    private RecyclerView rvHelados;
+
 
 
     public ListadoHeladosFragment() {
@@ -41,11 +40,6 @@ public class ListadoHeladosFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        listaHelados = new ArrayList<ProductoEntity>();
-        if (getArguments() != null) {
-            tipo_listado = getArguments().getInt(Constants.PARAM_TIPO_LISTADO);
-        }
-
     }
 
     @Override
@@ -55,22 +49,11 @@ public class ListadoHeladosFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_listado_helados, container, false);
         TextView titulo = (TextView) v.findViewById(R.id.listado_helados_titulo);
         //1 - RECYCLE VIEW
-        rvHeladosPostres = (RecyclerView)v.findViewById(R.id.rvHeladosPostres);
+        rvHelados = (RecyclerView)v.findViewById(R.id.rvHeladosPostres);
         GridLayoutManager manager = new GridLayoutManager(v.getContext(), 1, GridLayoutManager.VERTICAL, false);
-        rvHeladosPostres.setLayoutManager(manager);
-
-        //definir si mostrar helados o postres
-        listaHelados = FactoryRepositories.getInstancia().getProductoRepository().findAllToArrayList();
-
-        //3 - SET ADAPTER
-        RVAdapterProducto adapterProducto = new RVAdapterProducto();
-        adapterProducto.setCtx(getContext());
-        if (listaHelados!=null){
-            adapterProducto.setProductos(listaHelados);
-            rvHeladosPostres.setAdapter(adapterProducto);
-        }
-
-
+        rvHelados.setLayoutManager(manager);
+        RVAdapterProducto adapterProducto = new RVAdapterProducto(getFragmentManager());
+        rvHelados.setAdapter(adapterProducto);
         return v;
     }
 

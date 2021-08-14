@@ -15,7 +15,6 @@ import android.widget.Toast;
 
 import adaptivex.pedidoscloud.Entity.UserEntity;
 import adaptivex.pedidoscloud.R;
-import adaptivex.pedidoscloud.Servicios.Helpers.HelperUser;
 
 
 public class RegisterFragment extends Fragment implements View.OnClickListener {
@@ -109,7 +108,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
                 clickLogin();
                 break;
             case R.id.register_btn_register:
-                clickRegister();
+                //clickRegister();
                 break;
 
         }
@@ -123,19 +122,6 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    private void clickRegister(){
-        try{
-            if (validateForm()){
-                HelperUser hu = new HelperUser(getContext());
-                hu.setOpcion(HelperUser.OPTION_REGISTER);
-                hu.setBEHAVIOR_POST_REGISTER(HelperUser.BEHAVIOR_POST_REGISTER_INICIAR_APP);
-                hu.setUser(user);
-                hu.execute();
-            }
-        }catch (Exception e){
-            Toast.makeText(getContext(), "Error: ", Toast.LENGTH_LONG).show();
-        }
-    }
 
 
     private boolean validateForm(){

@@ -26,16 +26,10 @@ android:orientation="vertical">
             android:visibility="invisible"
             />
 
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/item_helado_chk"
-            />
         <TextView
             android:id="@+id/item_helado_nombre"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/item_helado_chk"
             android:text="Chocolate Con Granizado"
             android:textSize="20dp"
             />
@@ -61,7 +55,6 @@ android:orientation="vertical">
             android:max="150"
             android:progress="75"
             android:visibility="invisible"/>
-
 
     </RelativeLayout>
 

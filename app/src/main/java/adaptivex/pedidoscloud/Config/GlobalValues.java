@@ -1,12 +1,13 @@
 package adaptivex.pedidoscloud.Config;
 
 import android.content.Context;
+import android.support.v4.app.FragmentManager;
 
 import java.util.List;
 
 import adaptivex.pedidoscloud.Entity.UserProfileEntity;
 
-import adaptivex.pedidoscloud.Entity.ItemHelado;
+import adaptivex.pedidoscloud.Entity.ItemProducto;
 import adaptivex.pedidoscloud.Entity.LoginResult;
 import adaptivex.pedidoscloud.Entity.PedidoEntity;
 import adaptivex.pedidoscloud.Entity.PoteEntity;
@@ -19,6 +20,17 @@ public class GlobalValues {
 
     private static GlobalValues INSTANCIA;
     public  static final String ACTION_GET_STOCK_PRECIOS = "1";
+
+
+    private FragmentManager fragmentManager;
+
+    public FragmentManager getFragmentManager() {
+        return fragmentManager;
+    }
+
+    public void setFragmentManager(FragmentManager fragmentManager) {
+        this.fragmentManager = fragmentManager;
+    }
 
     //DATOS PARA EL PEDIDO
     public PedidoEntity PEDIDO_TEMPORAL;
@@ -246,8 +258,8 @@ public class GlobalValues {
 
     // Lista de los items que se seleccinaron en pantalla.
     // NOTA! cuando se edita un Pote, se debe cargar la ListaHeladosSeleecionados con los Items Seleccionados
-    // Se pone aca la lista, porque se debe ver desde CargarHeladosFragment y RVAdapterHelado
-    public List<ItemHelado> listaHeladosSeleccionados;
+    // Se pone aca la lista, porque se debe ver desde CargarProductosFragment y RVAdapterHelado
+    public List<ItemProducto> listaHeladosSeleccionados;
     public Integer PEDIDO_ACTUAL_NRO_POTE;
     public Integer PEDIDO_ACTUAL_MEDIDA_POTE;
     public PoteEntity PEDIDO_ACTUAL_POTE;

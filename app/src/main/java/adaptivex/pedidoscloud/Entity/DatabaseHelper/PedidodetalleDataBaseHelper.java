@@ -14,15 +14,18 @@ public class PedidodetalleDataBaseHelper extends SQLiteOpenHelper
     public static final String DB_NAME              = Configurador.DBName;
     public static final String TABLE_NAME           = "pedidodetalles";
     public static final int DB_VERSION              = Configurador.DBVersion;
-    public static final String CAMPO_ID             = "id";
-    public static final String CAMPO_PEDIDO_ID      = "pedidocabecera_id";
     public static final String CAMPO_PRODUCTO_ID    = "producto_id";
     public static final String CAMPO_CANTIDAD       = "cantidad";
     public static final String CAMPO_PRECIOUNITARIO = "preciounitario";
     public static final String CAMPO_MONTO          = "monto";
     public static final String CAMPO_ESTADO_ID      = "estado_id";
-    public static final String CAMPO_ANDROID_ID         = "idtmp";
+    //internto para la app
+    public static final String CAMPO_ANDROID_ID         = "android_id";
     public static final String CAMPO_PEDIDO_ANDROID_ID  = "pedido_android_id";
+    //id del server
+    public static final String CAMPO_ID             = "id";
+    public static final String CAMPO_PEDIDO_ID      = "pedido_id";
+
 
     //HELADERIA
     public static final String CAMPO_NRO_POTE            = "nropote";

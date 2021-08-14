@@ -16,10 +16,9 @@ import adaptivex.pedidoscloud.Repositories.FactoryRepositories;
 import adaptivex.pedidoscloud.Repositories.PedidoRepository;
 import adaptivex.pedidoscloud.Core.IniciarApp;
 import adaptivex.pedidoscloud.Entity.PedidoEntity;
-import adaptivex.pedidoscloud.Servicios.Helpers.HelperPedidos;
-import adaptivex.pedidoscloud.View.Pedidos.CargarHeladosFragment;
+import adaptivex.pedidoscloud.View.Pedidos.CargarProductosFragment;
 
-public class NuevoPedidoActivity extends AppCompatActivity implements  CargarHeladosFragment.OnFragmentInteractionListener {
+public class NuevoPedidoActivity extends AppCompatActivity implements  CargarProductosFragment.OnFragmentInteractionListener {
 
 
     @Override

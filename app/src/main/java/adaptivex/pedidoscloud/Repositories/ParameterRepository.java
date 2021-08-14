@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.util.Log;
 
+import java.lang.reflect.Parameter;
+import java.util.ArrayList;
 import java.util.List;
 
 import adaptivex.pedidoscloud.Entity.DatabaseHelper.MarcaDataBaseHelper;
@@ -77,15 +79,6 @@ public class ParameterRepository
     }
     public Cursor obtenerTodos()
     {
-        String[] campos = {
-                ParameterDataBaseHelper.ID,
-                ParameterDataBaseHelper.DESCRIPCION,
-                ParameterDataBaseHelper.NOMBRE,
-                ParameterDataBaseHelper.VALOR_INTEGER,
-                ParameterDataBaseHelper.VALOR_DECIMAL,
-                ParameterDataBaseHelper.VALOR_TEXTO
-                //      ParameterDataBaseHelper.VALOR_FECHA
-        };
         Cursor resultado = db.query(ParameterDataBaseHelper.TABLE_NAME, campos,
                 null, null, null, null, null);
         if (resultado != null)
@@ -107,6 +100,15 @@ public class ParameterRepository
         }
     }
 
+    public ArrayList<ParameterEntity> findAll()
+    {
+        try{
+            return parseCursorToListParameter(findBy(null,null));
+        }catch(Exception e){
+            Log.e("ParameterRepo",e.getMessage());
+            return null;
+        }
+    }
 
 
     public void setValores(ParameterEntity item){
@@ -144,9 +146,9 @@ public class ParameterRepository
     }
 
     /* ====== Parseadores de Cursores ========= */
-    public List<ParameterEntity> parseCursorToListParameter(Cursor resultado){
+    public ArrayList<ParameterEntity> parseCursorToListParameter(Cursor resultado){
         try{
-            List<ParameterEntity> parameterEntityList = null;
+            ArrayList<ParameterEntity> parameterEntityList = new ArrayList<ParameterEntity>();
             if (resultado != null)
             {
                 while(resultado.moveToNext()){

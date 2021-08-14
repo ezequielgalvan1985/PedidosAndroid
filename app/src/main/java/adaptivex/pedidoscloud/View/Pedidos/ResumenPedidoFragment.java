@@ -23,7 +23,6 @@ import adaptivex.pedidoscloud.Core.WorkNumber;
 import adaptivex.pedidoscloud.Entity.PedidoEntity;
 import adaptivex.pedidoscloud.R;
 import adaptivex.pedidoscloud.Servicios.FactoryServices;
-import adaptivex.pedidoscloud.Servicios.Helpers.HelperPedidos;
 
 public class ResumenPedidoFragment extends Fragment implements View.OnClickListener ,OnTaskCompleted {
 
@@ -33,7 +32,7 @@ public class ResumenPedidoFragment extends Fragment implements View.OnClickListe
                      txt_pedido_id, txt_hora_entrega, txt_estado,
                      txt_monto_descuento, txt_cantidad_descuento, txt_tiempo_demora, txt_monto_abona, lbl_cucuruchos;
     private Button   btnEnviarPedido;
-    private HelperPedidos hp;
+
     public ResumenPedidoFragment() {
 
     }
@@ -145,11 +144,7 @@ public class ResumenPedidoFragment extends Fragment implements View.OnClickListe
             if(p.getId()!=null){
                 if (p.getId() > 0 ){
 
-                    hp = new HelperPedidos(getContext());
-                    hp.setListener(this);
-                    hp.setOpcion(HelperPedidos.OPTION_CHECK_STATUS);
-                    hp.setPedido(p);
-                    hp.execute();
+
                     SystemClock.sleep(1000);
                 }
             }
@@ -206,9 +201,6 @@ public class ResumenPedidoFragment extends Fragment implements View.OnClickListe
                 .getPedidoServices()
                 .postPedido(FactoryRepositories.PEDIDO_TEMPORAL);
 
-        //hp = new HelperPedidos(getContext(),  GlobalValues.getInstancia().OPTION_HELPER_ENVIO_PEDIDO, FactoryRepositories.getInstancia().PEDIDO_TEMPORAL);
-        //hp.setListener(this);
-        //hp.execute();
 
 
     }
@@ -218,11 +210,7 @@ public class ResumenPedidoFragment extends Fragment implements View.OnClickListe
 
     @Override
     public void onTaskCompleted() {
-        if (hp.getOpcion() != HelperPedidos.OPTION_CHECK_STATUS){
-            Toast.makeText(getContext(),"Enviado OK" ,Toast.LENGTH_LONG).show();
-            btnEnviarPedido.setEnabled(false);
-            sendSMS(FactoryRepositories.getInstancia().PEDIDO_TEMPORAL.getTelefono(),  FactoryRepositories.getInstancia().PEDIDO_TEMPORAL.getHoraEntregaForSMS());
-        }
+       
     }
 
     @Override

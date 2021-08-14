@@ -3,11 +3,29 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="../../../../layout/custom_preview.xml" value="0.1703125" />
+        <entry key="app/src/main/res/layout/activity_producto_detalle.xml" value="0.22" />
+        <entry key="app/src/main/res/layout/content_producto_detalle.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_blank.xml" value="0.22" />
+        <entry key="app/src/main/res/layout/fragment_cargar_cantidad.xml" value="0.18072916666666666" />
+        <entry key="app/src/main/res/layout/fragment_cargar_helados.xml" value="0.18072916666666666" />
+        <entry key="app/src/main/res/layout/fragment_cargar_otros_datos.xml" value="0.18020833333333333" />
+        <entry key="app/src/main/res/layout/fragment_cargar_productos.xml" value="0.18020833333333333" />
         <entry key="app/src/main/res/layout/fragment_config.xml" value="0.33" />
         <entry key="app/src/main/res/layout/fragment_contacto.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_detail.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_item.xml" value="0.10364583333333334" />
+        <entry key="app/src/main/res/layout/fragment_item_list.xml" value="0.18" />
+        <entry key="app/src/main/res/layout/fragment_listado_helados.xml" value="0.10364583333333334" />
+        <entry key="app/src/main/res/layout/fragment_listado_productos.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_login.xml" value="0.33" />
         <entry key="app/src/main/res/layout/fragment_resumen.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/item_helado.xml" value="0.18072916666666666" />
+        <entry key="app/src/main/res/layout/item_pedido.xml" value="0.10364583333333334" />
+        <entry key="app/src/main/res/layout/item_pedidodetalle.xml" value="0.10364583333333334" />
+        <entry key="app/src/main/res/layout/item_producto.xml" value="0.18020833333333333" />
+        <entry key="app/src/main/res/layout/item_promo.xml" value="0.10364583333333334" />
         <entry key="app/src/main/res/menu/activity_main_drawer.xml" value="0.1" />
         <entry key="app/src/main/res/menu/menu_main.xml" value="0.1" />
       </map>
