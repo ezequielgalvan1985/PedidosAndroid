@@ -101,11 +101,6 @@ public class PedidoDataBaseHelper extends SQLiteOpenHelper
             CAMPO_HORA_ENTREGA       + " date null ," +
             CAMPO_HORA_RECEPCION     + " date null ," +
             CAMPO_TIEMPO_DEMORA      + " integer null ," +
-
-            CAMPO_CANTIDAD_POTE_CUARTO           + " integer null, " +
-            CAMPO_CANTIDAD_POTE_MEDIO            + " integer null, " +
-            CAMPO_CANTIDAD_POTE_TRESCUARTO       + " integer null, " +
-            CAMPO_CANTIDAD_POTE_KILO             + " integer null, " +
             CAMPO_ANDROID_ID             + " integer primary key autoincrement not null" +
             ")";
 

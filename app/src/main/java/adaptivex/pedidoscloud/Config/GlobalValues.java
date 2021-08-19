@@ -32,22 +32,12 @@ public class GlobalValues {
         this.fragmentManager = fragmentManager;
     }
 
-    //DATOS PARA EL PEDIDO
-    public PedidoEntity PEDIDO_TEMPORAL;
     public Integer CURRENT_FRAGMENT_NUEVO_PEDIDO;
     public String PRECIO_CUCURUCHO_MONEY;
-    public Double PRECIO_CUCURUCHO_DOUBLE;
-
-    public Context ctxTemporal;
-
-    public static final Integer ID_ANDROID = 1;
-
-
-    //UNICA VARIABLE USADA PARA VERIFICAR SI EL USUARIO ESTA LOGUEADO
-    // NULL = NO ESTA LOGUEADO
-    // SI TIENE VALOR, ENTONCES ESTA LOGUEADO
-    private UserProfileEntity usuariologueado;
     private LoginResult token;
+
+
+    private UserProfileEntity usuariologueado;
 
     public UserProfileEntity getUsuariologueado() {
         return usuariologueado;
@@ -73,35 +63,19 @@ public class GlobalValues {
 
 
     private int ActualFragment;
-    public static final int LISTADOPRODUCTOS = 1;
-    public static final int LISTADOCLIENTES = 2;
-    public static final int LISTADOMARCAS = 3;
     public static final int LISTADOCATEGORIAS = 4;
     public static final int LISTADOPEDIDOS = 5;
-    public static final int LISTADOPEDIDODETALLES = 6;
-    public static final int DETALLEPEDIDO = 7;
-    public static final int PRODUCTODETALLE = 8;
-    public static final int LISTADOHOJARUTA = 9;
     public static final int HOME = 10;
     public static final int CONFIGURACION = 11;
     public static final int DATOS_USER = 12;
 
     //FRAGMENTS Heladerias
     public static final int NP_CARGAR_DIRECCION         = 13;
-    public static final int NP_CARGAR_CANTIDAD          = 14;
-    public static final int NP_LISTADO_POTES            = 15;
-    public static final int NP_CARGAR_HELADOS           = 16;
-    public static final int NP_CARGAR_PROPORCION_HELADO = 17;
-    public static final int NP_CARGAR_OTROS_DATOS       = 18;
-    public static final int NP_RESUMEN_PEDIDO           = 19;
 
 
 
     //ERRORES
     public static final int RETURN_OK = 1;
-    public static final int RETURN_ERROR_200 = 200;
-    public static final int RETURN_ERROR_404 = 404;
-    public static final int RETURN_ERROR_99 = 99;
     public static final int RETURN_ERROR = 20;
 
     //Estados de un pedido
@@ -117,14 +91,6 @@ public class GlobalValues {
     public static final int ESTADO_PREPARADO = 2;
     public static final int ESTADO_ENTREGADO = 3;
     public static final int ESTADO_TODOS = 99;
-
-
-
-    //CONSTANTERS HELPER PEDIDOS
-    public static final int OPTION_HELPER_ENVIO_PEDIDO = 1;
-    public static final int OPTION_HELPER_ENVIO_PEDIDOS_PENDIENTES = 2;
-
-
 
     private int PEDIDO_ACTION_VALUE;
 
@@ -142,12 +108,7 @@ public class GlobalValues {
     public static final String PARAM_SERVICE_STOCK_PRECIOS_WORKING  = "PARAM_SERVICE_STOCK_PRECIOS_WORKING";
     public static final String PARAM_DOWNLOAD_DATABASE              = "PARAM_DOWNLOAD_DATABASE";
     public static final String PARAM_SERVICE_ENVIO_PEDIDOS_ACTIVATE = "PARAM_SERVICE_ENVIO_PEDIDOS_ACTIVATE";
-
-    public static final String PARAM_PRECIOXKILO                    = "precioxkilo";
-    public static final String PARAM_PRECIOTRESCUARTOS              = "precioxtrescuartos";
-    public static final String PARAM_PRECIOXMEDIO                   = "precioxmedio";
-    public static final String PARAM_PRECIOXCUARTO                  = "precioxcuarto";
-    public static final String PARAM_PRECIOCUCURUCHO                = "preciocucurucho";
+    public static final String PARAM_PRECIO_CUCURUCHO = "PARAM_PRECIO_CUCURUCHO";
 
 
     public static  String[] ESTADOS = {"NUEVO","EN PREPARACION","EN CAMINO","ENTREGADO"};

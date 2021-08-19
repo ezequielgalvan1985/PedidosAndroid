@@ -24,7 +24,7 @@ import adaptivex.pedidoscloud.Entity.PedidoEntity;
 import adaptivex.pedidoscloud.View.Categorias.ListadoCategoriasFragment;
 import adaptivex.pedidoscloud.View.Consulting.ConfigFragment;
 import adaptivex.pedidoscloud.View.Consulting.ResumenFragment;
-import adaptivex.pedidoscloud.View.Marcas.ListadoMarcasFragment;
+
 import adaptivex.pedidoscloud.View.Pedidos.CargarDireccionFragment;
 import adaptivex.pedidoscloud.View.Pedidos.CargarProductosFragment;
 import adaptivex.pedidoscloud.View.Pedidos.ListadoPedidosFragment;
@@ -38,7 +38,6 @@ public class MainActivity extends AppCompatActivity
         implements
         NavigationView.OnNavigationItemSelectedListener,
         ListadoCategoriasFragment.OnFragmentInteractionListener,
-        ListadoMarcasFragment.OnFragmentInteractionListener,
 
         HomeFragment.OnFragmentInteractionListener,
         ResumenFragment.OnFragmentInteractionListener,
@@ -244,11 +243,7 @@ public class MainActivity extends AppCompatActivity
                     fragmentTransaction = true;
                     break;
 
-                case R.id.nav_marcas:
-                    fragment = new ListadoMarcasFragment();
-                    fragmentTransaction = true;
-                    GlobalValues.getInstancia().setActualFragment(GlobalValues.getInstancia().LISTADOMARCAS);
-                    break;
+
 
                 case R.id.nav_pedidosentrega:
                     Toast.makeText(this, "Descarga de Pedidos para entregar " , Toast.LENGTH_LONG).show();

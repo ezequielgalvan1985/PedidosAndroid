@@ -35,7 +35,7 @@ public class PedidodetalleDataBaseHelper extends SQLiteOpenHelper
     public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
 
     public static final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " (" +
-            CAMPO_ID             + " integer null," +
+            CAMPO_ID             + " integer null , " +
             CAMPO_PEDIDO_ID      + " integer null ," +
             CAMPO_PRODUCTO_ID    + " integer null ," +
             CAMPO_CANTIDAD       + " real null ," +
@@ -43,10 +43,7 @@ public class PedidodetalleDataBaseHelper extends SQLiteOpenHelper
             CAMPO_MONTO          + " real null ," +
             CAMPO_ESTADO_ID      + " integer null, " +
             CAMPO_ANDROID_ID         + " integer primary key autoincrement not null," +
-            CAMPO_PEDIDO_ANDROID_ID  + " integer  null, " +
-            CAMPO_NRO_POTE           + " integer  null, " +
-            CAMPO_PROPORCION_HELADO  + " integer  null, " +
-            CAMPO_MEDIDA_POTE        + " integer  null " +
+            CAMPO_PEDIDO_ANDROID_ID  + " integer  null " +
             ")";
 
     public PedidodetalleDataBaseHelper(Context context)

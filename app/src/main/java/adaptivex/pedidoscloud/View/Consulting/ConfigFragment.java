@@ -18,7 +18,6 @@ import adaptivex.pedidoscloud.Core.IniciarApp;
 import adaptivex.pedidoscloud.Core.ParameterHelper;
 import adaptivex.pedidoscloud.Entity.ParameterEntity;
 import adaptivex.pedidoscloud.R;
-import adaptivex.pedidoscloud.Servicios.IntentServiceStockPrecios;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -91,7 +90,7 @@ public class ConfigFragment extends Fragment {
         Button btnRecordatorio = (Button) vista.findViewById(R.id.btnDescargarRecordatorio);
         tbActStockPrecios  = (ToggleButton) vista.findViewById(R.id.toggleButtonStockPrecios);
 
-        intentServiceStockPrecios = new Intent(getContext(), IntentServiceStockPrecios.class);
+
        //Boton simple
         btnRecordatorio.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -72,11 +72,6 @@ public class PedidoEntity {
     private Integer  tiempoDemora;
     private Date     horaentrega;
 
-    private Integer cantPoteCuarto      = 0 ;
-    private Integer cantPoteMedio       = 0 ;
-    private Integer cantPoteTresCuarto  = 0 ;
-    private Integer cantPoteKilo        = 0 ;
-
     private boolean entregado = false;
 
 
@@ -161,95 +156,9 @@ public class PedidoEntity {
 
     }
 
-
-    //Cantidad, es la medida del pote
-    public void agregarPote(Integer cantidad){
-        try{
-            cantidadKilos += cantidad;
-            addCantPoteMedida(cantidad);
-            setMontoHelados(getMontoHelados() + getPrecioMedidaPote(cantidad));
-            refreshMontoTotal();
-        }catch (Exception e){
-            Log.d("PedidoError", e.getMessage());
-        }
-    }
-    public void addCantPoteMedida(Integer cantidad){
-        switch (cantidad){
-            case Constants.MEDIDA_CUARTO:
-                cantPoteCuarto +=1;
-                break;
-            case Constants.MEDIDA_MEDIO:
-                cantPoteMedio +=1;
-                break;
-            case Constants.MEDIDA_TRESCUARTOS:
-                cantPoteTresCuarto +=1;
-                break;
-            case Constants.MEDIDA_KILO:
-                cantPoteKilo +=1;
-                break;
-        }
-
-    }
-
-    public void deleteCantPoteMedida(Integer cantidad){
-        switch (cantidad){
-            case Constants.MEDIDA_CUARTO:
-                cantPoteCuarto -=1;
-                break;
-            case Constants.MEDIDA_MEDIO:
-                cantPoteMedio -=1;
-                break;
-            case Constants.MEDIDA_TRESCUARTOS:
-                cantPoteTresCuarto -=1;
-                break;
-            case Constants.MEDIDA_KILO:
-                cantPoteKilo -=1;
-                break;
-        }
-    }
-
-    public String getKilosHeladosString(){
-        //String cartel = String.valueOf(this.cantidadKilos/1000)+ " KG " ;
-        String cartel =  FactoryRepositories.getInstancia().PEDIDO_TEMPORAL.getCantidadKilos().toString() +"Kg";
-        return cartel;
-    }
-
     public void setMontoCucuruchos(Double monto){
         this.montoCucuruchos= monto;
     }
-
-
-    public void quitarPote(PoteEntity pote){
-        cantidadKilos -= pote.getKilos();
-        deleteCantPoteMedida(pote.getKilos());
-        Double mh = getMontoHelados() - getPrecioMedidaPote(pote.getKilos());
-        setMontoHelados(mh);
-        refreshMontoTotal();
-    }
-
-    public void addPedidodetalle(PedidodetalleEntity pd){
-        this.items.add(pd);
-    }
-
-    public void editPedidodetalle(PedidodetalleEntity pd_param){
-        try{
-            Integer index = 0;
-            for (PedidodetalleEntity pd : items){
-
-                if (pd_param.getAndroidId() == pd.getAndroidId()){
-
-                    this.items.set(index, pd_param);
-
-                }
-                index++;
-            }
-        }catch (Exception e ){
-            Log.e( "Error ", e.getMessage());
-        }
-
-    }
-
-
     public String getLocalidad() {
         return localidad;
     }
@@ -494,11 +403,6 @@ public class PedidoEntity {
         this.envioDomicilio = envioDomicilio;
     }
 
-    public Integer getCantidadPotes() {
-        Integer cantidadpotes = WorkNumber.getValue(cantPoteCuarto) +WorkNumber.getValue(cantPoteMedio) + WorkNumber.getValue(cantPoteTresCuarto) + WorkNumber.getValue(cantPoteKilo);
-
-        return cantidadpotes;
-    }
 
 
 
@@ -622,53 +526,6 @@ public class PedidoEntity {
 
     public void setMontoabona(Double montoabona) {
         this.montoabona = montoabona;
-    }
-
-    public Integer getCantPoteCuarto() {
-        return cantPoteCuarto;
-    }
-
-    public void setCantPoteCuarto(Integer cantPoteCuarto) {
-        this.cantPoteCuarto = cantPoteCuarto;
-    }
-
-    public Integer getCantPoteMedio() {
-        return cantPoteMedio;
-    }
-
-    public void setCantPoteMedio(Integer cantPoteMedio) {
-        this.cantPoteMedio = cantPoteMedio;
-    }
-
-    public Integer getCantPoteTresCuarto() {
-        return cantPoteTresCuarto;
-    }
-
-    public void setCantPoteTresCuarto(Integer cantPoteTresCuarto) {
-        this.cantPoteTresCuarto = cantPoteTresCuarto;
-    }
-
-    public Integer getCantPoteKilo() {
-        return cantPoteKilo;
-    }
-
-    public void setCantPoteKilo(Integer cantPoteKilo) {
-        this.cantPoteKilo = cantPoteKilo;
-    }
-
-    public String getDireccion(){
-        String direccion ="";
-        direccion += getCalle() +" " + getNro() + ", " +getLocalidad();
-        return direccion;
-
-    }
-
-    public boolean isEntregado() {
-        return entregado;
-    }
-
-    public void setEntregado(boolean entregado) {
-        this.entregado = entregado;
     }
 
 }

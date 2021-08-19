@@ -69,9 +69,9 @@ public class PedidodetalleRepository
         valores.put(PedidodetalleDataBaseHelper.CAMPO_PRECIOUNITARIO, item.getPreciounitario());
         valores.put(PedidodetalleDataBaseHelper.CAMPO_MONTO, item.getMonto());
         valores.put(PedidodetalleDataBaseHelper.CAMPO_ESTADO_ID, item.getEstadoId());
-        valores.put(PedidodetalleDataBaseHelper.CAMPO_NRO_POTE, item.getNroPote());
-        valores.put(PedidodetalleDataBaseHelper.CAMPO_MEDIDA_POTE, item.getMedidaPote());
-        valores.put(PedidodetalleDataBaseHelper.CAMPO_PROPORCION_HELADO, item.getProporcionHelado());
+        //valores.put(PedidodetalleDataBaseHelper.CAMPO_NRO_POTE, item.getNroPote());
+        //valores.put(PedidodetalleDataBaseHelper.CAMPO_MEDIDA_POTE, item.getMedidaPote());
+        //valores.put(PedidodetalleDataBaseHelper.CAMPO_PROPORCION_HELADO, item.getProporcionHelado());
 
     }
 
@@ -133,10 +133,12 @@ public class PedidodetalleRepository
     public PedidodetalleEntity findByPedidoAndProducto(PedidoEntity pedido, ProductoEntity producto){
         try{
             String[] argumentos = {String.valueOf(pedido.getAndroid_id()),String.valueOf(producto.getId())};
-            String sWhere = PedidodetalleDataBaseHelper.CAMPO_PEDIDO_ANDROID_ID + " = ? AND";
+            String sWhere = PedidodetalleDataBaseHelper.CAMPO_PEDIDO_ANDROID_ID + " = ? AND ";
             sWhere += PedidodetalleDataBaseHelper.CAMPO_PRODUCTO_ID + " = ?";
-            return parseRecordToPedidodetalle(findBy(sWhere, argumentos));
-
+            Cursor c = findBy(sWhere, argumentos);
+            if (c!= null && c.moveToFirst())
+                return parseRecordToPedidodetalle(c);
+            return null;
         }catch(Exception e){
             Log.e("findbyPedidoAndProducto", e.getMessage());
             return null;
@@ -170,7 +172,10 @@ public class PedidodetalleRepository
         try {
             String[] argumentos = {String.valueOf(pedido.getAndroid_id())};
             String sWhere = PedidodetalleDataBaseHelper.CAMPO_PEDIDO_ANDROID_ID + " = ?";
-            return parseCursorToListPedidodetalle(findBy(sWhere,argumentos));
+            Cursor c = findBy(sWhere,argumentos);
+            if(c!= null)
+                return parseCursorToListPedidodetalle(c);
+            return null;
         }catch (Exception e){
             Log.e("findAllByPedido",e.getMessage());
             return null;
@@ -224,9 +229,11 @@ public class PedidodetalleRepository
             ArrayList<PedidodetalleEntity> pedidoList= null;
             if (resultado != null)
             {
-                while(resultado.moveToNext()){
+                resultado.moveToFirst();
+                pedidoList= new ArrayList<PedidodetalleEntity>();
+                do{
                     pedidoList.add(parseRecordToPedidodetalle(resultado));
-                }
+                }while(resultado.moveToNext());
             }
             return pedidoList;
         }catch(Exception e) {
@@ -251,11 +258,9 @@ public class PedidodetalleRepository
                 registro.setMonto(resultado.getDouble(resultado.getColumnIndex(PedidodetalleDataBaseHelper.CAMPO_MONTO)));
                 registro.setEstadoId(resultado.getInt(resultado.getColumnIndex(PedidodetalleDataBaseHelper.CAMPO_ESTADO_ID)));
                 registro.setAndroidId(resultado.getInt(resultado.getColumnIndex(PedidodetalleDataBaseHelper.CAMPO_ANDROID_ID)));
+                registro.setPedidoAndroidId(resultado.getInt(resultado.getColumnIndex(PedidodetalleDataBaseHelper.CAMPO_PEDIDO_ANDROID_ID)));
                 ProductoEntity p  = FactoryRepositories.getInstancia().getProductoRepository().abrir().findById(registro.getProductoId());
-                registro.setNroPote(resultado.getInt(resultado.getColumnIndex(PedidodetalleDataBaseHelper.CAMPO_NRO_POTE)));
-                registro.setProporcionHelado(resultado.getInt(resultado.getColumnIndex(PedidodetalleDataBaseHelper.CAMPO_PROPORCION_HELADO)));
-                registro.setMedidaPote(resultado.getInt(resultado.getColumnIndex(PedidodetalleDataBaseHelper.CAMPO_MEDIDA_POTE)));
-
+               
                 registro.setProducto(p);
             }
             return registro;

@@ -15,12 +15,13 @@ import android.widget.Toast;
 
 import adaptivex.pedidoscloud.Config.Constants;
 import adaptivex.pedidoscloud.Config.GlobalValues;
+import adaptivex.pedidoscloud.Entity.ParameterEntity;
 import adaptivex.pedidoscloud.Repositories.FactoryRepositories;
 import adaptivex.pedidoscloud.Repositories.PedidoRepository;
 import adaptivex.pedidoscloud.Core.WorkNumber;
 import adaptivex.pedidoscloud.R;
 
-public class CargarOtrosDatosFragment extends Fragment implements View.OnClickListener {
+public class CargarOtrosDatosFragment extends Fragment  {
 
     private EditText txtCucuruchos, txtMontoAbona,txtCucharitas;
     private TextView txtCucuruchoPrecio, txt_monto_total_helados;
@@ -30,11 +31,10 @@ public class CargarOtrosDatosFragment extends Fragment implements View.OnClickLi
 
 
     private void getDataForm(){
-        if (txtCucuruchos.getText()!= null) FactoryRepositories.getInstancia().PEDIDO_TEMPORAL.setCucuruchos(WorkNumber.parseInteger(txtCucuruchos.getText().toString()));
-        if (txtCucharitas.getText()!= null) FactoryRepositories.getInstancia().PEDIDO_TEMPORAL.setCucharitas(WorkNumber.parseInteger(txtCucharitas.getText().toString()));
-        if (txtMontoAbona.getText()!= null) FactoryRepositories.getInstancia().PEDIDO_TEMPORAL.setMontoabona(WorkNumber.parseDouble(txtMontoAbona.getText().toString()));
-        FactoryRepositories.getInstancia().PEDIDO_TEMPORAL.setEnvioDomicilio(chkEnvio.isChecked());
-
+        if (txtCucuruchos.getText()!= null) FactoryRepositories.PEDIDO_TEMPORAL.setCucuruchos(WorkNumber.parseInteger(txtCucuruchos.getText().toString()));
+        if (txtCucharitas.getText()!= null) FactoryRepositories.PEDIDO_TEMPORAL.setCucharitas(WorkNumber.parseInteger(txtCucharitas.getText().toString()));
+        if (txtMontoAbona.getText()!= null) FactoryRepositories.PEDIDO_TEMPORAL.setMontoabona(WorkNumber.parseDouble(txtMontoAbona.getText().toString()));
+        FactoryRepositories.PEDIDO_TEMPORAL.setEnvioDomicilio(chkEnvio.isChecked());
     }
 
     public CargarOtrosDatosFragment() {
@@ -44,7 +44,6 @@ public class CargarOtrosDatosFragment extends Fragment implements View.OnClickLi
 
     public static CargarOtrosDatosFragment newInstance(String param1, String param2) {
         CargarOtrosDatosFragment fragment = new CargarOtrosDatosFragment();
-
         return fragment;
     }
 
@@ -70,10 +69,24 @@ public class CargarOtrosDatosFragment extends Fragment implements View.OnClickLi
             txt_monto_total_helados = (TextView) v.findViewById(R.id.otros_datos_txt_monto_total_helados);
 
             //Cargar datos en los Objetos
-            btnListo.setOnClickListener(this);
+            btnListo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (validateForm()){
+                        getDataForm();
+                        FactoryRepositories
+                                .getInstancia()
+                                .getPedidoRepository()
+                                .abrir()
+                                .modificar(FactoryRepositories.PEDIDO_TEMPORAL);
+                        openResumenFragment();
+                    }
+                }
+            });
+            ParameterEntity param = FactoryRepositories.getInstancia().getParameterRepository().abrir().findByNombre(Constants.PARAM_PRECIO_CUCURUCHO);
 
-            txtCucuruchoPrecio.setText("Cucurucho ("+GlobalValues.getInstancia().PRECIO_CUCURUCHO_MONEY+" c/u):");
-            txt_monto_total_helados.setText("Monto a Pagar: "+ FactoryRepositories.getInstancia().PEDIDO_TEMPORAL.getMontoHeladoFormatMoney());
+            txtCucuruchoPrecio.setText("Cucurucho ("+ param.getValor_decimal().toString()+" c/u):");
+            txt_monto_total_helados.setText("Monto a Pagar: "+ FactoryRepositories.PEDIDO_TEMPORAL.getMontoHeladoFormatMoney());
 
 
             return v;
@@ -84,28 +97,11 @@ public class CargarOtrosDatosFragment extends Fragment implements View.OnClickLi
     }
 
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.otros_datos_btn_listo:
-                clickListo();
-        }
-    }
 
 
-    public void clickListo(){
-        //Se usa ClickListo por si en el futuro se tiene que hacer alguna otra cosa en el
-        //evento click del boton listo
-        if (validateForm()){
-            if (savePedido()){
-                openResumenFragment();
-            };
-        }
-    }
 
     public void openResumenFragment(){
         ResumenPedidoFragment fragment = new ResumenPedidoFragment();
-        //getFragmentManager().beginTransaction().remove(this).commit();
         FragmentManager fragmentManager         = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.content_main, fragment);
@@ -118,33 +114,17 @@ public class CargarOtrosDatosFragment extends Fragment implements View.OnClickLi
         boolean validate = true;
         String message = "";
         Double monto = WorkNumber.parseDouble(txtMontoAbona.getText().toString());
-        if (monto > 0.00 && monto < FactoryRepositories.getInstancia().PEDIDO_TEMPORAL.getMontoHelados() )
+        if (monto > 0.00 && monto < FactoryRepositories.PEDIDO_TEMPORAL.getMontoHelados() )
         {
             validate  = false;
             message ="* Monto ABONADO debe ser mayor a Monto a PAGAR \n";
         }
-
-
-
         if (validate == false){
             Toast.makeText(getView().getContext(),message,Toast.LENGTH_LONG).show();
         }
         return validate;
     }
 
-    public boolean savePedido(){
-        //Obtiene valores del formulario, y luego lo guarda en la base de datos
-        try{
-            getDataForm();
-            PedidoRepository pc = new PedidoRepository(getContext());
-            pc.abrir().modificar(FactoryRepositories.PEDIDO_TEMPORAL);
-
-            return true;
-        }catch (Exception e){
-            Toast.makeText(getContext(),"Error: " + e.getMessage(),Toast.LENGTH_LONG).show();
-            return false;
-        }
-    }
 
 
 

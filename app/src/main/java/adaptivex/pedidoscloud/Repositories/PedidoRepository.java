@@ -42,33 +42,46 @@ public class PedidoRepository
     private SQLiteDatabase db;
     private ContentValues valores;
 
-    private ArrayList<PedidoEntity> arrayListPedidos;
-    private List<PedidoEntity> listPedidos;
-    private ArrayList<PoteEntity> listaPotes;
-    private PedidoEntity pedidoTemp;
 
     private String[] campos = {
             PedidoDataBaseHelper.CAMPO_ID,
+            PedidoDataBaseHelper.CAMPO_ANDROID_ID,
+            PedidoDataBaseHelper.CAMPO_CLIENTE_ID,
             PedidoDataBaseHelper.CAMPO_CREATED,
             PedidoDataBaseHelper.CAMPO_SUBTOTAL,
             PedidoDataBaseHelper.CAMPO_IVA,
             PedidoDataBaseHelper.CAMPO_MONTO,
-            PedidoDataBaseHelper.CAMPO_CLIENTE_ID,
             PedidoDataBaseHelper.CAMPO_BONIFICACION,
             PedidoDataBaseHelper.CAMPO_ESTADO_ID,
-            PedidoDataBaseHelper.CAMPO_ANDROID_ID,
+
             PedidoDataBaseHelper.CAMPO_CUCURUCHOS,
+            PedidoDataBaseHelper.CAMPO_CUCHARITAS,
+            PedidoDataBaseHelper.CAMPO_CANTIDAD_KILOS,
             PedidoDataBaseHelper.CAMPO_CANTIDAD_DESCUENTO,
+
             //POTES
             PedidoDataBaseHelper.CAMPO_CANTIDAD_POTE_CUARTO,
             PedidoDataBaseHelper.CAMPO_CANTIDAD_POTE_MEDIO,
             PedidoDataBaseHelper.CAMPO_CANTIDAD_POTE_TRESCUARTO,
             PedidoDataBaseHelper.CAMPO_CANTIDAD_POTE_KILO,
+
+            PedidoDataBaseHelper.CAMPO_MONTO_HELADOS,
             PedidoDataBaseHelper.CAMPO_MONTO_CUCURUCHOS,
             PedidoDataBaseHelper.CAMPO_MONTO_DESCUENTO,
             PedidoDataBaseHelper.CAMPO_MONTO_ABONA,
-            PedidoDataBaseHelper.CAMPO_MONTO
-    };
+            PedidoDataBaseHelper.CAMPO_MONTO,
+
+            //direccion
+            PedidoDataBaseHelper.CAMPO_ENVIO_DOMICILIO,
+            PedidoDataBaseHelper.CAMPO_LOCALIDAD,
+            PedidoDataBaseHelper.CAMPO_CALLE,
+            PedidoDataBaseHelper.CAMPO_NRO,
+            PedidoDataBaseHelper.CAMPO_PISO,
+            PedidoDataBaseHelper.CAMPO_CONTACTO,
+            PedidoDataBaseHelper.CAMPO_TELEFONO
+
+
+};
 
 
 
@@ -78,8 +91,6 @@ public class PedidoRepository
     {
         this.context = context;
         this.valores = new ContentValues();
-        this.listaPotes =  new ArrayList<PoteEntity>();
-        this.pedidoTemp = new PedidoEntity();
     }
 
     public PedidoRepository abrir() throws SQLiteException
@@ -119,11 +130,6 @@ public class PedidoRepository
             valores.put(PedidoDataBaseHelper.CAMPO_TELEFONO,  item.getTelefono());
             valores.put(PedidoDataBaseHelper.CAMPO_CONTACTO,  item.getContacto());
             valores.put(PedidoDataBaseHelper.CAMPO_CANTIDAD_KILOS,   item.getCantidadKilos());
-            //POTES
-            valores.put(PedidoDataBaseHelper.CAMPO_CANTIDAD_POTE_CUARTO, item.getCantPoteCuarto());
-            valores.put(PedidoDataBaseHelper.CAMPO_CANTIDAD_POTE_MEDIO, item.getCantPoteMedio());
-            valores.put(PedidoDataBaseHelper.CAMPO_CANTIDAD_POTE_TRESCUARTO, item.getCantPoteTresCuarto());
-            valores.put(PedidoDataBaseHelper.CAMPO_CANTIDAD_POTE_KILO, item.getCantPoteKilo());
 
             valores.put(PedidoDataBaseHelper.CAMPO_CUCHARITAS,       item.getCucharitas());
             valores.put(PedidoDataBaseHelper.CAMPO_CUCURUCHOS,       item.getCucuruchos());
@@ -153,11 +159,7 @@ public class PedidoRepository
     {
         try{
             setValores(item);
-            long id = db.insert(PedidoDataBaseHelper.TABLE_NAME, null, valores);
-            //Guardar los datos de los Items del pedido
-            // se hace un foreach por cada pedido detalle
-            pedidoTemp = findById(id);
-            return id ;
+            return db.insert(PedidoDataBaseHelper.TABLE_NAME, null, valores);
         }catch(Exception e ){
             Log.e("PedidoRepos- agregar",e.getMessage());
             return -1;
@@ -192,13 +194,9 @@ public class PedidoRepository
                     FactoryRepositories.getInstancia().getPedidodetalleRepository().abrir().eliminar(detalle);
                 }
             }
-            //si esta seteado y esta cargando un pedido, refrescar el temporal
-            if (FactoryRepositories.PEDIDO_TEMPORAL != null){
-                FactoryRepositories.PEDIDO_TEMPORAL = FactoryRepositories
-                        .getInstancia()
-                        .getPedidoRepository()
-                        .findById(FactoryRepositories.PEDIDO_TEMPORAL.getAndroid_id());
-            }
+            //regrescar el pedido temporal
+            FactoryRepositories.PEDIDO_TEMPORAL = this.abrir().findByAndroidId(FactoryRepositories.PEDIDO_TEMPORAL.getAndroid_id());
+
 
         }catch(Exception e){
             Log.e("updateItems", e.getMessage());
@@ -314,7 +312,7 @@ public class PedidoRepository
                             .getInstancia()
                             .getPedidoRepository()
                             .abrir()
-                            .findById(id);
+                            .findByAndroidId(id);
 
             return id;
         }catch (Exception e ){
@@ -336,11 +334,18 @@ public class PedidoRepository
      * @version 2021.08
      * @since 1.0
      */
-    public PedidoEntity findByAndroidId(long androidId)
-    {
-        String[] argumentos = {String.valueOf(androidId)};
-        String sWhere = PedidoDataBaseHelper.CAMPO_ANDROID_ID + " = ?";
-        return parseRecordToPedido(findBy(sWhere,argumentos));
+    public PedidoEntity findByAndroidId(long androidId) {
+        try {
+            String[] argumentos = {String.valueOf(androidId)};
+            String sWhere = PedidoDataBaseHelper.CAMPO_ANDROID_ID + " = ?";
+            Cursor c = findBy(sWhere, argumentos);
+            if (c != null && c.moveToFirst())
+                return parseRecordToPedido(c);
+            return null;
+        } catch (Exception e) {
+            Log.e("PedidoRepo", e.getMessage());
+            return null;
+        }
     }
 
 
@@ -348,17 +353,12 @@ public class PedidoRepository
         try{
             String[] argumentos = {String.valueOf(id)};
             String sWhere = PedidoDataBaseHelper.CAMPO_ID + " = ?";
-            Cursor resultado = findBy(sWhere,argumentos);
-            PedidoEntity pedido = new PedidoEntity();
-            if (resultado != null)
-            {
-                while(resultado.moveToNext()){
-                    pedido = parseRecordToPedido(resultado);
-                }
-            }
-            return pedido;
+            Cursor c = findBy(sWhere,argumentos);
+            if (c != null && c.moveToNext())
+                return parseRecordToPedido(c);
+            return null;
         }catch(Exception e){
-            Log.e("MarcaRepo",e.getMessage());
+            Log.e("PedidoRepo",e.getMessage());
             return null;
         }
     }
@@ -439,7 +439,7 @@ public class PedidoRepository
                 registro.setAndroid_id(resultado.getInt(resultado.getColumnIndex(PedidoDataBaseHelper.CAMPO_ANDROID_ID)));
 
                 //Nuevos campos de PEdido para Heladeria
-                registro.setEnvioDomicilio(resultado.getInt(resultado.getColumnIndex(PedidoDataBaseHelper.CAMPO_ENVIO_DOMICILIO)) >0);
+                registro.setEnvioDomicilio((resultado.getColumnIndex(PedidoDataBaseHelper.CAMPO_ENVIO_DOMICILIO) >0));
                 registro.setLocalidad(resultado.getString(resultado.getColumnIndex(PedidoDataBaseHelper.CAMPO_LOCALIDAD)));
                 registro.setCalle(resultado.getString(resultado.getColumnIndex(PedidoDataBaseHelper.CAMPO_CALLE)));
                 registro.setNro(resultado.getString(resultado.getColumnIndex(PedidoDataBaseHelper.CAMPO_NRO)));
@@ -451,11 +451,6 @@ public class PedidoRepository
                 registro.setCucharitas(resultado.getInt(resultado.getColumnIndex(PedidoDataBaseHelper.CAMPO_CUCHARITAS)));
                 registro.setCantidadKilos(resultado.getInt(resultado.getColumnIndex(PedidoDataBaseHelper.CAMPO_CANTIDAD_KILOS)));
 
-                //POTES
-                registro.setCantPoteCuarto(resultado.getInt(resultado.getColumnIndex(PedidoDataBaseHelper.CAMPO_CANTIDAD_POTE_CUARTO)));
-                registro.setCantPoteMedio(resultado.getInt(resultado.getColumnIndex(PedidoDataBaseHelper.CAMPO_CANTIDAD_POTE_MEDIO)));
-                registro.setCantPoteTresCuarto(resultado.getInt(resultado.getColumnIndex(PedidoDataBaseHelper.CAMPO_CANTIDAD_POTE_TRESCUARTO)));
-                registro.setCantPoteKilo(resultado.getInt(resultado.getColumnIndex(PedidoDataBaseHelper.CAMPO_CANTIDAD_POTE_KILO)));
 
                 registro.setMontoHelados(resultado.getDouble(resultado.getColumnIndex(PedidoDataBaseHelper.CAMPO_MONTO_HELADOS)));
                 registro.setMontoCucuruchos(resultado.getDouble(resultado.getColumnIndex(PedidoDataBaseHelper.CAMPO_MONTO_CUCURUCHOS)));

@@ -143,8 +143,6 @@ public class ResumenPedidoFragment extends Fragment implements View.OnClickListe
             PedidoEntity p = FactoryRepositories.getInstancia().PEDIDO_TEMPORAL;
             if(p.getId()!=null){
                 if (p.getId() > 0 ){
-
-
                     SystemClock.sleep(1000);
                 }
             }

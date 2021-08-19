@@ -20,7 +20,7 @@ import adaptivex.pedidoscloud.Config.Constants;
 import adaptivex.pedidoscloud.R;
 import adaptivex.pedidoscloud.View.RVAdapters.RVAdapterProducto;
 
-public class CargarProductosFragment extends Fragment implements  View.OnKeyListener {
+public class CargarProductosFragment extends Fragment  {
 
     private OnFragmentInteractionListener mListener;
 
@@ -65,7 +65,7 @@ public class CargarProductosFragment extends Fragment implements  View.OnKeyList
                 @Override
                 public void onClick(View view) {
                     //validar que se cargo algo
-                    //llamar al fragment de otros datos
+
                     CargarOtrosDatosFragment fragment       = new CargarOtrosDatosFragment();
                     FragmentManager fragmentManager         = getFragmentManager();
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -117,17 +117,6 @@ public class CargarProductosFragment extends Fragment implements  View.OnKeyList
 
 
 
-    @Override
-    public boolean onKey(View v, int keyCode, KeyEvent event) {
-        if( keyCode == KeyEvent.KEYCODE_BACK )
-        {
-            //if (validateForm()){
-            //    return true;
-           // }
-            return true;
-        }
-        return false;
-    }
 
 
     public interface OnFragmentInteractionListener {

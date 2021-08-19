@@ -6,7 +6,7 @@ package adaptivex.pedidoscloud.Config;
  */
 public class Configurador {
 
-    public static final int DBVersion = 8;
+    public static final int DBVersion = 10;
     public static final String DBName = "DB_ROMA7";
     private static Configurador INSTANCIA;
     public static final String urlImgClientes = "http://www.ellechero.com.ar/files/producto/imagen/";

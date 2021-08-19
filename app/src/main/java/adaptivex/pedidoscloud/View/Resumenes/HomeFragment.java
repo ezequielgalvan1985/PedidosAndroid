@@ -14,8 +14,6 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import adaptivex.pedidoscloud.Config.Constants;
-import adaptivex.pedidoscloud.Config.GlobalValues;
-import adaptivex.pedidoscloud.Config.InsertRowsTest;
 import adaptivex.pedidoscloud.Repositories.FactoryRepositories;
 import adaptivex.pedidoscloud.R;
 import adaptivex.pedidoscloud.View.Pedidos.CargarDireccionFragment;
@@ -139,11 +137,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 }
                 break;
 
-            case R.id.home_btn_promos:
-                InsertRowsTest.insertPromos(v.getContext());
-                Fragment fragment4 = new ListadoPromosFragment();
-                openFragment(fragment4);
-                break;
+
 
             case R.id.home_btn_mi_pedido:
                 Fragment fragment5 = new ResumenPedidoFragment();
